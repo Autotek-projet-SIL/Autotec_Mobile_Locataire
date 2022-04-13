@@ -9,6 +9,7 @@ class Api {
   static const _url =
         "https://autotek-server.herokuapp.com/";
   static var uri = Uri(host:"https://autotek-server.herokuapp.com/");
+
   static String formattedDateNow() {
     var now = DateTime.now();
     var formatter = DateFormat.yMd();
@@ -17,26 +18,24 @@ class Api {
   }
 
 //use this function to create a user
-  static Future<http.Response> createUser(UserData u, String token) async {
+  static Future<http.Response> createUser(UserData u, String? token) async {
     return http.post(
-      Uri.parse(_url),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
+      Uri.http('autotek-server.herokuapp.com','/authentification_mobile/locataire_inscription/'),
+
       body: jsonEncode(<String, String>{
-        "token": token,
+        "token": token!,
         "id": u.id!,
         "nom": u.nom!,
         "prenom": u.prenom!,
         "email": u.email!,
         "mot_de_passe": u.motDePasse!,
         "numero_telephone": u.numeroTelephone!,
-        "photo_identite_recto": u.photoIdentiteRecto!,
-        "photo_identite_verso": u.photoIdentiteVerso!,
-        "photo_selfie": u.photoSelfie!,
+        "photo_identite_recto": "test",
+        "photo_identite_verso": "test",
+        "photo_selfie": "test",
         "statut_compte": "false",
         "statut": "en attente",
-        "date_inscription": formattedDateNow()
+        "date_inscription": DateTime.now().toString()
       }),
     );
   }
@@ -53,7 +52,7 @@ to tcheck if he's validated or not
 
   static Future<Object?> isUserValidated(String email) async {
     final response = await http
-        .get(Uri.parse('https://jsonplaceholder.typicode.com/albums/1'));
+        .get(Uri.parse(''));
 
     if (response.statusCode == 200) {
       UserData u = UserData.fromJson(jsonDecode(response.body));

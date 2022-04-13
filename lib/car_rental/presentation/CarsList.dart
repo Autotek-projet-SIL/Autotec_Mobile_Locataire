@@ -68,7 +68,7 @@ class CarListView extends StatelessWidget{
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
-        return CircularProgressIndicator();
+        return CircularProgressIndicator(strokeWidth: 10,);
       },
     );
   }

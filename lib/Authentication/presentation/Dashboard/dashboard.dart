@@ -120,9 +120,14 @@ class _DashboardState extends State<Dashboard> {
               _imageViewSelfie(),
               ElevatedButton(
                 child: const Text('Sign Out'),
-                onPressed: () {
+                onPressed: () async{
+                  await userCredentials.refresh();
+                  print("token\n");
+                  print(userCredentials.token);
+                  print("uid \n");
+                  print(userCredentials.uid);
                   // Signing out the user
-                  context.read<AuthBloc>().add(SignOutRequested());
+                 context.read<AuthBloc>().add(SignOutRequested());
                 },
               )
             ],

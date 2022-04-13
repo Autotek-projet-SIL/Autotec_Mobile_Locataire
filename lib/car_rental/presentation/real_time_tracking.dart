@@ -25,23 +25,24 @@ class MyMap extends StatefulWidget {
 class _MyMapState extends State<MyMap> {
   final loc.Location location = loc.Location();
   late GoogleMapController _controller;
+  bool _added = false;
+
   Set<Marker> _markers = {};
   Set<Polyline> _polylines = {};
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints = PolylinePoints();
   String googleAPIKey = "AIzaSyD1ZzI2O9bqUhQdwsPaUNrp81wtpvxZvzY";
-  bool _added = false;
   BitmapDescriptor? sourceIcon;
   BitmapDescriptor? destinationIcon;
 
   late LatLng source;
 
-  @override
+/*  @override
   void initState() {
     //source = widget.sourceLocation;
-    setSourceAndDestinationIcons();
+   // setSourceAndDestinationIcons();
     super.initState();
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +57,7 @@ class _MyMapState extends State<MyMap> {
             return const Center(child: CircularProgressIndicator());
           }
           return GoogleMap(
+            mapType: MapType.normal,
             myLocationEnabled: true,
             compassEnabled: true,
             tiltGesturesEnabled: false,
@@ -73,10 +75,10 @@ class _MyMapState extends State<MyMap> {
               Marker(
                   position: widget.destinationLocation,
                   markerId: const MarkerId('destPin'),
-                  icon: destinationIcon!),
+                  icon: BitmapDescriptor.defaultMarkerWithHue(
+                      BitmapDescriptor.hueBlue)),
             },
-            polylines: _polylines,
-            mapType: MapType.normal,
+            //   polylines: _polylines,
             initialCameraPosition: CameraPosition(
                 target: LatLng(
                   snapshot.data!.docs.singleWhere(
@@ -84,13 +86,13 @@ class _MyMapState extends State<MyMap> {
                   snapshot.data!.docs.singleWhere(
                       (element) => element.id == widget.carId)['longitude'],
                 ),
-                zoom: 17.47),
+                zoom: 14.47),
             onMapCreated: (GoogleMapController controller) {
               setState(
                 () {
                   _controller = controller;
                   _added = true;
-                  setPolylines(snapshot);
+                  //  setPolylines(snapshot);
                 },
               );
             },
@@ -100,18 +102,13 @@ class _MyMapState extends State<MyMap> {
     );
   }
 
-  void onMapCreated(
-      GoogleMapController controller, AsyncSnapshot<QuerySnapshot> snapshot) {
-    _controller = controller;
-  }
-
-  void setSourceAndDestinationIcons() async {
+  /* void setSourceAndDestinationIcons() async {
     sourceIcon =
         BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
     destinationIcon =
         BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure);
-  }
-
+  }*/
+/*
   setPolylines(AsyncSnapshot<QuerySnapshot<Object?>> snapshot) async {
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       googleAPIKey,
@@ -140,7 +137,7 @@ class _MyMapState extends State<MyMap> {
       _polylines.add(polyline);
     });
   }
-
+*/
   Future<void> mymap(AsyncSnapshot<QuerySnapshot> snapshot) async {
     await _controller.animateCamera(
       CameraUpdate.newCameraPosition(
@@ -151,28 +148,8 @@ class _MyMapState extends State<MyMap> {
               snapshot.data!.docs.singleWhere(
                   (element) => element.id == widget.carId)['longitude'],
             ),
-            zoom: 17.47),
+            zoom: 14.47),
       ),
-    );
-    setState(
-      () {
-        _markers.add(
-          Marker(
-              position: LatLng(
-                snapshot.data!.docs.singleWhere(
-                    (element) => element.id == widget.carId)['latitude'],
-                snapshot.data!.docs.singleWhere(
-                    (element) => element.id == widget.carId)['longitude'],
-              ),
-              markerId: const MarkerId('id'),
-              icon: BitmapDescriptor.defaultMarkerWithHue(
-                  BitmapDescriptor.hueGreen)),
-        );
-        _markers.add(Marker(
-            markerId: const MarkerId('destPin'),
-            position: widget.destinationLocation,
-            icon: destinationIcon!));
-      },
     );
   }
 }

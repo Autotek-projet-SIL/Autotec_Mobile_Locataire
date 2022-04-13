@@ -38,6 +38,12 @@ dependencies:
   image_picker:
   multi_image_picker: ^4.7.14
   validators: ^2.0.0
+  google_maps_flutter: ^2.1.3
+  location: ^4.2.0
+  cloud_firestore: ^3.1.11
+  permission_handler: ^9.2.0
+  flutter_polyline_points: ^1.0.0
+  google_maps_routes: ^1.1.2
 
   http: ^0.13.4
   intl: ^0.17.0

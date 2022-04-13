@@ -17,8 +17,8 @@ class WidgetViewCar extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          margin: const EdgeInsets.only(top:40.0,left: 10.0, right: 10.0),
-          height: 170,
+          margin: const EdgeInsets.only(top:10.0),
+          height: 140,
           decoration: const BoxDecoration(
 
             borderRadius: BorderRadius.only(
@@ -40,13 +40,13 @@ class WidgetViewCar extends StatelessWidget {
           child: Stack(
             children:  [
               Positioned(
-                top:35.0,
-                left: 20.0,
-                child: Image.asset(carImage,width: 170,),
+                top:10.0,
+                left: 10.0,
+                child: Image.network(carImage,width: 120),
               ),
               Positioned(
                 top:25.0,
-                right: 40.0,
+               left: 145,
                 child:Column(
                   children: [
                     Text(carName,
@@ -54,14 +54,13 @@ class WidgetViewCar extends StatelessWidget {
                         color: Colors.black,
                         fontFamily: 'Poppins',
                         fontWeight: FontWeight.bold,
-                        fontSize: 24,
-
+                        fontSize: 16,
                       ),),
                     Text(carPrice,
                       style: TextStyle(
                         color: Colors.blueGrey,
                         fontFamily: 'Poppins',
-                        fontSize: 20,
+                        fontSize: 13,
 
                       ),),
                   ],

@@ -86,7 +86,7 @@ class CarListView extends StatelessWidget{
     return ListView.builder(
         itemCount: data.length,
         itemBuilder: (context, index) {
-          return WidgetViewCar(carName: data[index].marque+" "+data[index].modele, carPrice: data[index].tarification.toString(), carImage: data[index].image);
+          return WidgetViewCar(carName: data[index].modele, carPrice: data[index].tarification.toString(), carImage: data[index].image);
         });
   }
 }

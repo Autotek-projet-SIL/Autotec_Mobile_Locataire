@@ -6,6 +6,13 @@ import 'package:flutter/material.dart';
 import '../DemandeVehicule//home.dart';
 import '../DemandeVehicule/aide.dart';
 
+void main(){
+  runApp(MaterialApp(
+    home: const WidgetBottomBar(),
+    debugShowCheckedModeBanner: false,
+    theme: ThemeData(fontFamily: 'Poppins'),
+  ));
+}
 
 class WidgetBottomBar extends StatefulWidget {
   const WidgetBottomBar({Key? key}) : super(key: key);
@@ -20,10 +27,10 @@ class _WidgetBottomBarState extends State<WidgetBottomBar> {
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    Home(), //home page
-    Historique(), // historique page
-    Aide(), // demande du support page
-    Profile(), // profil page
+    Home(),
+    Historique(),
+    Aide(),
+    Profile(),
   ];
 
   void _onItemTapped(int index) {
@@ -35,16 +42,19 @@ class _WidgetBottomBarState extends State<WidgetBottomBar> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('BottomNavigationBar Sample'),
+      ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
       ),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           boxShadow: [
-            BoxShadow(
-              color: Colors.black12,
-              blurRadius: 15,
-            ),
+               BoxShadow(
+                color: Colors.black12,
+                blurRadius: 15,
+              ),
           ],
         ),
         child: BottomNavigationBar(

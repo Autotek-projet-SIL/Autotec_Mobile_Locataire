@@ -1,5 +1,5 @@
 import 'package:autotec/Authentication/data/models/user_data.dart';
-
+import 'Cars.dart';
 import '../../components/WraisedButton.dart';
 import 'package:flutter/material.dart';
 
@@ -11,11 +11,12 @@ import 'CarsList.dart';
 class Demande extends StatefulWidget {
   final String dateDebut;
   final String dateFin;
-
+  final Car car;
   const Demande( {
     Key? key,
     required this.dateDebut,
-    required this.dateFin
+    required this.dateFin,
+    required this.car
   }): super(key: key);
 
   @override
@@ -126,7 +127,7 @@ class _DemandeState extends State<Demande> {
                 borderRadius: BorderRadius.circular(10.0),
               ),
               child: Center(
-                child: Text('Type vehicule'),
+                child: Text(widget.car.modele),
               ),
             ),
             SizedBox(height: 20),
@@ -136,10 +137,12 @@ class _DemandeState extends State<Demande> {
               print(userCredentials.token);
               print('uid\n');
               print (userCredentials.uid);
-              Navigator.push(
+              // faire le traitement de la demande with the spiner and eiter validate it or not
+              //then move to le suivi in real time
+              /*Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => CarsList()),
-              );
+                MaterialPageRoute(builder: (context) => ),
+              );*/
             }, color: Color(0xff2E9FB0), textColor: Colors.white)
 
           ],

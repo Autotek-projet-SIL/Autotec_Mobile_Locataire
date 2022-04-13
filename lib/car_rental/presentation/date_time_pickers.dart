@@ -1,8 +1,11 @@
+import 'package:autotec/Authentication/data/models/user_data.dart';
+
 import 'demande.dart';
 import '../../components/WBack.dart';
 import '../../components/WraisedButton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'CarsList.dart';
 
 class DateDebut extends StatefulWidget {
   const DateDebut({Key? key}) : super(key: key);
@@ -187,13 +190,15 @@ class _DateFinState extends State<DateFin> {
                 height: 20,
               ),
               WidgetRaisedButton(text: 'Continuer',
-                  press: (){
+                  press: ()async{
+                await userCredentials.refresh();
                     _date = DateTime(_date.year, _date.month, _date.day, _time.hour, _time.minute);
                     value="${_date.day}/${_date.month}/${_date.year} ${_date.hour}:${_date.minute}";
                     //print(value);
+
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Demande(dateDebut:widget.dateDeb,dateFin: value,)),
+                      MaterialPageRoute(builder: (context) => CarsList(Debut:widget.dateDeb,Fin: this.value,)),
                     );
 
                   },

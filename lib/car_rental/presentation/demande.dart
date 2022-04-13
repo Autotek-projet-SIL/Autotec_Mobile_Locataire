@@ -1,6 +1,10 @@
-import 'package:autoteck/components/WraisedButton.dart';
+import 'package:autotec/Authentication/data/models/user_data.dart';
+
+import '../../components/WraisedButton.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+
+import 'CarsList.dart';
+
 
 
 
@@ -76,7 +80,7 @@ class _DemandeState extends State<Demande> {
                         SizedBox(width: 3,),
                         Text(widget.dateDebut,
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),
+                          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12),
                         ),
                       ],
                     ),
@@ -103,7 +107,7 @@ class _DemandeState extends State<Demande> {
                         ),
                         SizedBox(width: 3,),
                         Text(widget.dateFin,textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14),
+                          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12),
                         ),
                       ],
                     ),
@@ -126,7 +130,17 @@ class _DemandeState extends State<Demande> {
               ),
             ),
             SizedBox(height: 20),
-            WidgetRaisedButton(text: 'Trouver une voiture', press:(){}, color: Color(0xff2E9FB0), textColor: Colors.white)
+            WidgetRaisedButton(text: 'Trouver une voiture', press:()async{
+              await userCredentials.refresh();
+              print("token\n");
+              print(userCredentials.token);
+              print('uid\n');
+              print (userCredentials.uid);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => CarsList()),
+              );
+            }, color: Color(0xff2E9FB0), textColor: Colors.white)
 
           ],
         ),

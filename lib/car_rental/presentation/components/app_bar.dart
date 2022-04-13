@@ -1,10 +1,10 @@
-import 'package:autoteck/DemandeVehicule/historique.dart';
-import 'package:autoteck/DemandeVehicule/profile.dart';
+//import 'package:autoteck/DemandeVehicule/historique.dart';
+//import 'package:autoteck/DemandeVehicule/profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../DemandeVehicule//home.dart';
-import '../DemandeVehicule/aide.dart';
+//import '../DemandeVehicule//home.dart';
+//import '../DemandeVehicule/aide.dart';
 
 
 class WidgetBottomBar extends StatefulWidget {
@@ -20,10 +20,10 @@ class _WidgetBottomBarState extends State<WidgetBottomBar> {
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    Home(), //home page
-    Historique(), // historique page
-    Aide(), // demande du support page
-    Profile(), // profil page
+    // Home(), //home page
+    // Historique(), // historique page
+    // Aide(), // demande du support page
+    // Profile(), // profil page
   ];
 
   void _onItemTapped(int index) {

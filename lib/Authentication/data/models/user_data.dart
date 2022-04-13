@@ -3,8 +3,11 @@ import 'dart:typed_data';
 import 'dart:io';
 import 'dart:core';
 
+import 'package:firebase_auth/firebase_auth.dart';
+
 class UserData {
   String? id; //put the id of firebase user
+  String? token;
   String? nom;
   String? prenom;
   String? email;
@@ -83,5 +86,33 @@ class UserData {
         json['photo_identite_recto'],
         json['photo_identite_verso'],
         json['photo_selfie']);
+  }
+}
+
+class userCredentials {
+  userCredentials._privateConstructor();
+  static final userCredentials _instance = userCredentials._privateConstructor();
+  static String? uid;
+  static String? token;
+
+  factory userCredentials(){
+    return _instance;
+  }
+  String? getUid(){
+    return uid;
+  }
+
+  String? getToken(){
+    return token;
+  }
+
+  static Future<void> refresh()async{
+    try{
+      token = await FirebaseAuth.instance.currentUser!.getIdToken();
+      uid = (await FirebaseAuth.instance.currentUser?.uid);
+    }on FirebaseAuthException catch (e){
+      print('auth exception!\n');
+    }
+
   }
 }

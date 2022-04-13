@@ -1,6 +1,6 @@
-import 'package:autoteck/DemandeVehicule/DateFin.dart';
-import 'package:autoteck/components/WBack.dart';
-import 'package:autoteck/components/WraisedButton.dart';
+import 'demande.dart';
+import '../../components/WBack.dart';
+import '../../components/WraisedButton.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -36,11 +36,11 @@ class _DateDebutState extends State<DateDebut> {
                 ),
               ),
               SizedBox(
-                height: 40,
+                height: 30,
               ),
               Text('Selectionner une date',style: TextStyle(fontSize: 18),),
               SizedBox(
-                height: 200,
+                height: 180,
                 child: CupertinoDatePicker(
                     initialDateTime: _date,
                     minimumYear: 2020,

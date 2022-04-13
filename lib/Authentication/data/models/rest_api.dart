@@ -7,7 +7,8 @@ import 'dart:async';
 
 class Api {
   static const _url =
-        "https://autotek-server.herokuapp.com//Locataire/";
+        "https://autotek-server.herokuapp.com/";
+  static var uri = Uri(host:"https://autotek-server.herokuapp.com/");
   static String formattedDateNow() {
     var now = DateTime.now();
     var formatter = DateFormat.yMd();

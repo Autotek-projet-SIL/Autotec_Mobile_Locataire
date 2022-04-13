@@ -1,18 +1,12 @@
-import 'package:autoteck/DemandeVehicule/historique.dart';
-import 'package:autoteck/DemandeVehicule/profile.dart';
+//import 'package:autoteck/DemandeVehicule/historique.dart';
+//import 'package:autoteck/DemandeVehicule/profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../DemandeVehicule//home.dart';
-import '../DemandeVehicule/aide.dart';
+import '../car_rental/presentation/home_page.dart';
+//import '../DemandeVehicule/aide.dart';
 
-void main(){
-  runApp(MaterialApp(
-    home: const WidgetBottomBar(),
-    debugShowCheckedModeBanner: false,
-    theme: ThemeData(fontFamily: 'Poppins'),
-  ));
-}
+
 
 class WidgetBottomBar extends StatefulWidget {
   const WidgetBottomBar({Key? key}) : super(key: key);
@@ -27,10 +21,10 @@ class _WidgetBottomBarState extends State<WidgetBottomBar> {
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    Home(),
-    Historique(),
-    Aide(),
-    Profile(),
+    // Home(),
+    // Historique(),
+    // Aide(),
+    // Profile(),
   ];
 
   void _onItemTapped(int index) {

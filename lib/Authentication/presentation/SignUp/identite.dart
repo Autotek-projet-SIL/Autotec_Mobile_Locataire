@@ -10,7 +10,7 @@ import '../../data/models/user_data.dart';
 import '../components/raised_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../Dashboard/dashboard.dart';
-
+import 'package:http/http.dart';
 // ignore: must_be_immutable
 class Identite extends StatefulWidget {
   UserData u;
@@ -153,9 +153,15 @@ class _IdentiteState extends State<Identite> {
                       text: "S'inscrire",
                       press: buttonActivated()
                           ? () async {
-                              _createAccountWithEmailAndPassword(context);
-                              _createAccountInDB();
-                            }
+                        //TODO add pictures to firebase storage and get the url
+                        await _createAccountWithEmailAndPassword(context);
+                        Navigator.of(context).pushReplacement(
+                              MaterialPageRoute(
+                                builder: (context) => Dashboard(
+                                  u: widget.u,
+                                ),
+                              ),
+                            );}
                           : null,
                       color: const Color.fromRGBO(27, 146, 164, 0.7),
                       textColor: Colors.white,
@@ -181,10 +187,23 @@ class _IdentiteState extends State<Identite> {
   }
 
   Future<void> _createAccountInDB() async {
-    setState(() async {
-      widget.u.id = FirebaseAuth.instance.currentUser!.uid;
-    Api.createUser(widget.u, await FirebaseAuth.instance.currentUser!.getIdToken());
-    //Api.getUser(widget.u.email!);
-    });
+
+    await userCredentials.refresh();
+    widget.u.id = userCredentials.uid;
+    print("uid: "+ widget.u.id!);
+    final response = await Api.createUser(widget.u, userCredentials.token);
+    if (response.statusCode != 200) {
+      throw Exception('insciption failed');
+    }else{
+      print("token\n");
+      print(userCredentials.token);
+      print("uid \n");
+      print(userCredentials.uid);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Dashboard(u: widget.u)),
+      );
+    }
+
   }
 }

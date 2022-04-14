@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:autotec/Authentication/data/models/user_data.dart';
+import 'package:autotec/car_rental/presentation/date_time_pickers.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'Cars.dart';
@@ -10,33 +11,38 @@ import '../../Authentication/data/models/user_data.dart';
 
 
 class CarsList extends StatefulWidget {
-  const CarsList({Key? key}) : super(key: key);
+  final String Debut;
+  final String Fin;
+   CarsList({Key? key, required this.Debut, required this.Fin}) : super(key: key);
 
   @override
   State<CarsList> createState() => _CarsListState();
 }
 
 class _CarsListState extends State<CarsList> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        children:const [
+        children: [
           Spacer(flex: 1,),
           Text(
             'Choisir un type de voiture',
             style: TextStyle(
+              fontFamily: 'poppin',
               fontWeight: FontWeight.w900,
               color: Colors.black,
+              fontSize: 20,
             ),
           ),
           Spacer(flex: 1,),
           Center(
 
             child: SizedBox(
-                height: 500,
+                height: 550,
                 width: 300,
-                child: CarListView()),
+                child: CarListView(DateDebut: widget.Debut, DateFin: widget.Fin,)),
           ),
           Spacer(flex: 1,),
         ],
@@ -46,7 +52,9 @@ class _CarsListState extends State<CarsList> {
 }
 
 class CarListView extends StatelessWidget{
-  const CarListView({Key? key}) : super(key: key);
+  final String DateDebut;
+  final String DateFin;
+  CarListView({Key? key, required this.DateDebut, required this.DateFin}) : super(key: key);
 
 
   @override
@@ -56,11 +64,11 @@ class CarListView extends StatelessWidget{
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<Car>? data = snapshot.data;
-          return _CarsListView(data);
+          return _CarsListView(data,this.DateDebut, this.DateFin);
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
-        return CircularProgressIndicator();
+        return CircularProgressIndicator(strokeWidth: 10,);
       },
     );
   }
@@ -82,11 +90,11 @@ class CarListView extends StatelessWidget{
     }
   }
 
-  ListView _CarsListView(data) {
+  ListView _CarsListView(data, dateD, dateF) {
     return ListView.builder(
         itemCount: data.length,
         itemBuilder: (context, index) {
-          return WidgetViewCar(carName: data[index].modele, carPrice: data[index].tarification.toString(), carImage: data[index].image);
+          return WidgetViewCar(car:data[index], DateDebut:dateD, DateFin: dateF);
         });
   }
 }

@@ -8,6 +8,8 @@ import 'Authentication/bloc/bloc/auth_bloc.dart';
 import 'Authentication/data/repositories/auth_repository.dart';
 import 'Authentication/presentation/first_screens/intro.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'car_rental/presentation/home_page.dart';
+import 'Authentication/presentation/first_screens/home.dart';
 
 var userCred ;
 
@@ -60,11 +62,11 @@ class MyApp extends StatelessWidget {
               builder: (context, snapshot) {
                 // If the snapshot has user data, then they're already signed in. So Navigating to the Dashboard.
                 if (snapshot.hasData) {
-                  return const DateDebut();
+                  return  Map();
                 }
                 // Otherwise, they're not signed in. Show the sign in page.
                 //return SignIn();
-                return const Intro();
+                return const Home();
               }),
         ),
       ),

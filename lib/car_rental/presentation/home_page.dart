@@ -1,10 +1,14 @@
+import 'package:autotec/Authentication/bloc/bloc/auth_bloc.dart';
+import 'package:autotec/Authentication/data/models/user_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:path/path.dart';
-import 'components/app_bar.dart';
+import 'search_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../Authentication/presentation/first_screens/home.dart';
+
 
 
 class Map extends StatefulWidget {
@@ -21,10 +25,10 @@ class _MapState extends State<Map> {
 
   void initState() {
     super.initState();
-    getCurrentLocation();
+    _getCurrentLocation();
   }
 
-  getCurrentLocation() {
+  _getCurrentLocation() {
     Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best,
         forceAndroidLocationManager: true)
@@ -63,48 +67,75 @@ class _MapState extends State<Map> {
 
    setState(() {
      _selectedIndex = index;
-
+     if (_selectedIndex==3){
+       context.read<AuthBloc>().add(SignOutRequested());
+     }
    });
+
  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: ()async{
+          await userCredentials.refresh();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => SearchPlacesScreen()),
+          );
+        },
+        backgroundColor: const Color.fromRGBO(27, 146, 164,1),
+        child: Icon(Icons.car_rental_outlined, color: Colors.white,size: 30,),
+      ),
       bottomNavigationBar: BottomNavigationBar(
+        onTap: _onItemTapped,
         elevation: 5.0,
         currentIndex:_selectedIndex ,
         selectedLabelStyle: const TextStyle(color: Color.fromRGBO(27, 146, 164, 0.7),),
         showUnselectedLabels: true,
         items:  <BottomNavigationBarItem> [
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.home_outlined, color: Colors.grey,),
             activeIcon:Icon(Icons.home_outlined, color: Color.fromRGBO(27, 146, 164, 0.7),) ,
             label: 'Accueil',
 
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.car_rental_outlined, color: Colors.grey,),
-            activeIcon:Icon(Icons.car_rental_outlined, color: Color.fromRGBO(27, 146, 164, 0.7),) ,
-            label: 'Location',
-
-          ),
-          BottomNavigationBarItem(
+          const BottomNavigationBarItem(
             icon: Icon(Icons.history, color: Colors.grey,),
             activeIcon:Icon(Icons.history, color: Color.fromRGBO(27, 146, 164, 0.7),) ,
             label: 'Historique',
 
           ),
-          BottomNavigationBarItem(
+         const BottomNavigationBarItem(
+            icon: Icon(Icons.notifications_none, color: Colors.grey,),
+            activeIcon:Icon(Icons.notifications_none, color: Color.fromRGBO(27, 146, 164, 0.7),) ,
+            label: 'Location',
+
+          ),
+          const BottomNavigationBarItem(
             icon: Icon(Icons.person_outline, color: Colors.grey,),
             activeIcon:Icon(Icons.person_outlined, color: Color.fromRGBO(27, 146, 164, 0.7),) ,
             label: 'Profile',
 
+
           ),
         ],
       ),
-        body: Stack(
+        body: BlocListener<AuthBloc, AuthState>(
+    listener: (context, state) {
+    if (state is UnAuthenticated) {
+    // Navigate to the sign in screen when the user Signs Out
+    Navigator.of(context).pushAndRemoveUntil(
+    MaterialPageRoute(builder: (context) => const Home()),
+    (route) => false,
+    );
+    }
+    },
+        child:   Stack(
             children: <Widget>[
               GoogleMap(
+                zoomControlsEnabled: false,
                 onMapCreated: _onMapCreated,
                 myLocationEnabled: true,
                 initialCameraPosition: CameraPosition(
@@ -114,7 +145,8 @@ class _MapState extends State<Map> {
               ),
 
             ]
-        )
+        ),),
+
     );
   }
 }

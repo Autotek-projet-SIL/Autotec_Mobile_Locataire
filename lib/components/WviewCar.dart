@@ -10,9 +10,11 @@ class WidgetViewCar extends StatelessWidget {
   final Car car;
   final String DateDebut;
   final String DateFin;
+  final double latitude;
+  final double longitude;
   const WidgetViewCar({
     Key? key,
-    required this.car, required this.DateDebut, required this.DateFin
+    required this.car, required this.DateDebut, required this.DateFin, required this.latitude, required this.longitude,
   }) : super(key: key);
 
   @override
@@ -24,7 +26,7 @@ class WidgetViewCar extends StatelessWidget {
             await userCredentials.refresh();
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Demande(dateDebut:this.DateDebut,dateFin: this.DateFin, car: this.car)),
+              MaterialPageRoute(builder: (context) => Demande(latitude: this.latitude, longitude: this.longitude, dateDebut:this.DateDebut,dateFin: this.DateFin, car: this.car)),
             );
           },
           child: Container(

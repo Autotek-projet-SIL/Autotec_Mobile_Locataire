@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 import 'CarsList.dart';
 
 class DateDebut extends StatefulWidget {
-  const DateDebut({Key? key}) : super(key: key);
+  final double latitude;
+  final double longitude;
+  const DateDebut({Key? key, required this.latitude, required this.longitude}) : super(key: key);
 
   @override
   State<DateDebut> createState() => _DateDebutState();
@@ -92,7 +94,7 @@ class _DateDebutState extends State<DateDebut> {
                     //print(value);
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => DateFin(dateDeb: value,)),
+                      MaterialPageRoute(builder: (context) => DateFin(dateDeb: value,latitude: widget.latitude,longitude: widget.longitude)),
                     );
                   },
                   color: Color.fromRGBO(27, 146, 164, 0.7),
@@ -107,11 +109,15 @@ class _DateDebutState extends State<DateDebut> {
 
 class DateFin extends StatefulWidget {
   final String dateDeb;
+  final double latitude;
+  final double longitude;
 
   const DateFin( {
     Key? key,
-    //  required this.dateDebut,
-    required this.dateDeb
+
+    required this.dateDeb,
+    required this.latitude,
+    required this.longitude
   }): super(key: key);
 
   @override
@@ -144,7 +150,7 @@ class _DateFinState extends State<DateFin> {
                 ),
               ),
               SizedBox(
-                height: 40,
+                height: 30,
               ),
               Text('Selectionner une date',style: TextStyle(fontSize: 18),),
               SizedBox(
@@ -163,7 +169,7 @@ class _DateFinState extends State<DateFin> {
                 ),
               ),
               SizedBox(
-                height: 50,
+                height: 30,
               ),
               Text(
                   'Selectionner le temps',
@@ -198,7 +204,7 @@ class _DateFinState extends State<DateFin> {
 
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => CarsList(Debut:widget.dateDeb,Fin: this.value,)),
+                      MaterialPageRoute(builder: (context) => CarsList(lat: widget.latitude, long: widget.longitude, Debut:widget.dateDeb,Fin: this.value,)),
                     );
 
                   },

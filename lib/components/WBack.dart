@@ -15,8 +15,8 @@ class WidgetArrowBack extends StatelessWidget {
           InkWell(
             child: Container(
               // margin: const EdgeInsets.only(top:40.0,left: 10.0, right: 10.0),
-              height: 50,
-              width: 50,
+              height: 40,
+              width: 40,
               decoration:  const BoxDecoration(
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(50),
@@ -36,7 +36,7 @@ class WidgetArrowBack extends StatelessWidget {
                     Icon(
                       Icons.arrow_back,
                       color: Colors.white,
-                      size: 30.0,
+                      size: 20.0,
 
 
                     ),

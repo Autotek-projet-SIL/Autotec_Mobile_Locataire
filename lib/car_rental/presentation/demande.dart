@@ -9,11 +9,15 @@ import 'CarsList.dart';
 
 
 class Demande extends StatefulWidget {
+  final double latitude;
+  final double longitude;
   final String dateDebut;
   final String dateFin;
   final Car car;
   const Demande( {
     Key? key,
+    required this.latitude,
+    required this.longitude,
     required this.dateDebut,
     required this.dateFin,
     required this.car

@@ -6,6 +6,7 @@ import '../components/text_field.dart';
 import '../components/text_field_password.dart';
 import '../../bloc/bloc/auth_bloc.dart';
 import '../SignUp/sign_up.dart';
+import '../../../car_rental/presentation/home_page.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -34,8 +35,8 @@ class _SignInState extends State<SignIn> {
         listener: (context, state) {
           if (state is Authenticated) {
             // Navigating to the dashboard screen if the user is authenticated
-            /* Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => const Dashboard()));*/
+             Navigator.pushReplacement(context,
+                MaterialPageRoute(builder: (context) => Map()));
           }
           if (state is AuthError) {
             // Showing the error message if the user has entered invalid credentials
@@ -125,8 +126,7 @@ class _SignInState extends State<SignIn> {
                                           color: Colors.black, fontSize: 16),
                                     ),
                                     onPressed: () {
-                                      _authenticateWithEmailAndPassword(
-                                          context);
+                                      _authenticateWithEmailAndPassword(context);
                                     },
                                   ),
                                 )

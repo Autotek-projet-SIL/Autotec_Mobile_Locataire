@@ -40,6 +40,10 @@ Future<void> main() async {
   print('User granted permission: ${settings.authorizationStatus}');
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  //Get Device token
+  String token = (await FirebaseMessaging.instance.getToken())!;
+  print("token ****");
+  print(token);
   runApp(const MyApp());
 
 }

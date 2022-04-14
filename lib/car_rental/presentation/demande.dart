@@ -2,8 +2,11 @@ import 'package:autotec/Authentication/data/models/user_data.dart';
 import 'Cars.dart';
 import '../../components/WraisedButton.dart';
 import 'package:flutter/material.dart';
-
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'CarsList.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
 
 
 
@@ -143,15 +146,62 @@ class _DemandeState extends State<Demande> {
               print (userCredentials.uid);
               // faire le traitement de la demande with the spiner and eiter validate it or not
               //then move to le suivi in real time
+              bool b = await _checkLocationFirebase();
+              if (b){
+                // voiture disponible -> reservation accepter
+                print('************vrai');
+                //updating the user position
+
+                await FirebaseFirestore.instance.collection('CarLocation').doc(widget.car.numero_chasis)
+                .update({
+                 // 'destination':new firebase.firestore.GeoPoint(widget.latitude, widget.longitude)
+                });
+              }else{
+                // pas de voiture dispo -> reservation refuser
+                print('************faux');
+              }
               /*Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => ),
               );*/
             }, color: Color(0xff2E9FB0), textColor: Colors.white)
 
+
           ],
         ),
       ),
     );
   }
+
+    Future<bool> _checkLocationFirebase()async{
+   // final querySnapshot = await FirebaseFirestore.instance.collection('CarLocation').doc(widget.car.numero_chasis).get();
+     final querySnapshot = await FirebaseFirestore.instance.collection('CarLocation').where('batterie', isGreaterThan: 20)
+     .where('disponible',isEqualTo: true).where('marque', isEqualTo: widget.car.marque).get();
+
+    //TODO check the distance btw them and send out the nearest one in case multiple
+     for (var doc in querySnapshot.docs) {
+       // Getting data directly
+
+       if( doc.exists){
+
+         return true;
+       }
+     }
+
+    return false;
+  }
+/*
+  _postReservation()async{
+    final response = await http.post(
+      Uri.http('autotek-server.herokuapp.com','/authentification_mobile/locataire_inscription/'),
+
+      body: jsonEncode(<String, String>{
+        "token": userCredentials.token,
+        "id": userCredentials.uid,
+
+      }),
+    );
+  }
+
+ */
 }

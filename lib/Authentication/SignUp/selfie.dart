@@ -4,9 +4,9 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import '../../data/models/user_data.dart';
-import '../components/raised_button.dart';
-//import 'package:path/path.dart' as path;
+import 'package:autotec/models/user_data.dart';
+import 'package:autotec/components/raised_button.dart';
+
 
 import 'identite.dart';
 

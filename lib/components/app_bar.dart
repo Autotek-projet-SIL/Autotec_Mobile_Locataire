@@ -3,8 +3,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-//import '../DemandeVehicule//home.dart';
-//import '../DemandeVehicule/aide.dart';
+import 'package:autotec/car_rental/home_page.dart';
+
 
 
 class WidgetBottomBar extends StatefulWidget {
@@ -20,7 +20,7 @@ class _WidgetBottomBarState extends State<WidgetBottomBar> {
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    // Home(), //home page
+     //home page
     // Historique(), // historique page
     // Aide(), // demande du support page
     // Profile(), // profil page

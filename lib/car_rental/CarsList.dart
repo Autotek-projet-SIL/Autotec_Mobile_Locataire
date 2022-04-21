@@ -1,19 +1,19 @@
 import 'dart:convert';
 
-import 'package:autotec/Authentication/data/models/user_data.dart';
-import 'package:autotec/car_rental/presentation/date_time_pickers.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'Cars.dart';
 import '/components/WviewCar.dart';
-import '../../Authentication/data/models/user_data.dart';
+import 'package:autotec/models/user_data.dart';
 
 
 
 class CarsList extends StatefulWidget {
+  final double lat;
+  final double long;
   final String Debut;
   final String Fin;
-   CarsList({Key? key, required this.Debut, required this.Fin}) : super(key: key);
+   CarsList({Key? key, required this.lat, required this.long,required this.Debut, required this.Fin}) : super(key: key);
 
   @override
   State<CarsList> createState() => _CarsListState();
@@ -42,7 +42,7 @@ class _CarsListState extends State<CarsList> {
             child: SizedBox(
                 height: 550,
                 width: 300,
-                child: CarListView(DateDebut: widget.Debut, DateFin: widget.Fin,)),
+                child: CarListView(latitude:widget.lat,longitude: widget.long ,DateDebut: widget.Debut, DateFin: widget.Fin,)),
           ),
           Spacer(flex: 1,),
         ],
@@ -52,9 +52,11 @@ class _CarsListState extends State<CarsList> {
 }
 
 class CarListView extends StatelessWidget{
+  final double latitude;
+  final double longitude;
   final String DateDebut;
   final String DateFin;
-  CarListView({Key? key, required this.DateDebut, required this.DateFin}) : super(key: key);
+  CarListView({Key? key, required this.latitude,  required this.longitude, required this.DateDebut, required this.DateFin}) : super(key: key);
 
 
   @override
@@ -64,11 +66,14 @@ class CarListView extends StatelessWidget{
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<Car>? data = snapshot.data;
-          return _CarsListView(data,this.DateDebut, this.DateFin);
+          return _CarsListView(data,this.DateDebut, this.DateFin, this.latitude, this.longitude);
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
-        return CircularProgressIndicator(strokeWidth: 10,);
+        return SizedBox(
+          height: 10,
+            width: 10,
+            child: CircularProgressIndicator());
       },
     );
   }
@@ -77,7 +82,7 @@ class CarListView extends StatelessWidget{
 
     var Url = Uri.http("autotek-server.herokuapp.com","/flotte/vehicule");
     print (Url.toString());
-    final response = await http.get(Url, headers: {'token':userCredentials.token!,'id':userCredentials.uid!});
+    final response = await http.get(Url, headers: {'token':userCredentials.token!,'id_sender':userCredentials.uid!});
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
@@ -90,11 +95,11 @@ class CarListView extends StatelessWidget{
     }
   }
 
-  ListView _CarsListView(data, dateD, dateF) {
+  ListView _CarsListView(data, dateD, dateF, latitude, longitude) {
     return ListView.builder(
         itemCount: data.length,
         itemBuilder: (context, index) {
-          return WidgetViewCar(car:data[index], DateDebut:dateD, DateFin: dateF);
+          return WidgetViewCar(car:data[index], DateDebut:dateD, DateFin: dateF, latitude: latitude, longitude: longitude);
         });
   }
 }

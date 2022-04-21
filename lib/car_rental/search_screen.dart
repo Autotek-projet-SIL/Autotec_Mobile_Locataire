@@ -1,6 +1,6 @@
 import 'dart:ui';
 
-import 'package:autotec/car_rental/presentation/date_time_pickers.dart';
+import 'package:autotec/car_rental/date_time_pickers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
@@ -17,7 +17,7 @@ class SearchPlacesScreen extends StatefulWidget {
   State<SearchPlacesScreen> createState() => _SearchPlacesScreenState();
 }
 
-const kGoogleApiKey = 'AIzaSyBQPZbwnOiANe0SgEQfgutDT6VWCtvxpDw';
+const kGoogleApiKey = 'AIzaSyA2Ns-gBQnfKGw2-CDxU9oZun0t0mxI2CY';
 final homeScaffoldKey = GlobalKey<ScaffoldState>();
 
 class _SearchPlacesScreenState extends State<SearchPlacesScreen> {

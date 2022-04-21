@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../bloc/bloc/auth_bloc.dart';
-import '../../data/models/user_data.dart';
+import 'package:autotec/bloc/auth_bloc.dart';
+import 'package:autotec/models/user_data.dart';
 import '../SignIn/sign_in.dart';
 import 'dart:io';
 

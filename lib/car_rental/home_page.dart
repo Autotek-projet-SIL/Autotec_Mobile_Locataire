@@ -1,13 +1,12 @@
-import 'package:autotec/Authentication/bloc/bloc/auth_bloc.dart';
-import 'package:autotec/Authentication/data/models/user_data.dart';
+import 'package:autotec/bloc/auth_bloc.dart';
+import 'package:autotec/models/user_data.dart';
 import 'package:flutter/cupertino.dart';
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'search_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../Authentication/presentation/first_screens/home.dart';
+import 'package:autotec/Authentication/first_screens/home.dart';
 
 
 

@@ -1,9 +1,10 @@
-import 'package:autotec/Authentication/data/models/user_data.dart';
-import 'package:autotec/car_rental/presentation/demande.dart';
+
 import 'package:flutter/material.dart';
 
-import '../car_rental/presentation/Car_details.dart';
-import '../car_rental/presentation/Cars.dart';
+import 'package:autotec/models/user_data.dart';
+import 'package:autotec/car_rental/demande.dart';
+import '../car_rental/Car_details.dart';
+import '../car_rental/Cars.dart';
 
 
 class WidgetViewCar extends StatelessWidget {

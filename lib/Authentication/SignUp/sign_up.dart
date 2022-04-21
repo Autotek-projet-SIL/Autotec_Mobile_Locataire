@@ -3,10 +3,10 @@
 import 'selfie.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import '../components/text_field.dart';
-import '../components/text_field_digits.dart';
-import '../components/text_field_password.dart';
-import '../../data/models/user_data.dart';
+import 'package:autotec/components/text_field.dart';
+import 'package:autotec/components/text_field_digits.dart';
+import 'package:autotec/components/text_field_password.dart';
+import 'package:autotec/models/user_data.dart';
 
 class SignUp extends StatefulWidget {
   const SignUp({Key? key}) : super(key: key);

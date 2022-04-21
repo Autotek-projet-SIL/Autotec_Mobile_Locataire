@@ -1,4 +1,4 @@
-import '../../../components/WraisedButton.dart';
+import 'WraisedButton.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';

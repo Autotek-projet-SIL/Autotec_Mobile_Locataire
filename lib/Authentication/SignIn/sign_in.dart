@@ -2,11 +2,11 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../components/text_field.dart';
-import '../components/text_field_password.dart';
-import '../../bloc/bloc/auth_bloc.dart';
+import 'package:autotec/components/text_field.dart';
+import 'package:autotec/components/text_field_password.dart';
+import 'package:autotec/bloc/auth_bloc.dart';
 import '../SignUp/sign_up.dart';
-import '../../../car_rental/presentation/home_page.dart';
+import 'package:autotec/car_rental/home_page.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key? key}) : super(key: key);

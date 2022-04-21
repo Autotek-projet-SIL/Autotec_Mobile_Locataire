@@ -1,15 +1,17 @@
-import 'package:autotec/Authentication/data/models/user_data.dart';
-import 'package:autotec/car_rental/presentation/date_time_pickers.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'Authentication/bloc/bloc/auth_bloc.dart';
-import 'Authentication/data/repositories/auth_repository.dart';
-import 'Authentication/presentation/first_screens/intro.dart';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'car_rental/presentation/home_page.dart';
-import 'Authentication/presentation/first_screens/home.dart';
+
+import 'package:autotec/bloc/auth_bloc.dart';
+import 'package:autotec/repositories/auth_repository.dart';
+
+import 'package:autotec/car_rental/home_page.dart';
+import 'package:autotec/Authentication/first_screens/home.dart';
+import 'package:autotec/models/user_data.dart';
+
 
 var userCred ;
 

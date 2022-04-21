@@ -1,6 +1,6 @@
-import 'package:autotec/Authentication/data/models/user_data.dart';
+import 'package:autotec/models/user_data.dart';
 import 'Cars.dart';
-import '../../components/WraisedButton.dart';
+import '../components/WraisedButton.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

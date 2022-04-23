@@ -44,7 +44,7 @@ dependencies:
   permission_handler: ^9.2.0
   flutter_polyline_points: ^1.0.0
   google_maps_routes: ^1.1.2
-
+  sliding_up_panel: ^2.0.0+1
   http: ^0.13.4
   intl: ^0.17.0
 
@@ -75,8 +75,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-  # assets:
-  #   - images/a_dot_burr.jpeg
+  assets:
+   - assets/Car.png
+   - location-map--car-pin.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

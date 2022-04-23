@@ -6,6 +6,18 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
+/*To do
+
+1 - the slider 
+2 - the distance 
+3 - the remaining time 
+4 - fix ui 
+5 - the localisation pin 
+6 - localization pin informations on click
+7 - fixe my time sheet
+
+ */
+
 class MyMap extends StatefulWidget {
   final String carId;
   final String userId;
@@ -27,8 +39,8 @@ class _MyMapState extends State<MyMap> {
   late GoogleMapController _controller;
   bool _added = false;
 
-  Set<Marker> _markers = {};
-  Set<Polyline> _polylines = {};
+  // Set<Marker> _markers = {};
+  //Set<Polyline> _polylines = {};
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints = PolylinePoints();
   String googleAPIKey = "AIzaSyD1ZzI2O9bqUhQdwsPaUNrp81wtpvxZvzY";
@@ -37,12 +49,12 @@ class _MyMapState extends State<MyMap> {
 
   late LatLng source;
 
-/*  @override
+  @override
   void initState() {
     //source = widget.sourceLocation;
-   // setSourceAndDestinationIcons();
+    setSourceAndDestinationIcons();
     super.initState();
-  }*/
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,20 +75,22 @@ class _MyMapState extends State<MyMap> {
             tiltGesturesEnabled: false,
             markers: {
               Marker(
-                  position: LatLng(
-                    snapshot.data!.docs.singleWhere(
-                        (element) => element.id == widget.carId)['latitude'],
-                    snapshot.data!.docs.singleWhere(
-                        (element) => element.id == widget.carId)['longitude'],
-                  ),
-                  markerId: const MarkerId('SourcePin'),
-                  icon: BitmapDescriptor.defaultMarkerWithHue(
-                      BitmapDescriptor.hueGreen)),
+                onTap: () {},
+                infoWindow: InfoWindow(
+                    title: "car is moving ", snippet: "snippet", onTap: () {}),
+                position: LatLng(
+                  snapshot.data!.docs.singleWhere(
+                      (element) => element.id == widget.carId)['latitude'],
+                  snapshot.data!.docs.singleWhere(
+                      (element) => element.id == widget.carId)['longitude'],
+                ),
+                markerId: const MarkerId('SourcePin'),
+                icon: sourceIcon!,
+              ),
               Marker(
                   position: widget.destinationLocation,
                   markerId: const MarkerId('destPin'),
-                  icon: BitmapDescriptor.defaultMarkerWithHue(
-                      BitmapDescriptor.hueBlue)),
+                  icon: destinationIcon!),
             },
             //   polylines: _polylines,
             initialCameraPosition: CameraPosition(
@@ -91,23 +105,64 @@ class _MyMapState extends State<MyMap> {
               setState(
                 () {
                   _controller = controller;
+                  _controller.setMapStyle(Utils.mapStyles);
                   _added = true;
                   //  setPolylines(snapshot);
                 },
               );
             },
           );
+
+          /*  DraggableScrollableSheet(
+              initialChildSize: 0.2,
+              minChildSize: 0.1,
+              builder:
+                  (BuildContext context, ScrollController scrollController) {
+                return Container(
+                  height: 200,
+                  color: Colors.white,
+                  child: Row(
+                    children: [
+                      Column(children: const[
+                       Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Text("car name"),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Text("Remaining time"),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(20),
+                        child: Text("Remaining distance"),
+                      )
+                      ],),
+                      Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Image.asset('assets/Car.png',height: 100, width: 100,),  
+                      ),
+                     
+                    ],
+                  ),
+                );
+              },
+            ),*/
         },
       ),
     );
   }
 
-  /* void setSourceAndDestinationIcons() async {
+  void setSourceAndDestinationIcons() async {
+    /*   sourceIcon = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(size: Size(0.01, 0.01)),
+      'assets/location-map--car-pin.png',
+    );*/
     sourceIcon =
-        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
+        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
     destinationIcon =
-        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure);
-  }*/
+        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
+  }
+
 /*
   setPolylines(AsyncSnapshot<QuerySnapshot<Object?>> snapshot) async {
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
@@ -152,4 +207,167 @@ class _MyMapState extends State<MyMap> {
       ),
     );
   }
+}
+
+class Utils {
+  static String mapStyles = '''[
+  {
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#f5f5f5"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.icon",
+    "stylers": [
+      {
+        "visibility": "off"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#616161"
+      }
+    ]
+  },
+  {
+    "elementType": "labels.text.stroke",
+    "stylers": [
+      {
+        "color": "#f5f5f5"
+      }
+    ]
+  },
+  {
+    "featureType": "administrative.land_parcel",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#bdbdbd"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#eeeeee"
+      }
+    ]
+  },
+  {
+    "featureType": "poi",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#757575"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#e5e5e5"
+      }
+    ]
+  },
+  {
+    "featureType": "poi.park",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#9e9e9e"
+      }
+    ]
+  },
+  {
+    "featureType": "road",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#ffffff"
+      }
+    ]
+  },
+  {
+    "featureType": "road.arterial",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#757575"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#dadada"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#616161"
+      }
+    ]
+  },
+  {
+    "featureType": "road.local",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#9e9e9e"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.line",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#e5e5e5"
+      }
+    ]
+  },
+  {
+    "featureType": "transit.station",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#eeeeee"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "geometry",
+    "stylers": [
+      {
+        "color": "#c9c9c9"
+      }
+    ]
+  },
+  {
+    "featureType": "water",
+    "elementType": "labels.text.fill",
+    "stylers": [
+      {
+        "color": "#9e9e9e"
+      }
+    ]
+  }
+]''';
 }

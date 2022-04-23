@@ -19,8 +19,8 @@ class MyApp extends StatelessWidget {
       title: 'autotec',
       home:  MyMap(
         carId: "user1", 
-        userId: "userId", // we use it to get thecar's location from firebase
-        destinationLocation: LatLng(36.712813, 3.172565), // client location it's fixed at first
+        userId: "USER", // we use it to get the car's location from firebase
+        destinationLocation: LatLng(36.7054387, 3.1719214), // client location it's fixed at first
       ),
     );
   }

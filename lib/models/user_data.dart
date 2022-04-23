@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:core';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class UserData {
   String? id; //put the id of firebase user
@@ -92,18 +93,15 @@ class UserData {
 class userCredentials {
   userCredentials._privateConstructor();
   static final userCredentials _instance = userCredentials._privateConstructor();
+  static String? devicetoken;
   static String? uid;
   static String? token;
 
   factory userCredentials(){
     return _instance;
   }
-  String? getUid(){
-    return uid;
-  }
-
-  String? getToken(){
-    return token;
+  static setDeviceToken()async{
+    devicetoken = await FirebaseMessaging.instance.getToken();
   }
 
   static Future<void> refresh()async{

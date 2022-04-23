@@ -19,31 +19,32 @@ class _OnBoardingState extends State<OnBoarding> {
             PageViewModel(
               title: 'Demandez une voiture et elle viendra à vous',
               body:
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vel in vitae, sed sem elementum.',
-              image: buildImage('assets/phone.png'),
+                  'pas besoin d`un chauffeur, nos voitures sont automatiques!',
+              image: buildImage('assets/cover2.png'),
               decoration: getPageDecoration(),
             ),
             PageViewModel(
               title: 'Créer un compte pour continuer',
               body:
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vel in vitae, sed sem elementum.',
-              image: buildImage('assets/cover2.png'),
+                  'inscrivez-vous et utilisez l`application gratuitement!',
+              image: buildImage('assets/phone.png'),
               decoration: getPageDecoration(),
             ),
             PageViewModel(
               title: 'Paiement rapide et sécurisé',
               body:
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vel in vitae, sed sem elementum.',
+                  'une fois votre trajet fait, effectuer un payement sécurisé et en toute transparence.',
               image: buildImage('assets/card.png'),
               decoration: getPageDecoration(),
             ),
           ],
           done: const Text('Suivant',
               style: TextStyle(
-                  fontWeight: FontWeight.w600, fontFamily: 'Poppins')),
+                  fontWeight: FontWeight.w600, fontFamily: 'Poppins', color: Colors.white)),
           onDone: () => goToHome(context),
           showSkipButton: true,
-          skip: const Text('Skip'),
+          skip: const Text('Skip',style: TextStyle(
+              fontWeight: FontWeight.w600, fontFamily: 'Poppins', color: Colors.white)),
           onSkip: () => goToHome(context),
           next: const Text('Suivant'),
           dotsDecorator: getDotDecoration(),
@@ -67,7 +68,7 @@ class _OnBoardingState extends State<OnBoarding> {
       );
 
   void goToHome(context) => Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const Home()),
+        MaterialPageRoute(builder: (context) => Home()),
       );
   DotsDecorator getDotDecoration() => DotsDecorator(
         color: const Color(0xFFBDBDBD),

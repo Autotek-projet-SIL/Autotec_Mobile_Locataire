@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_unnecessary_containers
 
+import 'package:autotec/Authentication/SignUp/identite_verso.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,16 +11,17 @@ import 'package:autotec/models/user_data.dart';
 import '../../../components/raised_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../Dashboard/dashboard.dart';
+import 'package:autotec/repositories/image_storage_repository.dart';
 import 'package:http/http.dart';
 // ignore: must_be_immutable
-class Identite extends StatefulWidget {
+class Identite_recto extends StatefulWidget {
   UserData u;
-  Identite({required this.u, Key? key}) : super(key: key);
+  Identite_recto({required this.u, Key? key}) : super(key: key);
   @override
-  _IdentiteState createState() => _IdentiteState();
+  _Identite_rectoState createState() => _Identite_rectoState();
 }
 
-class _IdentiteState extends State<Identite> {
+class _Identite_rectoState extends State<Identite_recto> {
   XFile? imageFile;
   final ImagePicker _picker = ImagePicker();
   bool isButtonActive = true;
@@ -154,15 +156,19 @@ class _IdentiteState extends State<Identite> {
                       press: buttonActivated()
                           ? () async {
                         //TODO add pictures to firebase storage and get the url
-                        await _createAccountWithEmailAndPassword(context);
-                        Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (context) => Dashboard(
-                                  u: widget.u,
-                                ),
+                        var id_url = await Storage.uploadFile(widget.u.photoIdentiteRecto.toString(),"Pièces identité Recto/"+widget.u.nom!+" "+widget.u.prenom!);
+                        widget.u.photoIdentiteVerso = id_url ;
+                        print("************************");
+                        print(widget.u.photoIdentiteVerso);
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Identite_verso(
+                                u: widget.u,
                               ),
-                            );}
-                          : null,
+                            ),
+                          );
+                      } : null,
                       color: const Color.fromRGBO(27, 146, 164, 0.7),
                       textColor: Colors.white,
                     ),

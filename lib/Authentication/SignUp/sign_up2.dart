@@ -1,6 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:autotec/Authentication/SignUp/sign_up2.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'selfie.dart';
 import 'package:email_validator/email_validator.dart';
@@ -10,38 +10,26 @@ import 'package:autotec/components/text_field_digits.dart';
 import 'package:autotec/components/text_field_password.dart';
 import 'package:autotec/models/user_data.dart';
 
-class SignUp extends StatefulWidget {
-  const SignUp({Key? key}) : super(key: key);
+class SignUp2 extends StatefulWidget {
+  UserData user;
+  SignUp2({required this.user, Key? key}) : super(key: key);
   @override
-  State<SignUp> createState() => _SignUpState();
+  State<SignUp2> createState() => _SignUp2State();
 }
 
-class _SignUpState extends State<SignUp> {
+class _SignUp2State extends State<SignUp2> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  TextEditingController firstNameController = TextEditingController();
-  TextEditingController lastNameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  TextEditingController dateinput = TextEditingController();
   TextEditingController mdpConfirmController = TextEditingController();
-  TextEditingController numeroTelephoneController = TextEditingController();
-
   dataNavigation(BuildContext context) {
-    UserData user = UserData.m(
-      id: "0",
-      nom: firstNameController.text,
-      prenom: lastNameController.text,
-      email: _emailController.text,
-      motDePasse: "",
-      numeroTelephone: numeroTelephoneController.text,
-    );
+
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       debugPrint("Form Validated");
       // _signupFormKey.currentState!.save();
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => SignUp2(user: user),
+          builder: (context) => Selfie(u: widget.user),
         ),
       );
     } else {
@@ -58,10 +46,11 @@ class _SignUpState extends State<SignUp> {
         child: Padding(
           padding: const EdgeInsets.all(18.0),
           child: SingleChildScrollView(
+            reverse: true,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                SizedBox(height: size.height * 0.1),
+                SizedBox(height: size.height * 0.01),
                 Image.asset(
                   'assets/logo.png',
                   width: 350,
@@ -69,66 +58,38 @@ class _SignUpState extends State<SignUp> {
                 SizedBox(height: size.height * 0.06),
                 const Text(
                   "S'inscrire pour continuer",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-
+                SizedBox(height: size.height * 0.06),
                 Center(
                   child: Form(
                     key: _formKey,
                     child: Column(
                       children: [
                         SizedBox(height: size.height * 0.03),
-                        CustomTextField(
-                          hintText: "Nom",
-                          validationMode: AutovalidateMode.onUserInteraction,
-                          controler: firstNameController,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your first name';
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(height: size.height * 0.03),
-                        CustomTextField(
-                          hintText: "Prénom",
-                          validationMode: AutovalidateMode.onUserInteraction,
-                          controler: lastNameController,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your last name';
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(height: size.height * 0.03),
-                        CustomTextField(
-                          hintText: " Votre email",
-                          controler: _emailController,
+                        TextFieldPassword (
+                          controller: _passwordController,
+                          hintText: "Mot de passe",
                           validationMode: AutovalidateMode.onUserInteraction,
                           validator: (value) {
-                            return value != null &&
-                                !EmailValidator.validate(value)
-                                ? 'Enter a valid email'
+                            return value != null && value.length < 6
+                                ? "Enter min. 6 characters"
                                 : null;
                           },
                         ),
                         SizedBox(height: size.height * 0.03),
-                        WidgetTextfieldDigit(
-                          hintText: "Numero de téléphone",
-                          controller: numeroTelephoneController,
-                          validationMode: AutovalidateMode.always,
+                        TextFieldPassword (
+                          controller: mdpConfirmController,
+                          hintText: "Confirmer votre Mot de passe",
+                          validationMode: AutovalidateMode.onUserInteraction,
                           validator: (value) {
-                            if (value == null ||
-                                value.isEmpty ||
-                                value.length < 10) {
-                              return 'le numero de telephone doit etre >10';
-                            }
-                            return null;
+                            return value != null && value.length < 6
+                                ? "Verifier votre mot de passe"
+                                : null;
                           },
                         ),
-
-                        SizedBox(height: size.height * 0.06),
+                        SizedBox(height: size.height * 0.03),
+                        SizedBox(height: size.height * 0.03),
                         FractionallySizedBox(
                           widthFactor: 1,
                           child:RaisedButton(
@@ -145,7 +106,9 @@ class _SignUpState extends State<SignUp> {
                             ),
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
+                                widget.user.motDePasse = _passwordController.text;
                                 dataNavigation(context);
+
                               }
                             },
                           ),

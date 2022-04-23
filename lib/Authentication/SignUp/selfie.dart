@@ -6,9 +6,9 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:autotec/models/user_data.dart';
 import 'package:autotec/components/raised_button.dart';
+import 'package:autotec/repositories/image_storage_repository.dart';
 
-
-import 'identite.dart';
+import 'identite_recto.dart';
 
 // ignore: must_be_immutable
 class Selfie extends StatefulWidget {
@@ -133,11 +133,14 @@ class _SelfieState extends State<Selfie> {
               CustomRaisedButton(
                 text: "Continuer",
                 press: buttonActivated()
-                    ? () {
+                    ? () async {
+                  var img_url = await Storage.uploadFile(imageFile!.path, "Selfies/"+widget.u.nom!+" "+widget.u.prenom!);
+                  widget.u.photoSelfie = img_url ;
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Identite(
+                            builder: (context) => Identite_recto(
                               u: widget.u,
                             ),
                           ),

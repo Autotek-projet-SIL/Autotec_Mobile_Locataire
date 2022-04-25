@@ -127,7 +127,7 @@ class _DashboardState extends State<Dashboard> {
                   print("uid \n");
                   print(userCredentials.uid);
                   // Signing out the user
-                 context.read<AuthBloc>().add(SignOutRequested());
+                context.read<AuthBloc>().add(SignOutRequested());
                 },
               )
             ],

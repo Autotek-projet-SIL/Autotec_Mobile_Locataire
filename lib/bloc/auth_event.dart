@@ -1,6 +1,5 @@
 part of 'auth_bloc.dart';
 
-
 abstract class AuthEvent extends Equatable {
   @override
   List<Object> get props => [];
@@ -21,8 +20,8 @@ class SignOutRequested extends AuthEvent {}
 class SignUpRequested extends AuthEvent {
   final String email;
   final String password;
-
-  SignUpRequested(this.email, this.password);
+  final UserData user;
+  SignUpRequested(this.email, this.password, this.user);
 }
 
 // When the user signing in with google this event is called and the [AuthRepository] is called to sign in the user

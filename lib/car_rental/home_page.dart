@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../models/rest_api.dart';
 import 'search_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:autotec/Authentication/first_screens/home.dart';
@@ -62,12 +63,15 @@ class _MapState extends State<Map> {
    // Profile(), // profil page
  ];
 
- void _onItemTapped(int index) {
+ void _onItemTapped(int index) async{
 
-   setState(() {
+   setState(() async{
      _selectedIndex = index;
      if (_selectedIndex==3){
        context.read<AuthBloc>().add(SignOutRequested());
+     }
+     if(_selectedIndex == 2) {
+
      }
    });
 

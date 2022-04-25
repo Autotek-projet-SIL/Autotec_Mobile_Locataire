@@ -12,38 +12,46 @@ class Api {
 
   static String formattedDateNow() {
     var now = DateTime.now();
-    var formatter = DateFormat.yMd();
+    var formatter = DateFormat("yyyy-MM-dd");
     String formattedDate = formatter.format(now);
     return formattedDate; // 2016-01-25
   }
 
 //use this function to create a user
-  static Future<http.Response> createUser(UserData u, String? token) async {
-    return http.post(
-      Uri.http('autotek-server.herokuapp.com','/authentification_mobile/locataire_inscription/'),
+  static Future<http.Response> createUser(UserData u, String token) async {
+    print("token "+ token.toString());
+    print("nom: "+ u.nom!);
+    print("prenom "+ u.prenom!);
+    print("email "+ u.email!);
+    print("date "+ formattedDateNow());
 
+
+    return await http.post(
+      Uri.parse('https://autotek-server.herokuapp.com/authentification_mobile/locataire_inscription/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
       body: jsonEncode(<String, String>{
-        "token": token!,
-        "id": u.id!,
+
+        "id_sender": u.id!,
+        "id":u.id!,
+        "token":token,
         "nom": u.nom!,
         "prenom": u.prenom!,
         "email": u.email!,
         "mot_de_passe": u.motDePasse!,
         "numero_telephone": u.numeroTelephone!,
-        "photo_identite_recto": "test",
-        "photo_identite_verso": "test",
-        "photo_selfie": "test",
-        "statut_compte": "false",
+        "photo_identite_recto": u.photoIdentiteRecto!,
+        "photo_identite_verso": u.photoIdentiteVerso!,
+        "photo_selfie": u.photoSelfie!,
+        "statut_compte": "f",
         "statut": "en attente",
-        "date_inscription": DateTime.now().toString()
+        "date_inscription": formattedDateNow()
       }),
     );
   }
 
-/*
-use these functions to see what to print in the page after the inscription
-to tcheck if he's validated or not
- */
+
   static Future<http.Response> getUser(String email) async {
     return http.get(
       Uri.parse(_url + email),

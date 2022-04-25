@@ -1,17 +1,19 @@
 // ignore_for_file: avoid_unnecessary_containers
 
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:autotec/main.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 import 'package:autotec/bloc/auth_bloc.dart';
 import 'package:autotec/models/rest_api.dart';
 import 'package:autotec/models/user_data.dart';
 import '../../../components/raised_button.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:autotec/car_rental/home_page.dart';
 import '../Dashboard/dashboard.dart';
 import 'package:autotec/repositories/image_storage_repository.dart';
-import 'package:http/http.dart';
 // ignore: must_be_immutable
 class Identite_verso extends StatefulWidget {
   UserData u;
@@ -107,13 +109,11 @@ class _Identite_versoState extends State<Identite_verso> {
         listener: (context, state) {
           if (state is Authenticated) {
             // Navigating to the home screen if the user is authenticated
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => Dashboard(
-                  u: widget.u,
-                ),
-              ),
-            );
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Map(),
+            ));
+
           }
           if (state is AuthError) {
             // Displaying the error message if the user is not authenticated
@@ -135,7 +135,7 @@ class _Identite_versoState extends State<Identite_verso> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      "Veuillez prendre une photo de votre piece d'identité ou permis",
+                      "Veuillez prendre une photo de votre piece d'identité (verso)",
                       style:
                       TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
@@ -154,22 +154,15 @@ class _Identite_versoState extends State<Identite_verso> {
                       text: "S'inscrire",
                       press: buttonActivated()
                           ? () async {
-
-                        var id_url = await Storage.uploadFile(widget.u.photoIdentiteVerso.toString(),"Pièces identité Verso/"+widget.u.nom!+" "+widget.u.prenom!);
+                        //uploading the image to storage
+                        var id_url = await Storage.uploadFile(imageFile!.path,"Pièces identité Verso/"+widget.u.nom!+" "+widget.u.prenom!);
                         widget.u.photoIdentiteVerso = id_url ;
-                        print("************************");
-                        print(widget.u.photoIdentiteVerso);
-                        //TODO inscription firebase et REST API
-                        //await _createAccountWithEmailAndPassword(context);
-                        /* Navigator.of(context).pushReplacement(
-                              MaterialPageRoute(
-                                builder: (context) => Dashboard(
-                                  u: widget.u,
-                                ),
-                              ),
-                            );
 
-                       */
+                        print(widget.u.photoIdentiteVerso);
+                        //inscription firebase and REST API
+                        await _createAccountWithEmailAndPassword(context);
+
+
                       } : null,
                       color: const Color.fromRGBO(27, 146, 164, 0.7),
                       textColor: Colors.white,
@@ -190,28 +183,9 @@ class _Identite_versoState extends State<Identite_verso> {
       SignUpRequested(
         widget.u.email!,
         widget.u.motDePasse!,
+        widget.u
       ),
     );
   }
 
-  Future<void> _createAccountInDB() async {
-
-    await userCredentials.refresh();
-    widget.u.id = userCredentials.uid;
-    print("uid: "+ widget.u.id!);
-    final response = await Api.createUser(widget.u, userCredentials.token);
-    if (response.statusCode != 200) {
-      throw Exception('insciption failed');
-    }else{
-      print("token\n");
-      print(userCredentials.token);
-      print("uid \n");
-      print(userCredentials.uid);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Dashboard(u: widget.u)),
-      );
-    }
-
-  }
 }

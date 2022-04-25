@@ -56,7 +56,7 @@ class _HomeState extends State<Home> {
               shape: const StadiumBorder(),
               padding: const EdgeInsets.symmetric(horizontal: 95, vertical: 14),
               child: const Text(
-                'S' '''''' 'inscrire',
+                "S ' inscrire",
                 style: TextStyle(color: Colors.white, fontSize: 16),
               ),
               onPressed: () {

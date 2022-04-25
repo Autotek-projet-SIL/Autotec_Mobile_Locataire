@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'package:autotec/models/user_data.dart';
+import "package:autotec/models/rest_api.dart";
 
 class AuthRepository {
   final _firebaseAuth = FirebaseAuth.instance;
@@ -40,5 +42,31 @@ class AuthRepository {
     } catch (e) {
       throw Exception(e);
     }
+  }
+
+  Future<void> createAccountInDB(UserData user) async {
+
+    await userCredentials.refresh();
+    user.id = userCredentials.uid;
+    print("uid: "+ user.id!);
+    final response = await Api.createUser(user, userCredentials.token!);
+    if (response.statusCode != 200) {
+      throw Exception('insciption failed');
+    }else{
+      print("token\n");
+      print(userCredentials.token);
+      print("uid \n");
+      print(userCredentials.uid);
+
+    }
+
+  }
+
+  Future<void> saveTokenDevice() async {
+    await userCredentials.setDeviceToken();
+    await FirebaseFirestore.instance.collection('DeviceToken').doc(userCredentials.uid).set({
+      'device_token': userCredentials.token,
+    }) .then((value) => print("token added"))
+        .catchError((error) => print("Failed to add token: $error"));
   }
 }

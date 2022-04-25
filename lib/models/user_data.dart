@@ -106,7 +106,7 @@ class userCredentials {
 
   static Future<void> refresh()async{
     try{
-      token = await FirebaseAuth.instance.currentUser!.getIdToken();
+      token = (await FirebaseAuth.instance.currentUser!.getIdToken());
       uid = (await FirebaseAuth.instance.currentUser?.uid);
     }on FirebaseAuthException catch (e){
       print('auth exception!\n');

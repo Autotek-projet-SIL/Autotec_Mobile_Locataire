@@ -136,7 +136,7 @@ class _Identite_rectoState extends State<Identite_recto> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
-                      "Veuillez prendre une photo de votre piece d'identité ou permis",
+                      "Veuillez prendre une photo de votre piece d'identité (recto)",
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
@@ -152,14 +152,13 @@ class _Identite_rectoState extends State<Identite_recto> {
                     ),
                     SizedBox(height: size.height * 0.03),
                     CustomRaisedButton(
-                      text: "S'inscrire",
+                      text: "Continuer",
                       press: buttonActivated()
                           ? () async {
-                        //TODO add pictures to firebase storage and get the url
-                        var id_url = await Storage.uploadFile(widget.u.photoIdentiteRecto.toString(),"Pièces identité Recto/"+widget.u.nom!+" "+widget.u.prenom!);
-                        widget.u.photoIdentiteVerso = id_url ;
+                        var id_url = await Storage.uploadFile(imageFile!.path,"Pièces identité Recto/"+widget.u.nom!+" "+widget.u.prenom!);
+                        widget.u.photoIdentiteRecto = id_url ;
                         print("************************");
-                        print(widget.u.photoIdentiteVerso);
+                        print(widget.u.photoIdentiteRecto);
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -183,33 +182,4 @@ class _Identite_rectoState extends State<Identite_recto> {
     );
   }
 
-  Future<void> _createAccountWithEmailAndPassword(BuildContext context) async {
-    BlocProvider.of<AuthBloc>(context).add(
-      SignUpRequested(
-        widget.u.email!,
-        widget.u.motDePasse!,
-      ),
-    );
-  }
-
-  Future<void> _createAccountInDB() async {
-
-    await userCredentials.refresh();
-    widget.u.id = userCredentials.uid;
-    print("uid: "+ widget.u.id!);
-    final response = await Api.createUser(widget.u, userCredentials.token);
-    if (response.statusCode != 200) {
-      throw Exception('insciption failed');
-    }else{
-      print("token\n");
-      print(userCredentials.token);
-      print("uid \n");
-      print(userCredentials.uid);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Dashboard(u: widget.u)),
-      );
-    }
-
-  }
 }

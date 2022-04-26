@@ -35,7 +35,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
   _getCurrentLocation() {
     Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best,
-        forceAndroidLocationManager: true)
+        forceAndroidLocationManager: false)
         .then((Position position) {
       setState(() {
         this.latitude = position.latitude;
@@ -90,6 +90,9 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                     minWidth: 250,
                     onPressed: (){
                     _getCurrentLocation();
+                    print("*******************8");
+                    print(this.latitude);
+
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => DateDebut( latitude:this.latitude,longitude: this.longitude,)),

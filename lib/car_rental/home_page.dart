@@ -21,27 +21,32 @@ class Map extends StatefulWidget {
 class _MapState extends State<Map> {
  late double latitude ;
  late double longitude ;
-
-
+ late Position? _currentlocation ;
   void initState() {
     super.initState();
-    _getCurrentLocation();
+   // _getCurrentLocation();
   }
 
-  _getCurrentLocation() async{
-   /*
-    final Position _currentlocation = await Geolocator.getCurrentPosition(
+  _getCurrentLocation(){
+     Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best,
-        forceAndroidLocationManager: true);
+        forceAndroidLocationManager: false).then((Position position) {
+
+      setState(() {
+        this._currentlocation = position;
+      });
+    }).catchError((e) {
+      print(e);
+    });
+
         setState(() {
-          latitude = _currentlocation.latitude;
-          longitude = _currentlocation.longitude;
+          this.latitude = this._currentlocation!.latitude;
+          this.longitude = this._currentlocation!.longitude;
         });
         print("***************");
         print(latitude);
         print(longitude);
 
-    */
   }
 
   late GoogleMapController mapController;
@@ -60,9 +65,9 @@ class _MapState extends State<Map> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        onPressed: ()async{
+        onPressed: (){
 
-          await  _getCurrentLocation();
+           _getCurrentLocation();
 
 
           mapController.animateCamera(CameraUpdate.newLatLngZoom(LatLng(latitude,longitude), 14));

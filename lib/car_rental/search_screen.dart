@@ -17,7 +17,7 @@ class SearchPlacesScreen extends StatefulWidget {
   State<SearchPlacesScreen> createState() => _SearchPlacesScreenState();
 }
 
-const kGoogleApiKey = 'AIzaSyA2Ns-gBQnfKGw2-CDxU9oZun0t0mxI2CY';
+const kGoogleApiKey = 'AIzaSyDgZadIjr0Xgvmeo6JZp5CN18Cv8Vy8j0E';
 final homeScaffoldKey = GlobalKey<ScaffoldState>();
 
 class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
@@ -117,20 +117,22 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
         apiKey: kGoogleApiKey,
         onError: onError,
         mode: _mode,
-        language: 'en',
+        language: 'fr',
         strictbounds: false,
         types: [""],
         decoration: InputDecoration(
             hintText: 'Search',
             focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(20), borderSide: BorderSide(color: Colors.white))),
-        components: [Component(Component.country,"fr"),Component(Component.country,"usa")]);
+        components: [Component(Component.country,"DZ")]);
 
+    setState(() {
+      displayPrediction(p!,homeScaffoldKey.currentState);
 
-    displayPrediction(p!,homeScaffoldKey.currentState);
+    });
   }
 
   void onError(PlacesAutocompleteResponse response){
-    // homeScaffoldKey.currentState!.showSnackBar(SnackBar(content: Text(response.errorMessage!)));
+    homeScaffoldKey.currentState!.showSnackBar(SnackBar(content: Text(response.errorMessage!)));
   }
 
   Future<void> displayPrediction(Prediction p, ScaffoldState? currentState) async {
@@ -146,11 +148,11 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
     final lng = detail.result.geometry!.location.lng;
 
     markersList.clear();
-    markersList.add(Marker(markerId: const MarkerId("0"),position: LatLng(lat, lng),infoWindow: InfoWindow(title: detail.result.name)));
+    markersList.add(Marker(markerId: const MarkerId("1"),position: LatLng(lat, lng),infoWindow: InfoWindow(title: detail.result.name)));
 
     setState(() {});
 
-    googleMapController.animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lng), 14.0));
+    googleMapController.animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lng), 13.0));
 
   }
 }

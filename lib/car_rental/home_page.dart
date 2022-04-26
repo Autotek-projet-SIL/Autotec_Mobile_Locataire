@@ -28,20 +28,20 @@ class _MapState extends State<Map> {
     _getCurrentLocation();
   }
 
-  _getCurrentLocation() {
-    Geolocator.getCurrentPosition(
+  _getCurrentLocation() async{
+   /*
+    final Position _currentlocation = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best,
-        forceAndroidLocationManager: true)
-        .then((Position position) {
-      setState(() {
-        latitude = position.latitude;
-        longitude = position.longitude;
-        print(position.latitude);
-        print(position.longitude);
-      });
-    }).catchError((e) {
-      print(e);
-    });
+        forceAndroidLocationManager: true);
+        setState(() {
+          latitude = _currentlocation.latitude;
+          longitude = _currentlocation.longitude;
+        });
+        print("***************");
+        print(latitude);
+        print(longitude);
+
+    */
   }
 
   late GoogleMapController mapController;
@@ -53,79 +53,63 @@ class _MapState extends State<Map> {
 
   }
 
- int _selectedIndex = 0;
- static const TextStyle optionStyle =
- TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
- static const List<Widget> _widgetOptions = <Widget>[
-   //home page
-   // Historique(), // historique page
-   // Aide(), // demande du support page
-   // Profile(), // profil page
- ];
 
- void _onItemTapped(int index) async{
-
-   setState(() async{
-     _selectedIndex = index;
-     if (_selectedIndex==3){
-       context.read<AuthBloc>().add(SignOutRequested());
-     }
-     if(_selectedIndex == 2) {
-
-     }
-   });
-
- }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: ()async{
-          await userCredentials.refresh();
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => SearchPlacesScreen()),
-          );
+
+          await  _getCurrentLocation();
+
+
+          mapController.animateCamera(CameraUpdate.newLatLngZoom(LatLng(latitude,longitude), 14));
         },
         backgroundColor: const Color.fromRGBO(27, 146, 164,1),
-        child: Icon(Icons.car_rental_outlined, color: Colors.white,size: 30,),
+        child: Icon(Icons.navigation_outlined, color: Colors.white,size: 30,),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: _onItemTapped,
-        elevation: 5.0,
-        currentIndex:_selectedIndex ,
-        selectedLabelStyle: const TextStyle(color: Color.fromRGBO(27, 146, 164, 0.7),),
-        showUnselectedLabels: true,
-        items:  <BottomNavigationBarItem> [
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.home_outlined, color: Colors.grey,),
-            activeIcon:Icon(Icons.home_outlined, color: Color.fromRGBO(27, 146, 164, 0.7),) ,
-            label: 'Accueil',
+    bottomNavigationBar: BottomAppBar(
+      shape:const CircularNotchedRectangle(),
 
+      color: Colors.white,
+      child: Row(
+
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.fromLTRB(50.0, 5, 20, 5),
+            child: IconButton(
+                onPressed: ()async{
+                  await userCredentials.refresh();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SearchPlacesScreen()),
+                  );
+                  },
+                icon: Icon(Icons.car_rental_outlined, color: Colors.grey,size: 30),
+              tooltip: 'rent a car',
+            ),
           ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.history, color: Colors.grey,),
-            activeIcon:Icon(Icons.history, color: Color.fromRGBO(27, 146, 164, 0.7),) ,
-            label: 'Historique',
-
+          Padding(
+            padding: const EdgeInsets.fromLTRB(50.0, 5, 50, 5),
+            child: IconButton(
+              onPressed: (){
+                //TODO navigate to profil
+              },
+              icon: Icon(Icons.person_outlined, color: Colors.grey,size: 30),
+              tooltip: 'open profil',
+            ),
           ),
-         const BottomNavigationBarItem(
-            icon: Icon(Icons.notifications_none, color: Colors.grey,),
-            activeIcon:Icon(Icons.notifications_none, color: Color.fromRGBO(27, 146, 164, 0.7),) ,
-            label: 'Location',
-
-          ),
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.person_outline, color: Colors.grey,),
-            activeIcon:Icon(Icons.person_outlined, color: Color.fromRGBO(27, 146, 164, 0.7),) ,
-            label: 'Profile',
 
 
-          ),
+
         ],
       ),
-        body: BlocListener<AuthBloc, AuthState>(
+      notchMargin: 5,
+    ),
+      body: BlocListener<AuthBloc, AuthState>(
     listener: (context, state) {
     if (state is UnAuthenticated) {
     // Navigate to the sign in screen when the user Signs Out

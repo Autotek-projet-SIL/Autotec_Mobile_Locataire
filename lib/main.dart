@@ -70,7 +70,7 @@ class MyApp extends StatelessWidget {
         ),
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
-          theme: ThemeData(fontFamily: 'Poppins'),
+          theme: ThemeData(fontFamily: 'poppins'),
           home: StreamBuilder<User?>(
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (context, snapshot) {

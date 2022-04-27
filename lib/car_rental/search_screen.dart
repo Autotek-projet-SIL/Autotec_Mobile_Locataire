@@ -130,21 +130,21 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
           height: 300,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text("point de depart", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+                padding: const EdgeInsets.all(10.0),
+                child: Text("point de depart", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
               ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
                     child: MaterialButton(
                       color: Color.fromRGBO(27, 146, 164, 0.7),
                       textColor: Colors.white,
-                      minWidth: 120,
+                      minWidth: 150,
                       onPressed: (){
                         _getCurrentLocation();
                         print("*******************");
@@ -159,19 +159,21 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.fromLTRB(10.0,10,0,10),
                     child: MaterialButton(
                       color: Color.fromRGBO(27, 146, 164, 0.7),
                       textColor: Colors.white,
-                      minWidth: 120,
+                      minWidth: 150,
                       onPressed: _handlePressButton,
                       child: const Text("chercher un endroid"),
                     ),
                   )
                 ],
               ),
+
             ],
-          )),
+          )
+      ),
     );
   }
 }

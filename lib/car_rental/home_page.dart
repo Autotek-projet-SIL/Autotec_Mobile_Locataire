@@ -1,15 +1,17 @@
+
 import 'package:autotec/bloc/auth_bloc.dart';
 import 'package:autotec/models/user_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../models/rest_api.dart';
 import 'search_screen.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:autotec/Authentication/first_screens/home.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 
+final ScaffoldKey = GlobalKey<ScaffoldState>();
 
 class Map extends StatefulWidget {
   const Map({Key? key}) : super(key: key);
@@ -63,11 +65,27 @@ class _MapState extends State<Map> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: ScaffoldKey,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        onPressed: (){
+        onPressed: ()async{
+          if( await Permission.location.isGranted){
 
-           _getCurrentLocation();
+            if(await Permission.location.serviceStatus.isEnabled){
+
+              _getCurrentLocation();
+            }else{
+
+              ScaffoldKey.currentState!.showSnackBar(SnackBar(content: Text("activer la localisation")));
+            }
+          }else{
+
+            ScaffoldKey.currentState!.showSnackBar(SnackBar(content: Text("permission denied")));
+
+            await [Permission.location,].request();
+          }
+
+
 
 
           mapController.animateCamera(CameraUpdate.newLatLngZoom(LatLng(latitude,longitude), 14));

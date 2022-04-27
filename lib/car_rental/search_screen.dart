@@ -69,46 +69,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
               googleMapController = controller;
             },
           ),
-          Positioned(
-            bottom: 0.0,
-            left: 0.0,
-            child: Container(
-               color: Colors.white,
-                width: 380,
-                height: 200,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text("Où souhaitez-vous obtenir votre voiture?", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                ),
-                MaterialButton(
-                  color: Color.fromRGBO(27, 146, 164, 0.7),
-                    textColor: Colors.white,
-                    minWidth: 250,
-                    onPressed: (){
-                    _getCurrentLocation();
-                    print("*******************8");
-                    print(this.latitude);
-
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => DateDebut( latitude:this.latitude,longitude: this.longitude,)),
-                    );
-                    },
-                    child: const Text("votre position"),
-                ),MaterialButton(
-                  color: Color.fromRGBO(27, 146, 164, 0.7),
-                    textColor: Colors.white,
-                    minWidth: 250,
-                    onPressed: _handlePressButton,
-                    child: const Text("chercher un endroid"),
-                )
-              ],
-            )),
-          )
+         bottomsheet(),
         ],
       ),
     );
@@ -157,5 +118,60 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
 
     googleMapController.animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lng), 13.0));
 
+  }
+
+  Widget bottomsheet(){
+    return  Positioned(
+      bottom: 0.0,
+      left: 0.0,
+      child: Container(
+          color: Colors.white,
+          width: 380,
+          height: 300,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text("point de depart", style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: MaterialButton(
+                      color: Color.fromRGBO(27, 146, 164, 0.7),
+                      textColor: Colors.white,
+                      minWidth: 120,
+                      onPressed: (){
+                        _getCurrentLocation();
+                        print("*******************");
+                        print(this.latitude);
+
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => DateDebut( latitude:this.latitude,longitude: this.longitude,)),
+                        );
+                      },
+                      child: const Text("votre position"),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: MaterialButton(
+                      color: Color.fromRGBO(27, 146, 164, 0.7),
+                      textColor: Colors.white,
+                      minWidth: 120,
+                      onPressed: _handlePressButton,
+                      child: const Text("chercher un endroid"),
+                    ),
+                  )
+                ],
+              ),
+            ],
+          )),
+    );
   }
 }

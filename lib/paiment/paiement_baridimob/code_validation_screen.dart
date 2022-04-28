@@ -1,5 +1,11 @@
+import 'package:autotec/components/text_field_digits.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:external_app_launcher/external_app_launcher.dart';
+import '../../components/WBack.dart';
+
+import '../../components/raised_button.dart';
+import 'email.dart';
 
 class CodeValidationScreen extends StatefulWidget {
   const CodeValidationScreen({Key? key}) : super(key: key);
@@ -10,9 +16,14 @@ class CodeValidationScreen extends StatefulWidget {
 
 class CodeValidationScreenState extends State<CodeValidationScreen> {
   final TextEditingController _textController = TextEditingController();
-
+  final TextEditingController _codeController = TextEditingController();
+  static bool pressed = false;
+  static const Color green = Color.fromRGBO(27, 146, 164, 0.7);
   // This function is triggered when the copy icon is pressed
   Future<void> _copyToClipboard() async {
+    setState(() {
+      pressed = true;
+    });
     await Clipboard.setData(ClipboardData(text: _textController.text));
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text('Copié dans le presse-papier'),
@@ -26,42 +37,175 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
   @override
   void initState() {
     super.initState();
-    _textController.text = "Code RIP de l'entreprise";
+    _textController.text = "0007 9343 1234 2353";
   }
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(30),
-          child: TextField(
-            controller: _textController,
-            readOnly: true,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(15),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(width: 3, color: Colors.black),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                  width: 3,
-                  color: Color.fromRGBO(27, 146, 164, 0.7),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Row(
+                  children: const [
+                    WidgetArrowBack(),
+                    SizedBox(
+                      width: 15,
+                    ),
+                    Text(
+                      'Validation',
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: 'Poppins'),
+                    ),
+                  ],
                 ),
-                borderRadius: BorderRadius.circular(15),
               ),
-              contentPadding: const EdgeInsets.all(14.0),
-              icon: IconButton(
-                icon: const Icon(Icons.copy),
-                onPressed: _copyToClipboard,
+              const SizedBox(height: 40),
+              const Text(
+                "Voici le code rip que vous devez utiliser dans la transaction",
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins'),
+                textAlign: TextAlign.center,
               ),
-            ),
+              const SizedBox(height: 20),
+              TextField(
+                style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins'),
+                controller: _textController,
+                readOnly: true,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      width: 3,
+                      color: pressed ? green : Colors.black,
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(
+                      width: 3,
+                      color: pressed ? green : Colors.black,
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  contentPadding: const EdgeInsets.all(14.0),
+                  icon: IconButton(
+                    icon: Icon(
+                      Icons.copy,
+                      color: pressed ? green : Colors.black,
+                    ),
+                    onPressed: _copyToClipboard,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 40),
+              const Text(
+                "vous pouvez accéder à l'application baridi mob directement à partir d'ici",
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins'),
+                textAlign: TextAlign.center,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: CustomRaisedButton(
+                  text: "Entrer dans l'application BaridiMob ",
+                  press: () async {
+                    await LaunchApp.openApp(
+                      androidPackageName: 'ru.bpc.mobilebank.bpc',
+                    );
+                  },
+                  color: const Color.fromRGBO(27, 146, 164, 0.7),
+                  textColor: Colors.white,
+                ),
+              ),
+              const SizedBox(height: 40),
+              const Text(
+                "taper ici le code de transaction que vous aver reçu ",
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins'),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              WidgetTextfieldDigit(
+                  hintText: "code",
+                  onChanged: (String text) {},
+                  validator: (value) {
+                    return value != null && value.length < 12
+                        ? "le code contient 12 chiffres"
+                        : null;
+                  },
+                  controller: _codeController,
+                  validationMode: AutovalidateMode.onUserInteraction),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: CustomRaisedButton(
+                  text: "Confirmer",
+                  press: () async {
+//                    String enteredCode = _codeController.text;
+//                    String code = await accessMail();
+                    (_codeController.text == await accessMail())
+                        ? showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return popUP("Merci !! ",
+                                  "Nous avons bien reçu votre paiement ", "Ok");
+                            },
+                          )
+                        : showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return popUP(
+                                  "Erreur !! ",
+                                  " Le code que vous avez saisi ne correspond à aucune transaction",
+                                  "Retour");
+                            },
+                          );
+                  },
+                  color: const Color.fromRGBO(27, 146, 164, 0.7),
+                  textColor: Colors.white,
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
+}
+
+Widget popUP(String title, String content, String buttonText) {
+  return AlertDialog(
+    title: Text(title),
+    content: Text(content),
+    actions: [
+      Padding(
+        padding: const EdgeInsets.all(20),
+        child: CustomRaisedButton(
+          text: buttonText,
+          press: () async {},
+          color: const Color.fromRGBO(27, 146, 164, 0.7),
+          textColor: Colors.white,
+        ),
+      )
+    ],
+  );
 }

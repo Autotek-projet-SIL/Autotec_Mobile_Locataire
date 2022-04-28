@@ -21,6 +21,8 @@ class WidgetTextfieldDigit extends StatelessWidget {
     return TextFormField(
       validator: validator,
       onChanged: onChanged,
+      controller: controller,
+      autovalidateMode: validationMode,
       keyboardType: TextInputType.number,
       cursorColor: Colors.black,
       decoration: InputDecoration(

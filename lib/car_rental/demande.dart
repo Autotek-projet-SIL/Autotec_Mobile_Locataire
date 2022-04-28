@@ -37,7 +37,7 @@ class _DemandeState extends State<Demande> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
@@ -47,24 +47,24 @@ class _DemandeState extends State<Demande> {
               width: 350,
             ),
             SizedBox(height: size.height * 0.05),
-            Text('Louer une voiture',
+             const Text('Louer une voiture',
               style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 40),
+             const SizedBox(height: 40),
             Container(
               height: 70,
               width: size.width,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: Color(0xff2E9FB0),
+                  color: const Color(0xff2E9FB0),
                 ),
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              child: Center(
+              child: const Center(
                 child: Text('votre position actuelle'),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Row(
               children: [
                 Container(
@@ -72,7 +72,7 @@ class _DemandeState extends State<Demande> {
                   width: size.width*0.4,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: Color(0xff2E9FB0),
+                      color: const Color(0xff2E9FB0),
                     ),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -80,15 +80,15 @@ class _DemandeState extends State<Demande> {
                     padding: const EdgeInsets.all(4.0),
                     child: Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.calendar_today_sharp,
                           color: Color(0xff2E9FB0),
                           size: 12.0,
                         ),
-                        SizedBox(width: 3,),
+                        const SizedBox(width: 3,),
                         Text(widget.dateDebut,
                           textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12),
+                          style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 12),
                         ),
                       ],
                     ),
@@ -100,7 +100,7 @@ class _DemandeState extends State<Demande> {
                   width: size.width*0.4,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color:Color(0xff2E9FB0),
+                      color:const Color(0xff2E9FB0),
                     ),
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -108,14 +108,14 @@ class _DemandeState extends State<Demande> {
                     padding: const EdgeInsets.all(4.0),
                     child: Row(
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.calendar_today_sharp,
-                          color: Color(0xff2E9FB0),
+                          color: const Color(0xff2E9FB0),
                           size: 12.0,
                         ),
-                        SizedBox(width: 3,),
+                        const SizedBox(width: 3,),
                         Text(widget.dateFin,textAlign: TextAlign.center,
-                          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 12),
+                          style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 12),
                         ),
                       ],
                     ),
@@ -123,13 +123,13 @@ class _DemandeState extends State<Demande> {
                 ),
               ],
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Container(
               height: 70,
               width: size.width,
               decoration: BoxDecoration(
                 border: Border.all(
-                  color: Color(0xff2E9FB0),
+                  color: const Color(0xff2E9FB0),
                 ),
                 borderRadius: BorderRadius.circular(10.0),
               ),
@@ -137,7 +137,7 @@ class _DemandeState extends State<Demande> {
                 child: Text(widget.car.modele),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             WidgetRaisedButton(text: 'Trouver une voiture', press:()async{
               await userCredentials.refresh();
               print("token\n");
@@ -164,7 +164,7 @@ class _DemandeState extends State<Demande> {
                 context,
                 MaterialPageRoute(builder: (context) => ),
               );*/
-            }, color: Color(0xff2E9FB0), textColor: Colors.white)
+            }, color: const Color(0xff2E9FB0), textColor: Colors.white)
 
 
           ],

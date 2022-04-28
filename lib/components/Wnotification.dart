@@ -44,7 +44,7 @@ class WidgetNotification extends StatelessWidget {
                 Positioned(
                   top:15,
                   left: 15,
-                  child:  Text(titre,style: TextStyle(color: Color(0xff263238),fontWeight: FontWeight.bold,fontSize: 17),),
+                  child:  Text(titre,style: const TextStyle(color: Color(0xff263238),fontWeight: FontWeight.bold,fontSize: 17),),
                 ),
                 Positioned(
                   top:50,
@@ -52,13 +52,13 @@ class WidgetNotification extends StatelessWidget {
                   child:  Container(
                     width: 350,
                     child: Text(
-                      texte,style: TextStyle(color:Color(0xff263238),fontSize: 15),),
+                      texte,style: const TextStyle(color:Color(0xff263238),fontSize: 15),),
                   ),
                 ),
                 Positioned(
                   top:15,
                   right: 30,
-                  child:  Text(time,style: TextStyle(fontSize: 15,color: Color(0xff263238)),),
+                  child:  Text(time,style: const TextStyle(fontSize: 15,color: const Color(0xff263238)),),
                 )
               ],
             ),

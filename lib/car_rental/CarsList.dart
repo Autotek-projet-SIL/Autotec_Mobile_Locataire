@@ -66,7 +66,7 @@ class CarListView extends StatelessWidget{
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<Car>? data = snapshot.data;
-          return _CarsListView(data,this.DateDebut, this.DateFin, this.latitude, this.longitude);
+          return _carsListView(data,this.DateDebut, this.DateFin, this.latitude, this.longitude);
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
@@ -95,7 +95,7 @@ class CarListView extends StatelessWidget{
     }
   }
 
-  ListView _CarsListView(data, dateD, dateF, latitude, longitude) {
+  ListView _carsListView(data, dateD, dateF, latitude, longitude) {
     return ListView.builder(
         itemCount: data.length,
         itemBuilder: (context, index) {

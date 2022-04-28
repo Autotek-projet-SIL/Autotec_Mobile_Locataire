@@ -48,6 +48,7 @@ dependencies:
   percent_indicator: ^3.4.0
   flutter_spinkit: ^5.1.0
   geolocator: ^8.2.0
+  geocoding: ^2.0.4
   flutter_google_places: ^0.3.0
   flutter_geocoder: ^0.2.2-nullsafety
   google_maps_webservice: ^0.0.19

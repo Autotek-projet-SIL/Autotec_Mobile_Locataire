@@ -3,12 +3,16 @@ import 'dart:ui';
 import 'package:autotec/car_rental/date_time_pickers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_geocoder/geocoder.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:autotec/components/WBack.dart';
+
+const kGoogleApiKey = 'AIzaSyDgZadIjr0Xgvmeo6JZp5CN18Cv8Vy8j0E';
+final homeScaffoldKey = GlobalKey<ScaffoldState>();
 
 class SearchPlacesScreen extends StatefulWidget {
   const SearchPlacesScreen({Key? key}) : super(key: key);
@@ -17,11 +21,10 @@ class SearchPlacesScreen extends StatefulWidget {
   State<SearchPlacesScreen> createState() => _SearchPlacesScreenState();
 }
 
-const kGoogleApiKey = 'AIzaSyDgZadIjr0Xgvmeo6JZp5CN18Cv8Vy8j0E';
-final homeScaffoldKey = GlobalKey<ScaffoldState>();
 
 class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
-  static const CameraPosition initialCameraPosition = CameraPosition(target: LatLng(36.7762, 3.05997 ), zoom: 13.0);
+
+  static const CameraPosition initialCameraPosition = CameraPosition(target: LatLng(36.7762, 3.05997 ), zoom: 14.0);
 
   Set<Marker> markersList = {};
 
@@ -29,53 +32,55 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
 
   final Mode _mode = Mode.overlay;
 
-  late double latitude=0.0;
-  late double longitude=0.0;
+  late double latitude_dpr=0.0;
+  late double longitude_dpr=0.0;
 
-  _getCurrentLocation() {
-    Geolocator.getCurrentPosition(
+  late double latitude_arv = 0.0;
+  late double longitude_arv = 0.0;
+
+  bool depart = false;
+  bool arrive = false;
+
+  String depart_adr = "";
+  String arrive_adr = "";
+
+
+  Future<Map<String, double>> _getCurrentLocation() async{
+    double? lat;
+    double? lng;
+    await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.best,
         forceAndroidLocationManager: false)
-        .then((Position position) {
-      setState(() {
-        this.latitude = position.latitude;
-        this.longitude = position.longitude;
-        print( position.latitude.toString());
-        print(position.longitude);
-      });
+        .then((Position position) async{
+          setState(() {
+            lat = position.latitude;
+            lng = position.longitude;
+
+          });
     }).catchError((e) {
       print(e);
     });
+    return {'latitude':lat!, 'longitude':lng!};
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      key: homeScaffoldKey,
-
-      body: Stack(
-        children: [
-          Positioned(
-           top: 10.0,
-            left: 10.0,
-            child: WidgetArrowBack(),
-          ),
-          GoogleMap(
-            initialCameraPosition: initialCameraPosition,
-            zoomControlsEnabled: false,
-            markers: markersList,
-            mapType: MapType.normal,
-            onMapCreated: (GoogleMapController controller) {
-              googleMapController = controller;
-            },
-          ),
-         bottomsheet(),
-        ],
-      ),
-    );
+  void _setMarker(String id, double lat, double lng){
+    markersList.add(Marker(markerId:  MarkerId(id),position: LatLng(lat, lng),));
+    googleMapController.animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lng), 14.0));
   }
 
-  Future<void> _handlePressButton() async {
+ Future<String> _getAdress(double latitude, double longitude)async{
+   final coordinates = new Coordinates(latitude, longitude);
+   var addresses = await Geocoder.local.findAddressesFromCoordinates(
+       coordinates);
+   var first = addresses.first;
+   print('1. ${first.locality}, 2. ${first.adminArea}, 3. ${first.subLocality}, '
+       '4. ${first.subAdminArea}, 5. ${first.addressLine}, 6. ${first.featureName},'
+       '7, ${first.thoroughfare}, 8. ${first.subThoroughfare}');
+
+   return first.addressLine!;
+ }
+
+  Future<Prediction?> _searchPlace() async {
     Prediction? p = await PlacesAutocomplete.show(
         context: context,
         apiKey: kGoogleApiKey,
@@ -89,17 +94,14 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
             focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(20), borderSide: BorderSide(color: Colors.white))),
         components: [Component(Component.country,"DZ")]);
 
-    setState(() {
-      displayPrediction(p!,homeScaffoldKey.currentState);
-
-    });
+    return p!;
   }
 
   void onError(PlacesAutocompleteResponse response){
     homeScaffoldKey.currentState!.showSnackBar(SnackBar(content: Text(response.errorMessage!)));
   }
 
-  Future<void> displayPrediction(Prediction p, ScaffoldState? currentState) async {
+  Future<Map<String, double>> _predictionToPosition(Prediction p, ScaffoldState? currentState) async {
 
     GoogleMapsPlaces places = GoogleMapsPlaces(
         apiKey: kGoogleApiKey,
@@ -111,69 +113,228 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
     final lat = detail.result.geometry!.location.lat;
     final lng = detail.result.geometry!.location.lng;
 
-    markersList.clear();
-    markersList.add(Marker(markerId: const MarkerId("1"),position: LatLng(lat, lng),infoWindow: InfoWindow(title: detail.result.name)));
-
-    setState(() {});
-
-    googleMapController.animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lng), 13.0));
-
+    return {'latitude': lat, 'longitude':lng};
   }
 
-  Widget bottomsheet(){
-    return  Positioned(
-      bottom: 0.0,
-      left: 0.0,
-      child: Container(
-          color: Colors.white,
-          width: 380,
-          height: 300,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(10.0),
-                child: Text("point de depart", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w500)),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+  Future<void> _showDepartDialog( BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: SingleChildScrollView(
+              child: ListBody(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
-                    child: MaterialButton(
-                      color: Color.fromRGBO(27, 146, 164, 0.7),
-                      textColor: Colors.white,
-                      minWidth: 150,
-                      onPressed: (){
-                        _getCurrentLocation();
-                        print("*******************");
-                        print(this.latitude);
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      child: const Text('votre position'),
+                      onTap: ()async{
+                        Navigator.pop(context);
+                        Map<String, double> position = await _getCurrentLocation();
+                        latitude_dpr = position['latitude']!;
+                        longitude_dpr = position['longitude']!;
+                        depart_adr = await _getAdress(latitude_dpr, longitude_dpr);
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => DateDebut( latitude:this.latitude,longitude: this.longitude,)),
-                        );
+                        setState((){
+                          _setMarker("depart", latitude_dpr, longitude_dpr);
+                          depart = true;
+                        });
+                        print("depart : ${latitude_dpr},${longitude_dpr} : ${depart_adr}");
                       },
-                      child: const Text("votre position"),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10.0,10,0,10),
-                    child: MaterialButton(
-                      color: Color.fromRGBO(27, 146, 164, 0.7),
-                      textColor: Colors.white,
-                      minWidth: 150,
-                      onPressed: _handlePressButton,
-                      child: const Text("chercher un endroid"),
-                    ),
+                  Padding(padding: EdgeInsets.all(8.0)),
+                  GestureDetector(
+                    child: const Text('choisir un endroid'),
+                    onTap: ()async{
+                      Navigator.pop(context);
+                      Prediction? p = await _searchPlace();
+                      Map<String, double> position = await _predictionToPosition(p!, homeScaffoldKey.currentState);
+                      latitude_dpr = position['latitude']!;
+                      longitude_dpr = position['longitude']!;
+                      depart_adr = await _getAdress(latitude_dpr, longitude_dpr);
+
+                      setState((){
+                        _setMarker("depart", latitude_dpr, longitude_dpr);
+                        depart = true;
+                      });
+                      print("depart : ${latitude_dpr},${longitude_dpr} : ${depart_adr}");
+                    },
                   )
                 ],
               ),
+            ),
+          );
+        });
+  }
 
-            ],
-          )
+  Future<void> _showArriveDialog( BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: GestureDetector(
+                      child: const Text('votre position'),
+                      onTap: ()async{
+                        Navigator.pop(context);
+                        Map<String, double> position = await _getCurrentLocation();
+                        latitude_arv = position['latitude']!;
+                        longitude_arv =  position['longitude']!;
+                        arrive_adr = await _getAdress(latitude_arv, longitude_arv);
+
+                        setState((){
+                          _setMarker("arrive", latitude_arv, longitude_arv);
+                          arrive = true;
+                        });
+                        print("arrive : ${latitude_arv},${longitude_arv} : ${arrive_adr}");
+                      },
+                    ),
+                  ),
+                  Padding(padding: EdgeInsets.all(8.0)),
+                  GestureDetector(
+                    child: const Text('choisir un endroid'),
+                    onTap: ()async{
+                      Navigator.pop(context);
+                      Prediction? p = await _searchPlace();
+                      Map<String, double> position = await _predictionToPosition(p!, homeScaffoldKey.currentState);
+                      latitude_arv = position['latitude']!;
+                      longitude_arv =  position['longitude']!;
+                      arrive_adr = await _getAdress(latitude_arv, longitude_arv);
+                      setState((){
+                        _setMarker("arrive", latitude_arv, longitude_arv);
+                        arrive = true;
+                      });
+                      print("arrive : ${latitude_arv},${longitude_arv} : ${arrive_adr}");
+                    },
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: homeScaffoldKey,
+
+      body: Stack(
+        children: [
+
+          GoogleMap(
+            initialCameraPosition: initialCameraPosition,
+            zoomControlsEnabled: false,
+            markers: markersList,
+            mapType: MapType.normal,
+            onMapCreated: (GoogleMapController controller) {
+              googleMapController = controller;
+            },
+          ),
+      Positioned(
+        bottom: 0.0,
+        left: 0.0,
+          child: Container(
+              color: Colors.white,
+              width: 360,
+              height: 270,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 50,
+                    width: 300,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Color(0xff2E9FB0),
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding:const EdgeInsets.fromLTRB(5,10,0,10),
+                          child: const Icon(Icons.pin_drop_outlined, color: Colors.grey,),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: GestureDetector(
+                            child: Expanded(
+                                child:Text(this.depart? this.depart_adr : "point de depart", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600))),
+                            onTap: (){
+                              setState(() {
+                                _showDepartDialog(context);
+                             });
+
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: 50,
+                    width: 300,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Color(0xff2E9FB0),
+                      ),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(5,10,0,10),
+                          child: Icon(Icons.pin_drop_outlined, color: Colors.grey,),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: GestureDetector(
+                            child: Text(arrive? arrive_adr : "point d'arrive", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                            onTap: (){
+                              _showArriveDialog(context);
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: 50,
+                    width: 300,
+
+                    child: ElevatedButton(
+                        onPressed: (){
+                          //TODO  regler les attributs a passer entre les pages
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => CarsList(lat: , long: widget.longitude, Debut:widget.dateDeb,Fin: this.value,)),
+                          );
+
+                        },
+                        child:Text("continuer"),
+                        style: ButtonStyle(
+                       backgroundColor: MaterialStateProperty.all<Color>(Color(0xff2E9FB0)),
+
+                        ),
+                    ),
+                  )
+                ],
+              )
+          ),
+
+      ),
+        ],
       ),
     );
   }
+
+
 }

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'Cars.dart';
@@ -7,13 +9,9 @@ import '/components/WviewCar.dart';
 import 'package:autotec/models/user_data.dart';
 
 
-
 class CarsList extends StatefulWidget {
-  final double lat;
-  final double long;
-  final String Debut;
-  final String Fin;
-   CarsList({Key? key, required this.lat, required this.long,required this.Debut, required this.Fin}) : super(key: key);
+
+   CarsList({Key? key}) : super(key: key);
 
   @override
   State<CarsList> createState() => _CarsListState();
@@ -24,25 +22,21 @@ class _CarsListState extends State<CarsList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       body: Column(
         children: [
-          Spacer(flex: 1,),
+          Spacer(flex: 2,),
           Text(
-            'Choisir un type de voiture',
+            'veillez choisir une voiture',
             style: TextStyle(
-              fontFamily: 'poppin',
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w800,
               color: Colors.black,
               fontSize: 20,
             ),
           ),
           Spacer(flex: 1,),
           Center(
-
-            child: SizedBox(
-                height: 550,
-                width: 300,
-                child: CarListView(latitude:widget.lat,longitude: widget.long ,DateDebut: widget.Debut, DateFin: widget.Fin,)),
+                child: CarListView(),
           ),
           Spacer(flex: 1,),
         ],
@@ -52,33 +46,62 @@ class _CarsListState extends State<CarsList> {
 }
 
 class CarListView extends StatelessWidget{
-  final double latitude;
-  final double longitude;
-  final String DateDebut;
-  final String DateFin;
-  CarListView({Key? key, required this.latitude,  required this.longitude, required this.DateDebut, required this.DateFin}) : super(key: key);
+
+  CarListView({Key? key}) : super(key: key);
 
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Car>>(
-      future: _fetchCars(),
+      future: _fetchCars(context),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<Car>? data = snapshot.data;
-          return _CarsListView(data,this.DateDebut, this.DateFin, this.latitude, this.longitude);
+          return SizedBox(
+              height: 550,
+              width: 350,
+              child: _CarsListView(data));
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
-        return SizedBox(
-          height: 10,
-            width: 10,
-            child: CircularProgressIndicator());
+        return  CircularProgressIndicator();
       },
     );
   }
 
-  Future<List<Car>> _fetchCars() async {
+  Future<void> _showFailDialog( BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: SingleChildScrollView(
+                child: SizedBox(
+                  height: 160,
+                  width: 280,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(child:
+                      Text("aucune voiture n'est disponible en ce moment, veuillez réessayer plus tard")
+                      ),
+                      Center(
+                        child: FlatButton(
+                            onPressed: (){
+                              //TODO send a post with rejected demande de location
+                              Navigator.pop(context);
+                            },
+                            child: Text("ok")),
+                      )
+                    ],
+                  ),
+                )
+            ),
+          );
+        });
+  }
+
+  Future<List<Car>> _fetchCars(BuildContext context) async {
 
     var Url = Uri.http("autotek-server.herokuapp.com","/flotte/vehicule");
     print (Url.toString());
@@ -86,7 +109,20 @@ class CarListView extends StatelessWidget{
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
-      return jsonResponse.map((json) => new Car.fromJson(json)).toList();
+      List<Car> list =  jsonResponse.map((json) => new Car.fromJson(json)).toList();
+      //recuperer ceux dispo et batterie > 20
+      try{
+        final querySnapshot = await FirebaseFirestore.instance.collection('CarLocation').where('batterie', isGreaterThan: 20)
+            .where('disponible',isEqualTo: true).get();
+        list.removeWhere((element) => (! querySnapshot.docs.any((doc) => doc.id == element.numero_chasis)));
+      }catch (e){
+        print (e.toString());
+      }
+
+      if(list.isEmpty){
+         _showFailDialog(context);
+      }
+      return list;
     } else if (response.statusCode == 403) {
       throw Exception('access forbiden');
     }else{
@@ -95,11 +131,11 @@ class CarListView extends StatelessWidget{
     }
   }
 
-  ListView _CarsListView(data, dateD, dateF, latitude, longitude) {
+  ListView _CarsListView(data) {
     return ListView.builder(
         itemCount: data.length,
         itemBuilder: (context, index) {
-          return WidgetViewCar(car:data[index], DateDebut:dateD, DateFin: dateF, latitude: latitude, longitude: longitude);
+          return WidgetViewCar(car:data[index]);
         });
   }
 }

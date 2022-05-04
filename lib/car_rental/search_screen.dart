@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:autotec/car_rental/date_time_pickers.dart';
+import 'package:autotec/models/user_data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geocoder/geocoder.dart';
@@ -9,8 +10,9 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
-import 'package:autotec/components/WBack.dart';
+import 'package:autotec/models/Location.dart';
 
+import 'CarsList.dart';
 const kGoogleApiKey = 'AIzaSyDgZadIjr0Xgvmeo6JZp5CN18Cv8Vy8j0E';
 final homeScaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -43,7 +45,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
 
   String depart_adr = "";
   String arrive_adr = "";
-
+  String region = "";
 
   Future<Map<String, double>> _getCurrentLocation() async{
     double? lat;
@@ -79,6 +81,19 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
 
    return first.addressLine!;
  }
+
+  Future<String> _getRegion(double latitude, double longitude)async{
+    final coordinates = new Coordinates(latitude, longitude);
+    var addresses = await Geocoder.local.findAddressesFromCoordinates(
+        coordinates);
+    var first = addresses.first;
+    print('1. ${first.locality}, 2. ${first.adminArea}, 3. ${first.subLocality}, '
+        '4. ${first.subAdminArea}, 5. ${first.addressLine}, 6. ${first.featureName},'
+        '7, ${first.thoroughfare}, 8. ${first.subThoroughfare}');
+
+    return first.adminArea!;
+  }
+
 
   Future<Prediction?> _searchPlace() async {
     Prediction? p = await PlacesAutocomplete.show(
@@ -134,6 +149,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                         latitude_dpr = position['latitude']!;
                         longitude_dpr = position['longitude']!;
                         depart_adr = await _getAdress(latitude_dpr, longitude_dpr);
+                        region = await _getRegion(latitude_dpr, longitude_dpr);
 
                         setState((){
                           _setMarker("depart", latitude_dpr, longitude_dpr);
@@ -263,19 +279,17 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                           padding:const EdgeInsets.fromLTRB(5,10,0,10),
                           child: const Icon(Icons.pin_drop_outlined, color: Colors.grey,),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: GestureDetector(
-                            child: Expanded(
-                                child:Text(this.depart? this.depart_adr : "point de depart", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600))),
-                            onTap: (){
-                              setState(() {
-                                _showDepartDialog(context);
-                             });
+                        Expanded(
+                                child:Container(
+                                    child: SingleChildScrollView(
+                                        scrollDirection: Axis.horizontal,
+                                        padding: EdgeInsets.all(11),
+                                        child: GestureDetector(
+                                          onTap: (){
+                                            _showDepartDialog(context);
+                                          },
+                                            child: Text(this.depart? this.depart_adr : "point de départ", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)))))),
 
-                            },
-                          ),
-                        ),
                       ],
                     ),
                   ),
@@ -294,13 +308,18 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                           padding: const EdgeInsets.fromLTRB(5,10,0,10),
                           child: Icon(Icons.pin_drop_outlined, color: Colors.grey,),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: GestureDetector(
-                            child: Text(arrive? arrive_adr : "point d'arrive", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
-                            onTap: (){
-                              _showArriveDialog(context);
-                            },
+                        Expanded(
+                          child: Container(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              padding: const EdgeInsets.all(10.0),
+                              child: GestureDetector(
+                                child: Text(arrive? arrive_adr : "point d'arrivé", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                                onTap: (){
+                                  _showArriveDialog(context);
+                                },
+                              ),
+                            ),
                           ),
                         ),
                       ],
@@ -311,12 +330,31 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                     width: 300,
 
                     child: ElevatedButton(
-                        onPressed: (){
+                        onPressed: ()async{
                           //TODO  regler les attributs a passer entre les pages
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => CarsList(lat: , long: widget.longitude, Debut:widget.dateDeb,Fin: this.value,)),
-                          );
+                          if(depart && arrive ){
+                            if(depart_adr != arrive_adr){
+                              carLocation _carLocation = carLocation();
+                              _carLocation.region = region;
+                              _carLocation.latitude_depart = latitude_dpr;
+                              _carLocation.longitude_depart = longitude_dpr;
+                              _carLocation.point_depart = depart_adr;
+                              _carLocation.latitude_arrive = latitude_arv;
+                              _carLocation.longitude_arrive = longitude_arv;
+                              _carLocation.point_arrive = arrive_adr;
+                              await userCredentials.refresh();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => CarsList()),
+                              );
+                            }else{
+                              homeScaffoldKey.currentState!.showSnackBar(SnackBar(content: Text('veuillez choisir des addresses différentes')));
+                            }
+                          }else if(!depart){
+                            homeScaffoldKey.currentState!.showSnackBar(SnackBar(content: Text('veuillez choisir un point de départ')));
+                          }else{
+                            homeScaffoldKey.currentState!.showSnackBar(SnackBar(content: Text('veuillez choisir un point d`arrivé')));
+                          }
 
                         },
                         child:Text("continuer"),

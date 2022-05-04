@@ -1,4 +1,5 @@
 
+import 'package:autotec/models/Location.dart';
 import 'package:flutter/material.dart';
 
 import 'package:autotec/models/user_data.dart';
@@ -9,13 +10,10 @@ import '../car_rental/Cars.dart';
 
 class WidgetViewCar extends StatelessWidget {
   final Car car;
-  final String DateDebut;
-  final String DateFin;
-  final double latitude;
-  final double longitude;
+
   const WidgetViewCar({
     Key? key,
-    required this.car, required this.DateDebut, required this.DateFin, required this.latitude, required this.longitude,
+    required this.car
   }) : super(key: key);
 
   @override
@@ -25,13 +23,15 @@ class WidgetViewCar extends StatelessWidget {
         GestureDetector(
           onTap: ()async{
             await userCredentials.refresh();
+            carLocation _location = carLocation();
+            _location.car = car;
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Demande(latitude: this.latitude, longitude: this.longitude, dateDebut:this.DateDebut,dateFin: this.DateFin, car: this.car)),
+              MaterialPageRoute(builder: (context) => Demande()),
             );
           },
           child: Container(
-            margin: const EdgeInsets.only(top:10.0),
+            margin: const EdgeInsets.only(top:10.0, left: 10.0, right: 10.0),
             height: 140,
             decoration: const BoxDecoration(
 
@@ -46,7 +46,7 @@ class WidgetViewCar extends StatelessWidget {
                   color: Colors.grey,
                   spreadRadius: 2,
                   blurRadius: 10,
-                  offset: Offset(0, 3), // changes position of shadow
+                  offset: Offset(0,2), // changes position of shadow
                 ),
               ],
               color: Colors.white,
@@ -56,30 +56,34 @@ class WidgetViewCar extends StatelessWidget {
                 Positioned(
                   top:10.0,
                   left: 10.0,
-                  child: Image.network(car.image,width: 120),
+                  child: Image.network(car.image!,width: 120),
                 ),
                 Positioned(
-                  top:25.0,
+                  top:10.0,
                  left: 145,
-                  child:Column(
-                    children: [
-                      Text(car.modele,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),),
-                      Text(car.tarification.toString()+" DA",
-                        style: TextStyle(
-                          color: Colors.blueGrey,
-                          fontFamily: 'Poppins',
-                          fontSize: 13,
-
-                        ),),
-                    ],
-                  ) ,
+                  child:
+                      Container(
+                        height: 50,
+                        width: 150,
+                        child: Text(car.modele!,
+                          maxLines: 2,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'Poppins',
+                            fontWeight: FontWeight.bold,
+                            fontSize: 14,
+                          ),),
+                      ),
                 ),
+                Positioned(
+                  bottom: 10,
+                  left: 50,
+                  child: Text(car.tarification.toString()+" DA",
+                  style: TextStyle(
+                    color: Colors.blueGrey,
+                    fontSize: 13,
+
+                  ),),),
                 Positioned(
                   bottom:0.0,
                   right: 0.0,

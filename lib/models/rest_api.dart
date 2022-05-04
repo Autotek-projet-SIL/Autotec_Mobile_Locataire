@@ -1,5 +1,6 @@
 
 import 'dart:convert';
+import 'package:autotec/models/Location.dart';
 import 'package:http/http.dart' as http;
 import 'user_data.dart';
 import 'package:intl/intl.dart';
@@ -19,12 +20,6 @@ class Api {
 
 //use this function to create a user
   static Future<http.Response> createUser(UserData u, String token) async {
-    print("token "+ token.toString());
-    print("nom: "+ u.nom!);
-    print("prenom "+ u.prenom!);
-    print("email "+ u.email!);
-    print("date "+ formattedDateNow());
-
 
     return await http.post(
       Uri.parse('https://autotek-server.herokuapp.com/authentification_mobile/locataire_inscription/'),
@@ -71,4 +66,35 @@ class Api {
     }
     return false;
   }
+
+  static Future<http.Response> postLocation(String status) async {
+
+    carLocation _location = carLocation();
+    return await http.post(
+      Uri.parse('https://autotek-server.herokuapp.com/gestionlocations/ajouter_location/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+
+        "id_sender": userCredentials.uid!,
+        "token":userCredentials.token!,
+        'date_debut':formattedDateNow(),
+
+        'status_demande_location':status,
+        'id_locataire':userCredentials.uid!,
+        'region': _location.region!,
+        'numero_chassis':_location.numero_chassis!, //TODO notice them that it can be null in case demande rejetee
+        'id_trajet':"1", //TODO no idea what's this and how th get it
+        'en_cours': "t", // t or f
+        'point_depart':_location.point_depart!,
+        'point_arrive':_location.point_arrive!,
+
+        //TODO add les positions de depart et d'arrive
+      }),
+    );
+  }
+
+
+
 }

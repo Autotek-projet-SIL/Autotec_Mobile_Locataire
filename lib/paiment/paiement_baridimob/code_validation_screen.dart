@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
 import '../../components/WBack.dart';
-
 import '../../components/raised_button.dart';
+import '../../models/payment_baridimob.dart';
 import 'email.dart';
 
 class CodeValidationScreen extends StatefulWidget {
@@ -15,13 +15,18 @@ class CodeValidationScreen extends StatefulWidget {
 }
 
 class CodeValidationScreenState extends State<CodeValidationScreen> {
-  final TextEditingController _textController = TextEditingController();
+  // text controllers
+  final TextEditingController _ripController = TextEditingController();
   final TextEditingController _codeController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+
+  // variables for UI purposes
   static bool ripCopied = false;
   static bool emailCopied = false;
   static const Color green = Color.fromRGBO(27, 146, 164, 0.7);
-  Future<void> _copyToClipboard() async {
-    await Clipboard.setData(ClipboardData(text: _textController.text));
+
+  Future<void> _copyToClipboard(TextEditingController controller) async {
+    await Clipboard.setData(ClipboardData(text: controller.text));
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text('Copié dans le presse-papier'),
       elevation: 3,
@@ -34,7 +39,8 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
   @override
   void initState() {
     super.initState();
-    _textController.text = "0007 9343 1234 2353";
+    _ripController.text = BaridiMobAccount().rip;
+    _emailController.text = BaridiMobAccount().email;
   }
 
   @override
@@ -75,43 +81,8 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
-              /*  TextField(
-                style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w500,
-                    fontFamily: 'Poppins'),
-                controller: _textController,
-                readOnly: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      width: 3,
-                      color: ripCopied ? green : Colors.black,
-                    ),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      width: 3,
-                      color: ripCopied ? green : Colors.black,
-                    ),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  contentPadding: const EdgeInsets.all(14.0),
-                  icon: IconButton(
-                    icon: Icon(
-                      Icons.copy,
-                      color: ripCopied ? green : Colors.black,
-                    ),
-                    onPressed: _copyToClipboard,
-                  ),
-                ),
-              ),*/
-              textFiedToCopy(ripCopied, _textController, green, () {
-                _copyToClipboard();
+              textFiedToCopy(ripCopied, _ripController, green, () {
+                _copyToClipboard(_ripController);
                 setState(() {
                   ripCopied = true;
                 });
@@ -126,8 +97,8 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
-              textFiedToCopy(emailCopied, _textController, green, () {
-                _copyToClipboard();
+              textFiedToCopy(emailCopied, _emailController, green, () {
+                _copyToClipboard(_emailController);
                 setState(() {
                   emailCopied = true;
                 });
@@ -165,7 +136,7 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
               ),
               const SizedBox(height: 20),
               WidgetTextfieldDigit(
-                  hintText: "code",
+                  hintText: "Code de transaction",
                   onChanged: (String text) {},
                   validator: (value) {
                     return value != null && value.length < 12
@@ -179,8 +150,6 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
                 child: CustomRaisedButton(
                   text: "Confirmer",
                   press: () async {
-//                    String enteredCode = _codeController.text;
-//                    String code = await accessMail();
                     (_codeController.text == await accessMail())
                         ? showDialog(
                             context: context,

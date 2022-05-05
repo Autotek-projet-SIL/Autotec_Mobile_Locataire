@@ -1,9 +1,13 @@
 import 'package:autotec/paiment/paiement_baridimob/payment_video_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../components/raised_button.dart';
 
-void main() {
+Future<void> main() async {
+    WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(const PaimentMethodeScreen());
 }
 

@@ -17,13 +17,10 @@ class CodeValidationScreen extends StatefulWidget {
 class CodeValidationScreenState extends State<CodeValidationScreen> {
   final TextEditingController _textController = TextEditingController();
   final TextEditingController _codeController = TextEditingController();
-  static bool pressed = false;
+  static bool ripCopied = false;
+  static bool emailCopied = false;
   static const Color green = Color.fromRGBO(27, 146, 164, 0.7);
-  // This function is triggered when the copy icon is pressed
   Future<void> _copyToClipboard() async {
-    setState(() {
-      pressed = true;
-    });
     await Clipboard.setData(ClipboardData(text: _textController.text));
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text('Copié dans le presse-papier'),
@@ -78,7 +75,7 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
-              TextField(
+              /*  TextField(
                 style: const TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w500,
@@ -92,14 +89,14 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
                   enabledBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       width: 3,
-                      color: pressed ? green : Colors.black,
+                      color: ripCopied ? green : Colors.black,
                     ),
                     borderRadius: BorderRadius.circular(15),
                   ),
                   focusedBorder: OutlineInputBorder(
                     borderSide: BorderSide(
                       width: 3,
-                      color: pressed ? green : Colors.black,
+                      color: ripCopied ? green : Colors.black,
                     ),
                     borderRadius: BorderRadius.circular(15),
                   ),
@@ -107,12 +104,34 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
                   icon: IconButton(
                     icon: Icon(
                       Icons.copy,
-                      color: pressed ? green : Colors.black,
+                      color: ripCopied ? green : Colors.black,
                     ),
                     onPressed: _copyToClipboard,
                   ),
                 ),
+              ),*/
+              textFiedToCopy(ripCopied, _textController, green, () {
+                _copyToClipboard();
+                setState(() {
+                  ripCopied = true;
+                });
+              }),
+              const SizedBox(height: 40),
+              const Text(
+                "voici l'e-mail auquel vous devez envoyer le reçu ",
+                style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Poppins'),
+                textAlign: TextAlign.center,
               ),
+              const SizedBox(height: 20),
+              textFiedToCopy(emailCopied, _textController, green, () {
+                _copyToClipboard();
+                setState(() {
+                  emailCopied = true;
+                });
+              }),
               const SizedBox(height: 40),
               const Text(
                 "vous pouvez accéder à l'application baridi mob directement à partir d'ici",
@@ -150,7 +169,7 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
                   onChanged: (String text) {},
                   validator: (value) {
                     return value != null && value.length < 12
-                        ? "le code contient 12 chiffres"
+                        ? "le code ne contient que des chiffres"
                         : null;
                   },
                   controller: _codeController,
@@ -190,6 +209,43 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
       ),
     );
   }
+}
+
+Widget textFiedToCopy(bool pressed, TextEditingController _textController,
+    Color green, VoidCallback _copyToClipboard) {
+  return TextField(
+    style: const TextStyle(
+        fontSize: 20, fontWeight: FontWeight.w500, fontFamily: 'Poppins'),
+    controller: _textController,
+    readOnly: true,
+    decoration: InputDecoration(
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          width: 3,
+          color: pressed ? green : Colors.black,
+        ),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          width: 3,
+          color: pressed ? green : Colors.black,
+        ),
+        borderRadius: BorderRadius.circular(15),
+      ),
+      contentPadding: const EdgeInsets.all(14.0),
+      icon: IconButton(
+        icon: Icon(
+          Icons.copy,
+          color: pressed ? green : Colors.black,
+        ),
+        onPressed: _copyToClipboard,
+      ),
+    ),
+  );
 }
 
 Widget popUP(String title, String content, String buttonText) {

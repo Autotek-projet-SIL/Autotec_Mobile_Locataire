@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-
 import '../../components/WBack.dart';
 import '../../components/raised_button.dart';
 import 'code_validation_screen.dart';
+
+import 'package:firebase_storage/firebase_storage.dart';
 
 class PaymentVideoScreen extends StatefulWidget {
   const PaymentVideoScreen({Key? key}) : super(key: key);
@@ -14,13 +16,12 @@ class PaymentVideoScreen extends StatefulWidget {
 
 class PaymentVideoScreenState extends State<PaymentVideoScreen> {
   late VideoPlayerController _controller;
-
   @override
   void initState() {
     super.initState();
     _controller = VideoPlayerController.network(
         // we need to get the video from firebase
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4')
+        'https://firebasestorage.googleapis.com/v0/b/autotek-8c725.appspot.com/o/Paiement%2FBaridi_Mob_Payment_descriptive_video_test.mp4?alt=media&token=330697ab-e51c-40e8-8718-f2c0baeac90e')
       ..initialize().then((_) {
         // Ensure the first frame is shown af
         //ter the video is initialized, even before the play button has been pressed.
@@ -83,8 +84,7 @@ class PaymentVideoScreenState extends State<PaymentVideoScreen> {
                     SizedBox(
                       width: size.width * 0.3,
                       child: CustomRaisedButton(
-                        text:
-                            _controller.value.isPlaying ? "stop<q" : "demarer",
+                        text: _controller.value.isPlaying ? "stop" : "demarer",
                         press: () => {
                           setState(() {
                             _controller.value.isPlaying

@@ -1,10 +1,11 @@
 import 'package:autotec/components/text_field_digits.dart';
+import 'package:autotec/models/baridimob_payment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:external_app_launcher/external_app_launcher.dart';
 import '../../components/WBack.dart';
 import '../../components/raised_button.dart';
-import '../../models/payment_baridimob.dart';
+import '../../models/baridimob_account.dart';
 import 'email.dart';
 
 class CodeValidationScreen extends StatefulWidget {
@@ -15,6 +16,8 @@ class CodeValidationScreen extends StatefulWidget {
 }
 
 class CodeValidationScreenState extends State<CodeValidationScreen> {
+  //payment
+  BaridiMobPayment? baridiMobPayment;
   // text controllers
   final TextEditingController _ripController = TextEditingController();
   final TextEditingController _codeController = TextEditingController();
@@ -150,6 +153,14 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
                 child: CustomRaisedButton(
                   text: "Confirmer",
                   press: () async {
+                    DateTime date = DateTime.now();
+                    baridiMobPayment!.codeTransaction = _codeController.text;
+                    baridiMobPayment!.datePaiement =
+                        "${date.hour}:${date.minute}:${date.second}";
+                    baridiMobPayment!.heurPaiement =
+                        "${date.hour}:${date.minute}:${date.second}";
+
+                    verifyTeansactionCode(baridiMobPayment!);
                     (_codeController.text == await accessMail())
                         ? showDialog(
                             context: context,

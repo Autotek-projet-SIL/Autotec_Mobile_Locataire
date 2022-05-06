@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../components/raised_button.dart';
 
 Future<void> main() async {
-    WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
   runApp(const PaimentMethodeScreen());
@@ -16,7 +16,7 @@ class PaimentMethodeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(  home :Body()) ;
+    return const  MaterialApp(home: Body());
   }
 }
 
@@ -53,8 +53,7 @@ class Body extends StatelessWidget {
                 text: "Carte Edahabia (BaridiMob)",
                 press: () => Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const PaymentVideoScreen()),
+                  MaterialPageRoute(builder: (context) => PaymentVideoScreen()),
                 ),
                 color: const Color.fromRGBO(27, 146, 164, 0.7),
                 textColor: Colors.white,
@@ -64,8 +63,7 @@ class Body extends StatelessWidget {
                 text: "PayPal",
                 press: () => Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const PaymentVideoScreen()),
+                  MaterialPageRoute(builder: (context) => PaymentVideoScreen()),
                 ),
                 color: const Color.fromRGBO(27, 146, 164, 0.7),
                 textColor: Colors.white,

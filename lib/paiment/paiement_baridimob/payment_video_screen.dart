@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import '../../components/WBack.dart';
 import '../../components/raised_button.dart';
+import '../../models/user_data.dart';
 import 'code_validation_screen.dart';
 
 import 'package:firebase_storage/firebase_storage.dart';
 
 class PaymentVideoScreen extends StatefulWidget {
-  const PaymentVideoScreen({Key? key}) : super(key: key);
+  PaymentVideoScreen({ Key? key}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => PaymentVideoScreenState();
@@ -105,8 +106,8 @@ class PaymentVideoScreenState extends State<PaymentVideoScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    const CodeValidationScreen()),
+                                builder: (context) => CodeValidationScreen(                                      
+                                    )),
                           )
                         },
                         color: const Color.fromRGBO(27, 146, 164, 0.7),

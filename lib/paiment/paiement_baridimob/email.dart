@@ -1,6 +1,9 @@
 import 'package:enough_mail/enough_mail.dart';
-import 'package:flutter/material.dart';
+import '../../models/baridimob_payment.dart';
+import '../../models/rest_api.dart';
+import '../../models/user_data.dart';
 
+//* verification using only flutter */
 //l'email de l'entreprise
 String userName = 'artificcontactpro';
 String password = "artific2022";
@@ -63,4 +66,19 @@ String getVerificationCode(MimeMessage message) {
     }
   }
   return code;
+}
+
+/* Rest apis verifiations */
+
+Future<bool> verifyTeansactionCode(
+  BaridiMobPayment baridiMobPayment,
+) async {
+  await userCredentials.refresh();
+  final response =
+      await Api.sendBaridiMobDetails(baridiMobPayment, userCredentials.token!);
+  if (response.statusCode != 200) {
+    return false;
+  } else {
+    return true;
+  }
 }

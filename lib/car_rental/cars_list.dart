@@ -1,7 +1,8 @@
+// ignore_for_file: deprecated_member_use
+
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'Cars.dart';
@@ -11,7 +12,7 @@ import 'package:autotec/models/user_data.dart';
 
 class CarsList extends StatefulWidget {
 
-   CarsList({Key? key}) : super(key: key);
+   const CarsList({Key? key}) : super(key: key);
 
   @override
   State<CarsList> createState() => _CarsListState();
@@ -25,8 +26,8 @@ class _CarsListState extends State<CarsList> {
 
       body: Column(
         children: [
-          Spacer(flex: 2,),
-          Text(
+          const Spacer(flex: 2,),
+          const Text(
             'veillez choisir une voiture',
             style: TextStyle(
               fontWeight: FontWeight.w800,
@@ -34,11 +35,11 @@ class _CarsListState extends State<CarsList> {
               fontSize: 20,
             ),
           ),
-          Spacer(flex: 1,),
+          const Spacer(flex: 1,),
           Center(
                 child: CarListView(),
           ),
-          Spacer(flex: 1,),
+          const Spacer(flex: 1,),
         ],
       ),
     );
@@ -64,7 +65,7 @@ class CarListView extends StatelessWidget{
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
-        return  CircularProgressIndicator();
+        return  const CircularProgressIndicator();
       },
     );
   }
@@ -82,7 +83,7 @@ class CarListView extends StatelessWidget{
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(child:
+                      const Expanded(child:
                       Text("aucune voiture n'est disponible en ce moment, veuillez réessayer plus tard")
                       ),
                       Center(
@@ -91,7 +92,7 @@ class CarListView extends StatelessWidget{
                               //TODO send a post with rejected demande de location
                               Navigator.pop(context);
                             },
-                            child: Text("ok")),
+                            child: const Text("ok")),
                       )
                     ],
                   ),
@@ -105,11 +106,11 @@ class CarListView extends StatelessWidget{
 
     var Url = Uri.http("autotek-server.herokuapp.com","/flotte/vehicule");
     print (Url.toString());
-    final response = await http.get(Url, headers: {'token':userCredentials.token!,'id_sender':userCredentials.uid!});
+    final response = await http.get(Url, headers: {'token':UserCredentials.token!,'id_sender':UserCredentials.uid!});
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
-      List<Car> list =  jsonResponse.map((json) => new Car.fromJson(json)).toList();
+      List<Car> list =  jsonResponse.map((json) =>  Car.fromJson(json)).toList();
       //recuperer ceux dispo et batterie > 20
       try{
         final querySnapshot = await FirebaseFirestore.instance.collection('CarLocation').where('batterie', isGreaterThan: 20)

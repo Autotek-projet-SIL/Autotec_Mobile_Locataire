@@ -22,12 +22,12 @@ class WidgetViewCar extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: ()async{
-            await userCredentials.refresh();
+            await UserCredentials.refresh();
             carLocation _location = carLocation();
             _location.car = car;
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Demande()),
+              MaterialPageRoute(builder: (context) => const Demande()),
             );
           },
           child: Container(
@@ -67,7 +67,7 @@ class WidgetViewCar extends StatelessWidget {
                         width: 150,
                         child: Text(car.modele!,
                           maxLines: 2,
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.black,
                             fontFamily: 'Poppins',
                             fontWeight: FontWeight.bold,
@@ -79,7 +79,7 @@ class WidgetViewCar extends StatelessWidget {
                   bottom: 10,
                   left: 50,
                   child: Text(car.tarification.toString()+" DA",
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.blueGrey,
                     fontSize: 13,
 
@@ -91,13 +91,13 @@ class WidgetViewCar extends StatelessWidget {
                     children:  [
                       FlatButton(
                           onPressed :()async{
-                            await userCredentials.refresh();
+                            await UserCredentials.refresh();
                             Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => CarDetail(car: car)),
                             );
                           } ,
-                          color: Color(0xff2E9FB0),
+                          color: const Color(0xff2E9FB0),
                           textColor: Colors.white,
                           minWidth: 140,
                           height: 50,
@@ -107,7 +107,7 @@ class WidgetViewCar extends StatelessWidget {
                               bottomRight: Radius.circular(20),
                             ),
                           ),
-                          child: Text('Details')),
+                          child: const Text('Details')),
 
                     ],
                   ) ,

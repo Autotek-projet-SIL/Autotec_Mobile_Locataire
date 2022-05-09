@@ -14,8 +14,7 @@ import 'package:autotec/Authentication/first_screens/home.dart';
 import 'package:autotec/models/user_data.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
-var userCred ;
+var userCred;
 var initScreen;
 
 FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -28,7 +27,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
 }
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -36,7 +34,7 @@ Future<void> main() async {
   initScreen = await prefs.getInt("initScreen");
   await prefs.setInt("initScreen", 1);
 
-  userCred = userCredentials();
+  userCred = UserCredentials();
   await Firebase.initializeApp();
 
   //Get permission for notifications
@@ -53,10 +51,9 @@ Future<void> main() async {
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   //Get Device token
-  userCredentials.setDeviceToken();
+  UserCredentials.setDeviceToken();
 
   runApp(const MyApp());
-
 }
 
 class MyApp extends StatelessWidget {
@@ -77,14 +74,13 @@ class MyApp extends StatelessWidget {
               builder: (context, snapshot) {
                 // If the snapshot has user data, then they're already signed in.
                 if (snapshot.hasData) {
-                  return  Map();
-                }else{
-                  if(initScreen==0 || initScreen==null){
+                  return const Map();
+                } else {
+                  if (initScreen == 0 || initScreen == null) {
                     return OnBoarding();
                   }
-                  return Home();
+                  return const Home();
                 }
-
               }),
         ),
       ),

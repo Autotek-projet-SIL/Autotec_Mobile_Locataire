@@ -90,14 +90,14 @@ class UserData {
   }
 }
 
-class userCredentials {
-  userCredentials._privateConstructor();
-  static final userCredentials _instance = userCredentials._privateConstructor();
+class UserCredentials {
+  UserCredentials._privateConstructor();
+  static final UserCredentials _instance = UserCredentials._privateConstructor();
   static String? devicetoken;
   static String? uid;
   static String? token;
 
-  factory userCredentials(){
+  factory UserCredentials(){
     return _instance;
   }
   static setDeviceToken()async{

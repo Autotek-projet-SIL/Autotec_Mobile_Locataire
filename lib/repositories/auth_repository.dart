@@ -46,26 +46,26 @@ class AuthRepository {
 
   Future<void> createAccountInDB(UserData user) async {
 
-    await userCredentials.refresh();
-    user.id = userCredentials.uid;
+    await UserCredentials.refresh();
+    user.id = UserCredentials.uid;
     print("uid: "+ user.id!);
-    final response = await Api.createUser(user, userCredentials.token!);
+    final response = await Api.createUser(user, UserCredentials.token!);
     if (response.statusCode != 200) {
       throw Exception('insciption failed');
     }else{
       print("token\n");
-      print(userCredentials.token);
+      print(UserCredentials.token);
       print("uid \n");
-      print(userCredentials.uid);
+      print(UserCredentials.uid);
 
     }
 
   }
 
   Future<void> saveTokenDevice() async {
-    await userCredentials.setDeviceToken();
-    await FirebaseFirestore.instance.collection('DeviceToken').doc(userCredentials.uid).set({
-      'device_token': userCredentials.token,
+    await UserCredentials.setDeviceToken();
+    await FirebaseFirestore.instance.collection('DeviceToken').doc(UserCredentials.uid).set({
+      'device_token': UserCredentials.token,
     }) .then((value) => print("token added"))
         .catchError((error) => print("Failed to add token: $error"));
   }

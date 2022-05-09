@@ -121,11 +121,11 @@ class _DashboardState extends State<Dashboard> {
               ElevatedButton(
                 child: const Text('Sign Out'),
                 onPressed: () async{
-                  await userCredentials.refresh();
+                  await UserCredentials.refresh();
                   print("token\n");
-                  print(userCredentials.token);
+                  print(UserCredentials.token);
                   print("uid \n");
-                  print(userCredentials.uid);
+                  print(UserCredentials.uid);
                   // Signing out the user
                 context.read<AuthBloc>().add(SignOutRequested());
                 },

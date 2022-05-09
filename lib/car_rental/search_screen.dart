@@ -1,8 +1,6 @@
-import 'dart:ui';
+// ignore_for_file: deprecated_member_use
 
-import 'package:autotec/car_rental/date_time_pickers.dart';
 import 'package:autotec/models/user_data.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_geocoder/geocoder.dart';
 import 'package:flutter_google_places/flutter_google_places.dart';
@@ -12,7 +10,7 @@ import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:autotec/models/Location.dart';
 
-import 'CarsList.dart';
+import 'cars_list.dart';
 const kGoogleApiKey = 'AIzaSyDgZadIjr0Xgvmeo6JZp5CN18Cv8Vy8j0E';
 final homeScaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -71,7 +69,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
   }
 
  Future<String> _getAdress(double latitude, double longitude)async{
-   final coordinates = new Coordinates(latitude, longitude);
+   final coordinates = Coordinates(latitude, longitude);
    var addresses = await Geocoder.local.findAddressesFromCoordinates(
        coordinates);
    var first = addresses.first;
@@ -83,7 +81,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
  }
 
   Future<String> _getRegion(double latitude, double longitude)async{
-    final coordinates = new Coordinates(latitude, longitude);
+    final coordinates = Coordinates(latitude, longitude);
     var addresses = await Geocoder.local.findAddressesFromCoordinates(
         coordinates);
     var first = addresses.first;
@@ -106,7 +104,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
         types: [""],
         decoration: InputDecoration(
             hintText: 'Search',
-            focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(20), borderSide: BorderSide(color: Colors.white))),
+            focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(20), borderSide: const BorderSide(color: Colors.white))),
         components: [Component(Component.country,"DZ")]);
 
     return p!;
@@ -159,7 +157,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                       },
                     ),
                   ),
-                  Padding(padding: EdgeInsets.all(8.0)),
+                  const Padding(padding: EdgeInsets.all(8.0)),
                   GestureDetector(
                     child: const Text('choisir un endroid'),
                     onTap: ()async{
@@ -211,7 +209,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                       },
                     ),
                   ),
-                  Padding(padding: EdgeInsets.all(8.0)),
+                  const Padding(padding: EdgeInsets.all(8.0)),
                   GestureDetector(
                     child: const Text('choisir un endroid'),
                     onTap: ()async{
@@ -269,26 +267,26 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                     width: 300,
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Color(0xff2E9FB0),
+                        color: const Color(0xff2E9FB0),
                       ),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: Row(
                       children: [
-                        Padding(
-                          padding:const EdgeInsets.fromLTRB(5,10,0,10),
-                          child: const Icon(Icons.pin_drop_outlined, color: Colors.grey,),
+                        const Padding(
+                          padding:EdgeInsets.fromLTRB(5,10,0,10),
+                          child: Icon(Icons.pin_drop_outlined, color: Colors.grey,),
                         ),
                         Expanded(
                                 child:Container(
                                     child: SingleChildScrollView(
                                         scrollDirection: Axis.horizontal,
-                                        padding: EdgeInsets.all(11),
+                                        padding: const EdgeInsets.all(11),
                                         child: GestureDetector(
                                           onTap: (){
                                             _showDepartDialog(context);
                                           },
-                                            child: Text(this.depart? this.depart_adr : "point de départ", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)))))),
+                                            child: Text(this.depart? this.depart_adr : "point de départ", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)))))),
 
                       ],
                     ),
@@ -298,15 +296,15 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                     width: 300,
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Color(0xff2E9FB0),
+                        color: const Color(0xff2E9FB0),
                       ),
                       borderRadius: BorderRadius.circular(10.0),
                     ),
                     child: Row(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(5,10,0,10),
-                          child: Icon(Icons.pin_drop_outlined, color: Colors.grey,),
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(5,10,0,10),
+                          child: const Icon(Icons.pin_drop_outlined, color: Colors.grey,),
                         ),
                         Expanded(
                           child: Container(
@@ -314,7 +312,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                               scrollDirection: Axis.horizontal,
                               padding: const EdgeInsets.all(10.0),
                               child: GestureDetector(
-                                child: Text(arrive? arrive_adr : "point d'arrivé", style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                                child: Text(arrive? arrive_adr : "point d'arrivé", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
                                 onTap: (){
                                   _showArriveDialog(context);
                                 },
@@ -342,24 +340,24 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                               _carLocation.latitude_arrive = latitude_arv;
                               _carLocation.longitude_arrive = longitude_arv;
                               _carLocation.point_arrive = arrive_adr;
-                              await userCredentials.refresh();
+                              await UserCredentials.refresh();
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => CarsList()),
+                                MaterialPageRoute(builder: (context) => const CarsList()),
                               );
                             }else{
-                              homeScaffoldKey.currentState!.showSnackBar(SnackBar(content: Text('veuillez choisir des addresses différentes')));
+                              homeScaffoldKey.currentState!.showSnackBar(const SnackBar(content: const Text('veuillez choisir des addresses différentes')));
                             }
                           }else if(!depart){
-                            homeScaffoldKey.currentState!.showSnackBar(SnackBar(content: Text('veuillez choisir un point de départ')));
+                            homeScaffoldKey.currentState!.showSnackBar(const SnackBar(content: const Text('veuillez choisir un point de départ')));
                           }else{
-                            homeScaffoldKey.currentState!.showSnackBar(SnackBar(content: Text('veuillez choisir un point d`arrivé')));
+                            homeScaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text('veuillez choisir un point d`arrivé')));
                           }
 
                         },
-                        child:Text("continuer"),
+                        child:const Text("continuer"),
                         style: ButtonStyle(
-                       backgroundColor: MaterialStateProperty.all<Color>(Color(0xff2E9FB0)),
+                       backgroundColor: MaterialStateProperty.all<Color>(const Color(0xff2E9FB0)),
 
                         ),
                     ),

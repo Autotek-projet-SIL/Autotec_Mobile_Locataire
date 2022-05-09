@@ -1,18 +1,15 @@
 // ignore_for_file: avoid_unnecessary_containers
 
-import 'package:autotec/main.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:autotec/bloc/auth_bloc.dart';
-import 'package:autotec/models/rest_api.dart';
+
 import 'package:autotec/models/user_data.dart';
 import '../../../components/raised_button.dart';
 import 'package:autotec/car_rental/home_page.dart';
-import '../Dashboard/dashboard.dart';
 import 'package:autotec/repositories/image_storage_repository.dart';
 // ignore: must_be_immutable
 class Identite_verso extends StatefulWidget {

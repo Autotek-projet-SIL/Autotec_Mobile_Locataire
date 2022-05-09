@@ -1,18 +1,19 @@
 // ignore_for_file: avoid_unnecessary_containers
 
 import 'package:autotec/Authentication/SignUp/identite_verso.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:autotec/bloc/auth_bloc.dart';
-import 'package:autotec/models/rest_api.dart';
+
 import 'package:autotec/models/user_data.dart';
 import '../../../components/raised_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../Dashboard/dashboard.dart';
 import 'package:autotec/repositories/image_storage_repository.dart';
-import 'package:http/http.dart';
+
+
 // ignore: must_be_immutable
 class Identite_recto extends StatefulWidget {
   UserData u;
@@ -155,19 +156,25 @@ class _Identite_rectoState extends State<Identite_recto> {
                       text: "Continuer",
                       press: buttonActivated()
                           ? () async {
-                        var id_url = await Storage.uploadFile(imageFile!.path,"Pièces identité Recto/"+widget.u.nom!+" "+widget.u.prenom!);
-                        widget.u.photoIdentiteRecto = id_url ;
-                        print("************************");
-                        print(widget.u.photoIdentiteRecto);
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Identite_verso(
-                                u: widget.u,
-                              ),
-                            ),
-                          );
-                      } : null,
+                              var id_url = await Storage.uploadFile(
+                                  imageFile!.path,
+                                  "Pièces identité Recto/" +
+                                      widget.u.nom! +
+                                      " " +
+                                      widget.u.prenom!);
+                              widget.u.photoIdentiteRecto = id_url;
+                              print("************************");
+                              print(widget.u.photoIdentiteRecto);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Identite_verso(
+                                    u: widget.u,
+                                  ),
+                                ),
+                              );
+                            }
+                          : null,
                       color: const Color.fromRGBO(27, 146, 164, 0.7),
                       textColor: Colors.white,
                     ),
@@ -181,5 +188,4 @@ class _Identite_rectoState extends State<Identite_recto> {
       ),
     );
   }
-
 }

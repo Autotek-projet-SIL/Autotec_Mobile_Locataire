@@ -48,7 +48,7 @@ class WidgetViewTrip extends StatelessWidget {
                     children: [
                       Text(carName,
                         textAlign: TextAlign.start,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
                           fontFamily: 'Poppins',
                           fontSize: 20,
@@ -62,13 +62,13 @@ class WidgetViewTrip extends StatelessWidget {
                       Row(
                           children:[
                             Image.asset('assets/a.png',),
-                            SizedBox(width: 20,),
+                            const SizedBox(width: 20,),
                             Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(start,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.black,
                                     fontFamily: 'Poppins',
                                     fontSize: 16,
@@ -76,10 +76,10 @@ class WidgetViewTrip extends StatelessWidget {
                                   ),
 
                                 ),
-                                SizedBox(height: 10,),
+                                const SizedBox(height: 10,),
                                 Text(end,
                                   textAlign: TextAlign.start,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     color: Colors.black,
                                     fontFamily: 'Poppins',
                                     fontSize: 16,
@@ -97,7 +97,7 @@ class WidgetViewTrip extends StatelessWidget {
                   children: [
                     Text(carPrice,
                       textAlign: TextAlign.start,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                         fontFamily: 'Poppins',
                         fontSize: 20,
@@ -113,7 +113,7 @@ class WidgetViewTrip extends StatelessWidget {
                   children:  [
                     FlatButton(
                         onPressed :(){} ,
-                        color: Color(0xff2E9FB0),
+                        color: const Color(0xff2E9FB0),
                         textColor: Colors.white,
                         minWidth: 140,
                         height: 50,
@@ -123,7 +123,7 @@ class WidgetViewTrip extends StatelessWidget {
                             bottomRight: Radius.circular(20),
                           ),
                         ),
-                        child: Text('Details')),
+                        child: const Text('Details')),
 
                   ],
                 ) ,

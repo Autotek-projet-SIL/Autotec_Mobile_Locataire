@@ -1,7 +1,6 @@
 
 import 'package:autotec/bloc/auth_bloc.dart';
 import 'package:autotec/models/user_data.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -11,7 +10,7 @@ import 'package:autotec/Authentication/first_screens/home.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 
-final ScaffoldKey = GlobalKey<ScaffoldState>();
+final scaffoldKey = GlobalKey<ScaffoldState>();
 
 class Map extends StatefulWidget {
   const Map({Key? key}) : super(key: key);
@@ -24,6 +23,7 @@ class _MapState extends State<Map> {
  late double latitude ;
  late double longitude ;
  late Position? _currentlocation ;
+ @override
   void initState() {
     super.initState();
    // _getCurrentLocation();
@@ -65,7 +65,7 @@ class _MapState extends State<Map> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: ScaffoldKey,
+      key: scaffoldKey,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
         onPressed: ()async{
@@ -76,11 +76,11 @@ class _MapState extends State<Map> {
               _getCurrentLocation();
             }else{
 
-              ScaffoldKey.currentState!.showSnackBar(SnackBar(content: Text("activer la localisation")));
+              scaffoldKey.currentState!.showSnackBar(SnackBar(content: Text("activer la localisation")));
             }
           }else{
 
-            ScaffoldKey.currentState!.showSnackBar(SnackBar(content: Text("permission denied")));
+            scaffoldKey.currentState!.showSnackBar(SnackBar(content: Text("permission denied")));
 
             await [Permission.location,].request();
           }
@@ -105,7 +105,7 @@ class _MapState extends State<Map> {
             padding: const EdgeInsets.fromLTRB(50.0, 5, 20, 5),
             child: IconButton(
                 onPressed: ()async{
-                  await userCredentials.refresh();
+                  await UserCredentials.refresh();
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => SearchPlacesScreen()),

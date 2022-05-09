@@ -1,9 +1,7 @@
 //import 'package:autoteck/DemandeVehicule/historique.dart';
 //import 'package:autoteck/DemandeVehicule/profile.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:autotec/car_rental/home_page.dart';
 
 
 
@@ -76,7 +74,7 @@ class _WidgetBottomBarState extends State<WidgetBottomBar> {
             ),
           ],
           currentIndex: _selectedIndex,
-          selectedItemColor:Color.fromRGBO(27, 146, 164, 0.7),
+          selectedItemColor:const Color.fromRGBO(27, 146, 164, 0.7),
           onTap: _onItemTapped,
         ),
       ),

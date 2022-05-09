@@ -41,7 +41,7 @@ class WidgetCarInfo extends StatelessWidget {
 
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Text(carPrice,

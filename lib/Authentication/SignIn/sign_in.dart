@@ -5,8 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:autotec/components/text_field.dart';
 import 'package:autotec/components/text_field_password.dart';
 import 'package:autotec/bloc/auth_bloc.dart';
-import 'package:autotec/models/user_data.dart';
-import 'package:autotec/models/rest_api.dart';
 import '../SignUp/sign_up.dart';
 import 'package:autotec/car_rental/home_page.dart';
 
@@ -38,7 +36,7 @@ class _SignInState extends State<SignIn> {
           if (state is Authenticated) {
             // Navigating to the dashboard screen if the user is authenticated
              Navigator.pushReplacement(context,
-                MaterialPageRoute(builder: (context) => Map()));
+                MaterialPageRoute(builder: (context) => const Map()));
 
 
           }

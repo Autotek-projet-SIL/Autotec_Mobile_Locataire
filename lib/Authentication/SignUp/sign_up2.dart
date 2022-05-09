@@ -1,12 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
-import 'package:firebase_auth/firebase_auth.dart';
-
 import 'selfie.dart';
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
-import 'package:autotec/components/text_field.dart';
-import 'package:autotec/components/text_field_digits.dart';
 import 'package:autotec/components/text_field_password.dart';
 import 'package:autotec/models/user_data.dart';
 
@@ -22,7 +17,6 @@ class _SignUp2State extends State<SignUp2> {
   final TextEditingController _passwordController = TextEditingController();
   TextEditingController mdpConfirmController = TextEditingController();
   dataNavigation(BuildContext context) {
-
     if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       debugPrint("Form Validated");
       // _signupFormKey.currentState!.save();
@@ -67,7 +61,7 @@ class _SignUp2State extends State<SignUp2> {
                     child: Column(
                       children: [
                         SizedBox(height: size.height * 0.03),
-                        TextFieldPassword (
+                        TextFieldPassword(
                           controller: _passwordController,
                           hintText: "Mot de passe",
                           validationMode: AutovalidateMode.onUserInteraction,
@@ -78,7 +72,7 @@ class _SignUp2State extends State<SignUp2> {
                           },
                         ),
                         SizedBox(height: size.height * 0.03),
-                        TextFieldPassword (
+                        TextFieldPassword(
                           controller: mdpConfirmController,
                           hintText: "Confirmer votre Mot de passe",
                           validationMode: AutovalidateMode.onUserInteraction,
@@ -92,7 +86,7 @@ class _SignUp2State extends State<SignUp2> {
                         SizedBox(height: size.height * 0.03),
                         FractionallySizedBox(
                           widthFactor: 1,
-                          child:RaisedButton(
+                          child: RaisedButton(
                             color: const Color.fromRGBO(27, 146, 164, 0.7),
                             hoverColor: Colors.black,
                             shape: RoundedRectangleBorder(
@@ -102,13 +96,13 @@ class _SignUp2State extends State<SignUp2> {
                             child: const Text(
                               "continue",
                               style:
-                              TextStyle(color: Colors.black, fontSize: 16),
+                                  TextStyle(color: Colors.black, fontSize: 16),
                             ),
                             onPressed: () {
                               if (_formKey.currentState!.validate()) {
-                                widget.user.motDePasse = _passwordController.text;
+                                widget.user.motDePasse =
+                                    _passwordController.text;
                                 dataNavigation(context);
-
                               }
                             },
                           ),
@@ -117,7 +111,6 @@ class _SignUp2State extends State<SignUp2> {
                     ),
                   ),
                 ),
-
               ],
             ),
           ),

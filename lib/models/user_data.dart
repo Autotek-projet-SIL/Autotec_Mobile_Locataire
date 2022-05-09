@@ -92,25 +92,29 @@ class UserData {
 
 class userCredentials {
   userCredentials._privateConstructor();
-  static final userCredentials _instance = userCredentials._privateConstructor();
+
+  static final userCredentials _instance = userCredentials
+      ._privateConstructor();
   static String? devicetoken;
   static String? uid;
   static String? token;
+  static String? email;
 
   factory userCredentials(){
     return _instance;
   }
-  static setDeviceToken()async{
+
+  static setDeviceToken() async {
     devicetoken = await FirebaseMessaging.instance.getToken();
   }
 
-  static Future<void> refresh()async{
-    try{
+  static Future<void> refresh() async {
+    try {
       token = (await FirebaseAuth.instance.currentUser!.getIdToken());
       uid = (await FirebaseAuth.instance.currentUser?.uid);
-    }on FirebaseAuthException catch (e){
+      email = (await FirebaseAuth.instance.currentUser?.email);
+    } on FirebaseAuthException catch (e) {
       print('auth exception!\n');
     }
-
   }
 }

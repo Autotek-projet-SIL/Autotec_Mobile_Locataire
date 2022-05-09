@@ -6,12 +6,14 @@ class WidgetViewTrip extends StatelessWidget {
   final String carPrice;
   final String start;
   final String end;
+  final void Function()? press;
   const WidgetViewTrip({
     Key? key,
     required this.carName,
     required this.carPrice,
     required this.start,
     required this.end,
+    required this.press,
   }) : super(key: key);
 
   @override
@@ -19,7 +21,7 @@ class WidgetViewTrip extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          margin: const EdgeInsets.only(top:40.0,left: 10.0, right: 10.0),
+          margin: const EdgeInsets.only(top:20.0,left: 10.0, right: 10.0),
           height: 170,
           decoration: const BoxDecoration(
 
@@ -43,50 +45,58 @@ class WidgetViewTrip extends StatelessWidget {
             children:  [
               Positioned(
                   top:15.0,
-                  left: 15.0,
+                  left: 0.0,
                   child: Column(
                     children: [
-                      Text(carName,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontFamily: 'Poppins',
-                          fontSize: 20,
+                      SizedBox(
+                        height:50,
+                        width: 200,
+                        child: Text(carName,
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontFamily: 'Poppins',
+                              fontSize: 18,fontWeight: FontWeight.bold
 
+                          ),
                         ),
                       ),
 
                       const SizedBox(
-                        height: 30,
+                        height: 12,
                       ),
-                      Row(
-                          children:[
-                            Image.asset('assets/a.png',),
-                            SizedBox(width: 20,),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Text(start,
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontSize: 16,
+                      SizedBox(
+                        //height: 400,
+                        width: 300,
+                        child: Row(
+                            children:[
+                              Image.asset('assets/a.png',width: 45,),
+                              // SizedBox(width: 10,),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(start,
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'Poppins',
+                                      fontSize: 16,
+
+                                    ),
 
                                   ),
+                                  SizedBox(height: 20,),
+                                  Text(end,
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontFamily: 'Poppins',
+                                      fontSize: 16,
 
-                                ),
-                                SizedBox(height: 10,),
-                                Text(end,
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                    fontFamily: 'Poppins',
-                                    fontSize: 16,
-
-                                  ),),
-                              ],
-                            ),]
+                                    ),),
+                                ],
+                              ),]
+                        ),
                       ),
                     ],
                   )),
@@ -112,10 +122,10 @@ class WidgetViewTrip extends StatelessWidget {
                 child:Column(
                   children:  [
                     FlatButton(
-                        onPressed :(){} ,
+                        onPressed :press ,
                         color: Color(0xff2E9FB0),
                         textColor: Colors.white,
-                        minWidth: 140,
+                        minWidth: 100,
                         height: 50,
                         shape:  const RoundedRectangleBorder(
                           borderRadius:  BorderRadius.only(

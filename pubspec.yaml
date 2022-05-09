@@ -97,6 +97,16 @@ flutter:
     - assets/welcome.png
     - assets/profil.jpg
     - assets/profil.png
+    - assets/bill.png
+    - assets/hello.png
+    - assets/a.png
+    - assets/car.png
+    - assets/battery.png
+    - assets/speed.png
+    - assets/temp.png
+    - assets/blocked.png
+    - assets/circulation.png
+    - assets/panne.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

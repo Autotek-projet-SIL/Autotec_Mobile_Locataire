@@ -1,6 +1,7 @@
 
 import 'package:autotec/bloc/auth_bloc.dart';
 import 'package:autotec/models/user_data.dart';
+import 'package:autotec/profile/profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -118,9 +119,15 @@ class _MapState extends State<Map> {
           Padding(
             padding: const EdgeInsets.fromLTRB(50.0, 5, 50, 5),
             child: IconButton(
-              onPressed: (){
+              onPressed: () async {
                 //TODO navigate to profil
-
+                await userCredentials.refresh();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) =>
+                  Profile()
+                  ),
+                );
 
               },
               icon: Icon(Icons.person_outlined, color: Colors.grey,size: 30),

@@ -6,7 +6,7 @@ class WidgetCarInfo extends StatelessWidget {
   final String carPrice;
   final String carImage;
   const WidgetCarInfo({
-     Key? key,
+    Key? key,
     required this.carName,
     required this.carPrice,
     required this.carImage,
@@ -14,11 +14,13 @@ class WidgetCarInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return Stack(
       children: [
+
         Container(
           margin: const EdgeInsets.only(top:40.0,left: 130.0, right: 0.0),
-          height: 350,
+          height:size.height*0.48,
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(50),
@@ -29,48 +31,47 @@ class WidgetCarInfo extends StatelessWidget {
           child: Stack(
             children:  [
               Positioned(
-                  top:260.0,
-                  right: 80,
-                  child: Column(
-                    children: [
-                      Text(carName,
+                top:size.height*0.33,
+                right: 5,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width:200,
+                      child: Text(carName,
                         style: const TextStyle(
                           color: Colors.white,
                           fontFamily: 'Poppins',
-                          fontSize: 20,
+                          fontSize: 18,
 
                         ),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(carPrice,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Poppins',
-                          fontSize: 20,
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(carPrice,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Poppins',
+                        fontSize: 16,
 
-                        ),
                       ),
-                    ],
-                  ))
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
-        Stack(
-          children: [
-            Positioned(
-                top: 110,
-                right: 50,
-                child: Container(
-                  child: Image.asset(carImage,width: 315,),
-
-
-                ))
-          ],
+        Positioned(
+          top: size.height*0.09,
+          right: 10,
+          child: Container(
+            child: Image.network(carImage,width: 330,),
+          ),
         ),
-      ],
 
+      ],
     );
   }
 }

@@ -114,7 +114,7 @@ class CarListView extends StatelessWidget{
       try{
         final querySnapshot = await FirebaseFirestore.instance.collection('CarLocation').where('batterie', isGreaterThan: 20)
             .where('disponible',isEqualTo: true).get();
-        list.removeWhere((element) => (! querySnapshot.docs.any((doc) => doc.id == element.numero_chasis)));
+        list.removeWhere((element) => (! querySnapshot.docs.any((doc) => doc.id == element.numeroChassis)));
       }catch (e){
         print (e.toString());
       }

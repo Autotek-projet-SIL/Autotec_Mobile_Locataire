@@ -18,16 +18,16 @@ class WidgetCarSpecifications extends StatelessWidget {
           Container(
             // margin: const EdgeInsets.only(top:40.0,left: 10.0, right: 10.0),
             height: 80,
-            width: 80,
+            width: 85,
             decoration:  BoxDecoration(
               border: Border.all(
-                color: Colors.blue,
+                color: Color(0xff2E9FB0),
               ),
               borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(5),
-                topLeft: Radius.circular(5),
-                bottomRight: Radius.circular(5),
-                topRight: Radius.circular(5),
+                bottomLeft: Radius.circular(15),
+                topLeft: Radius.circular(15),
+                bottomRight: Radius.circular(15),
+                topRight: Radius.circular(15),
               ),
               color: Colors.transparent,
 
@@ -39,8 +39,8 @@ class WidgetCarSpecifications extends StatelessWidget {
                   child:Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Image.asset(image,width: 50,),
-                      Text(titre,style: TextStyle(fontSize: 18),)
+                      Image.asset(image,width: 45,),
+                      Text(titre,style: TextStyle(fontSize: 15),)
                     ],
                   ),
                 ),

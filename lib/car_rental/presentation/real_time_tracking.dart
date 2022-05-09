@@ -1,5 +1,5 @@
-// ignore_for_file: prefer_final_fields
-
+import 'dart:math';
+import 'package:autotec/car_rental/presentation/sliding_up_panel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -8,26 +8,27 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 /*To do
 
-1 - the slider 
-2 - the distance 
-3 - the remaining time 
-4 - fix ui 
-5 - the localisation pin 
-6 - localization pin informations on click
-7 - fixe my time sheet
+1 - the slider                               done
+4 - fix ui                                   done
+5 - the localisation pin                     done
+7 - the action button ( support )            done
+2 - the distance                             done
+6 - localization pin informations on click   done
+3 - the remaining time                       done
+
+8 - data from firebase ( 1st track)
+9 - data from firebase ( 2nd track)
 
  */
 
 class MyMap extends StatefulWidget {
   final String carId;
   final String userId;
-  // final LatLng sourceLocation;
   final LatLng destinationLocation;
   const MyMap(
       {Key? key,
       required this.carId,
       required this.userId,
-      //  required this.sourceLocation,
       required this.destinationLocation})
       : super(key: key);
   @override
@@ -38,20 +39,15 @@ class _MyMapState extends State<MyMap> {
   final loc.Location location = loc.Location();
   late GoogleMapController _controller;
   bool _added = false;
-
-  // Set<Marker> _markers = {};
-  //Set<Polyline> _polylines = {};
+  Set<Polyline> _polylines = {};
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints = PolylinePoints();
-  String googleAPIKey = "AIzaSyD1ZzI2O9bqUhQdwsPaUNrp81wtpvxZvzY";
+  String googleAPIKey = "AIzaSyCYFQXP0t1dUWtl9V4xm73lt-l_nQQIkcw";
   BitmapDescriptor? sourceIcon;
   BitmapDescriptor? destinationIcon;
 
-  late LatLng source;
-
   @override
   void initState() {
-    //source = widget.sourceLocation;
     setSourceAndDestinationIcons();
     super.initState();
   }
@@ -60,7 +56,8 @@ class _MyMapState extends State<MyMap> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('location').snapshots(),
+        stream:
+            FirebaseFirestore.instance.collection('CarLocation').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (_added) {
             mymap(snapshot);
@@ -75,9 +72,8 @@ class _MyMapState extends State<MyMap> {
             tiltGesturesEnabled: false,
             markers: {
               Marker(
+                infoWindow: InfoWindow(title: "car on the way ", onTap: () {}),
                 onTap: () {},
-                infoWindow: InfoWindow(
-                    title: "car is moving ", snippet: "snippet", onTap: () {}),
                 position: LatLng(
                   snapshot.data!.docs.singleWhere(
                       (element) => element.id == widget.carId)['latitude'],
@@ -88,11 +84,15 @@ class _MyMapState extends State<MyMap> {
                 icon: sourceIcon!,
               ),
               Marker(
+                  infoWindow: InfoWindow(
+                      title: " name of the user ",
+                      snippet: "waiting for car",
+                      onTap: () {}),
                   position: widget.destinationLocation,
                   markerId: const MarkerId('destPin'),
                   icon: destinationIcon!),
             },
-            //   polylines: _polylines,
+            polylines: _polylines,
             initialCameraPosition: CameraPosition(
                 target: LatLng(
                   snapshot.data!.docs.singleWhere(
@@ -105,65 +105,26 @@ class _MyMapState extends State<MyMap> {
               setState(
                 () {
                   _controller = controller;
-                  _controller.setMapStyle(Utils.mapStyles);
                   _added = true;
-                  //  setPolylines(snapshot);
+                  setPolylines(snapshot);
                 },
               );
             },
           );
-
-          /*  DraggableScrollableSheet(
-              initialChildSize: 0.2,
-              minChildSize: 0.1,
-              builder:
-                  (BuildContext context, ScrollController scrollController) {
-                return Container(
-                  height: 200,
-                  color: Colors.white,
-                  child: Row(
-                    children: [
-                      Column(children: const[
-                       Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Text("car name"),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Text("Remaining time"),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.all(20),
-                        child: Text("Remaining distance"),
-                      )
-                      ],),
-                      Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Image.asset('assets/Car.png',height: 100, width: 100,),  
-                      ),
-                     
-                    ],
-                  ),
-                );
-              },
-            ),*/
         },
       ),
     );
   }
 
   void setSourceAndDestinationIcons() async {
-    /*   sourceIcon = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(size: Size(0.01, 0.01)),
-      'assets/location-map--car-pin.png',
-    );*/
-    sourceIcon =
-        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue);
-    destinationIcon =
-        BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
+    sourceIcon = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(devicePixelRatio: 9.2, size: Size(12, 12)),
+        'assets/car-placeholder.png');
+    destinationIcon = await BitmapDescriptor.fromAssetImage(
+        const ImageConfiguration(devicePixelRatio: 9.2, size: Size(12, 12)),
+        'assets/user-pin.png');
   }
 
-/*
   setPolylines(AsyncSnapshot<QuerySnapshot<Object?>> snapshot) async {
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       googleAPIKey,
@@ -177,22 +138,44 @@ class _MyMapState extends State<MyMap> {
           widget.destinationLocation.longitude),
       travelMode: TravelMode.driving,
     );
+
     if (result.points.isNotEmpty) {
       for (var point in result.points) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       }
+    } else {
+      print(result.errorMessage);
     }
+    double totalDistance = 0;
+    for (var i = 0; i < polylineCoordinates.length - 1; i++) {
+      totalDistance += calculateDistance(
+          polylineCoordinates[i].latitude,
+          polylineCoordinates[i].longitude,
+          polylineCoordinates[i + 1].latitude,
+          polylineCoordinates[i + 1].longitude);
+    }
+    print(totalDistance);
+
     setState(() {
       Polyline polyline = Polyline(
           polylineId: const PolylineId("poly"),
-          color: Colors.blue,
-          width: 20,
+          color: const Color.fromRGBO(27, 146, 164, 0.7),
+          width: 10,
           visible: true,
           points: polylineCoordinates);
       _polylines.add(polyline);
+      Distance.distance = totalDistance;
     });
   }
-*/
+
+  double calculateDistance(lat1, lon1, lat2, lon2) {
+    var p = 0.017453292519943295;
+    var a = 0.5 -
+        cos((lat2 - lat1) * p) / 2 +
+        cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
+    return 12742 * asin(sqrt(a));
+  }
+
   Future<void> mymap(AsyncSnapshot<QuerySnapshot> snapshot) async {
     await _controller.animateCamera(
       CameraUpdate.newCameraPosition(
@@ -203,171 +186,8 @@ class _MyMapState extends State<MyMap> {
               snapshot.data!.docs.singleWhere(
                   (element) => element.id == widget.carId)['longitude'],
             ),
-            zoom: 14.47),
+            zoom: 12.47),
       ),
     );
   }
-}
-
-class Utils {
-  static String mapStyles = '''[
-  {
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#f5f5f5"
-      }
-    ]
-  },
-  {
-    "elementType": "labels.icon",
-    "stylers": [
-      {
-        "visibility": "off"
-      }
-    ]
-  },
-  {
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#616161"
-      }
-    ]
-  },
-  {
-    "elementType": "labels.text.stroke",
-    "stylers": [
-      {
-        "color": "#f5f5f5"
-      }
-    ]
-  },
-  {
-    "featureType": "administrative.land_parcel",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#bdbdbd"
-      }
-    ]
-  },
-  {
-    "featureType": "poi",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#eeeeee"
-      }
-    ]
-  },
-  {
-    "featureType": "poi",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#757575"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.park",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#e5e5e5"
-      }
-    ]
-  },
-  {
-    "featureType": "poi.park",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#9e9e9e"
-      }
-    ]
-  },
-  {
-    "featureType": "road",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#ffffff"
-      }
-    ]
-  },
-  {
-    "featureType": "road.arterial",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#757575"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#dadada"
-      }
-    ]
-  },
-  {
-    "featureType": "road.highway",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#616161"
-      }
-    ]
-  },
-  {
-    "featureType": "road.local",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#9e9e9e"
-      }
-    ]
-  },
-  {
-    "featureType": "transit.line",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#e5e5e5"
-      }
-    ]
-  },
-  {
-    "featureType": "transit.station",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#eeeeee"
-      }
-    ]
-  },
-  {
-    "featureType": "water",
-    "elementType": "geometry",
-    "stylers": [
-      {
-        "color": "#c9c9c9"
-      }
-    ]
-  },
-  {
-    "featureType": "water",
-    "elementType": "labels.text.fill",
-    "stylers": [
-      {
-        "color": "#9e9e9e"
-      }
-    ]
-  }
-]''';
 }

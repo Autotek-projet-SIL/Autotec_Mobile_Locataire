@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 
@@ -111,6 +113,7 @@ class WidgetViewTrip extends StatelessWidget {
                 right: 0.0,
                 child:Column(
                   children:  [
+                    // ignore: deprecated_member_use
                     FlatButton(
                         onPressed :(){} ,
                         color: const Color(0xff2E9FB0),

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:io';
@@ -107,9 +109,10 @@ class UserCredentials {
   static Future<void> refresh()async{
     try{
       token = (await FirebaseAuth.instance.currentUser!.getIdToken());
-      uid = (await FirebaseAuth.instance.currentUser?.uid);
+      uid = ( FirebaseAuth.instance.currentUser?.uid);
     }on FirebaseAuthException catch (e){
       print('auth exception!\n');
+      print(e);
     }
 
   }

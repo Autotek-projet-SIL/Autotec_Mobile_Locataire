@@ -1,7 +1,8 @@
 
 import 'dart:convert';
-import 'package:autotec/models/Location.dart';
+import 'package:autotec/models/location.dart';
 import 'package:http/http.dart' as http;
+import 'baridimob_payment.dart';
 import 'user_data.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
@@ -69,7 +70,7 @@ class Api {
 
   static Future<http.Response> postLocation(String status) async {
 
-    carLocation _location = carLocation();
+    CarLocation _location = CarLocation();
     return await http.post(
       Uri.parse('https://autotek-server.herokuapp.com/gestionlocations/ajouter_location/'),
       headers: <String, String>{
@@ -96,5 +97,27 @@ class Api {
   }
 
 
+  static Future<http.Response> sendBaridiMobDetails(
+      BaridiMobPayment b, String token) async {
+    return await http.post(
+      Uri.parse(
+          'https://autotek-server.herokuapp.com/paiement/verifier_paiement/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        "token": token,
+        "id_sender": UserCredentials.uid!,
+        "id": UserCredentials.uid!,
+        "id_facture": "1",
+        "type_paiement": "baridimob",
+        "heure_paiement": b.heurPaiement!,
+        "date_paiement": b.heurPaiement!,
+        "montant": b.montant!.toString(),
+        "codetransaction": b.codeTransaction!,
+        "id_transaction": "002021540661",
+      }),
+    );
+  }
 
 }

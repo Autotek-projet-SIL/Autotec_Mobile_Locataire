@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, non_constant_identifier_names, avoid_print, unnecessary_brace_in_string_interps, avoid_unnecessary_containers, sized_box_for_whitespace
 
 import 'package:autotec/models/user_data.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
-import 'package:autotec/models/Location.dart';
+import 'package:autotec/models/location.dart';
 
 import 'cars_list.dart';
 const kGoogleApiKey = 'AIzaSyDgZadIjr0Xgvmeo6JZp5CN18Cv8Vy8j0E';
@@ -286,7 +286,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                                           onTap: (){
                                             _showDepartDialog(context);
                                           },
-                                            child: Text(this.depart? this.depart_adr : "point de départ", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)))))),
+                                            child: Text(depart? depart_adr : "point de départ", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)))))),
 
                       ],
                     ),
@@ -304,7 +304,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                       children: [
                         const Padding(
                           padding: EdgeInsets.fromLTRB(5,10,0,10),
-                          child: const Icon(Icons.pin_drop_outlined, color: Colors.grey,),
+                          child:  Icon(Icons.pin_drop_outlined, color: Colors.grey,),
                         ),
                         Expanded(
                           child: Container(
@@ -332,7 +332,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                           //TODO  regler les attributs a passer entre les pages
                           if(depart && arrive ){
                             if(depart_adr != arrive_adr){
-                              carLocation _carLocation = carLocation();
+                              CarLocation _carLocation = CarLocation();
                               _carLocation.region = region;
                               _carLocation.latitude_depart = latitude_dpr;
                               _carLocation.longitude_depart = longitude_dpr;
@@ -346,10 +346,10 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                                 MaterialPageRoute(builder: (context) => const CarsList()),
                               );
                             }else{
-                              homeScaffoldKey.currentState!.showSnackBar(const SnackBar(content: const Text('veuillez choisir des addresses différentes')));
+                              homeScaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text('veuillez choisir des addresses différentes')));
                             }
                           }else if(!depart){
-                            homeScaffoldKey.currentState!.showSnackBar(const SnackBar(content: const Text('veuillez choisir un point de départ')));
+                            homeScaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text('veuillez choisir un point de départ')));
                           }else{
                             homeScaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text('veuillez choisir un point d`arrivé')));
                           }

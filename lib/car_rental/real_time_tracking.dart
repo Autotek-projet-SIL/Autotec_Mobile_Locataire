@@ -1,11 +1,13 @@
+// ignore_for_file: avoid_print, prefer_final_fields
+
 import 'dart:math';
-import 'package:autotec/car_rental/presentation/sliding_up_panel.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-
+import './sliding_up_panel.dart';
 /*To do
 
 1 - the slider                               done

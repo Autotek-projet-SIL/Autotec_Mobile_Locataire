@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 class WidgetTextFieldPassword extends StatelessWidget {
@@ -21,10 +23,10 @@ class WidgetTextFieldPassword extends StatelessWidget {
       validator: validator,
       obscureText: true,
       onChanged: (value) {},
-      cursorColor:Color.fromRGBO(27, 146, 164, 1),
+      cursorColor:const Color.fromRGBO(27, 146, 164, 1),
       decoration: InputDecoration(
         hintText: hintText,
-        suffixIcon: Icon(
+        suffixIcon: const Icon(
           Icons.visibility,
           color: Colors.black,
         ),

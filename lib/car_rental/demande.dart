@@ -1,5 +1,7 @@
 
-import 'package:autotec/models/Location.dart';
+// ignore_for_file: avoid_unnecessary_containers, avoid_print
+
+import 'package:autotec/models/location.dart';
 import 'package:autotec/models/user_data.dart';
 
 import '../components/WraisedButton.dart';
@@ -21,7 +23,7 @@ class Demande extends StatefulWidget {
 class _DemandeState extends State<Demande> {
 
   // ignore: prefer_final_fields
-  carLocation _location = carLocation();
+  CarLocation _location = CarLocation();
 
   @override
   Widget build(BuildContext context) {

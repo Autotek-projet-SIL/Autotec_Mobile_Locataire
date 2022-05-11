@@ -1,10 +1,13 @@
+// ignore_for_file: non_constant_identifier_names
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
-import '../car_rental/Cars.dart';
+import '../car_rental/cars.dart';
 
-class carLocation{
+class CarLocation{
 
-  carLocation._privateConstructor();
+  CarLocation._privateConstructor();
 
   // the info related to the location
   int? id;
@@ -31,9 +34,9 @@ class carLocation{
 
   Car? car;
 
-  static final carLocation _instance = carLocation._privateConstructor();
+  static final CarLocation _instance = CarLocation._privateConstructor();
 
-  factory carLocation(){
+  factory CarLocation(){
     return _instance;
   }
 }

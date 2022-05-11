@@ -1,4 +1,6 @@
 
+// ignore_for_file: avoid_print, deprecated_member_use
+
 import 'package:autotec/bloc/auth_bloc.dart';
 import 'package:autotec/models/user_data.dart';
 import 'package:flutter/material.dart';
@@ -35,15 +37,15 @@ class _MapState extends State<Map> {
         forceAndroidLocationManager: false).then((Position position) {
 
       setState(() {
-        this._currentlocation = position;
+        _currentlocation = position;
       });
     }).catchError((e) {
       print(e);
     });
 
         setState(() {
-          this.latitude = this._currentlocation!.latitude;
-          this.longitude = this._currentlocation!.longitude;
+          latitude = _currentlocation!.latitude;
+          longitude = _currentlocation!.longitude;
         });
         print("***************");
         print(latitude);
@@ -76,11 +78,11 @@ class _MapState extends State<Map> {
               _getCurrentLocation();
             }else{
 
-              scaffoldKey.currentState!.showSnackBar(SnackBar(content: Text("activer la localisation")));
+              scaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text("activer la localisation")));
             }
           }else{
 
-            scaffoldKey.currentState!.showSnackBar(SnackBar(content: Text("permission denied")));
+            scaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text("permission denied")));
 
             await [Permission.location,].request();
           }
@@ -91,7 +93,7 @@ class _MapState extends State<Map> {
           mapController.animateCamera(CameraUpdate.newLatLngZoom(LatLng(latitude,longitude), 14));
         },
         backgroundColor: const Color.fromRGBO(27, 146, 164,1),
-        child: Icon(Icons.navigation_outlined, color: Colors.white,size: 30,),
+        child: const Icon(Icons.navigation_outlined, color: Colors.white,size: 30,),
       ),
     bottomNavigationBar: BottomAppBar(
       shape:const CircularNotchedRectangle(),
@@ -108,10 +110,10 @@ class _MapState extends State<Map> {
                   await UserCredentials.refresh();
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SearchPlacesScreen()),
+                    MaterialPageRoute(builder: (context) => const SearchPlacesScreen()),
                   );
                   },
-                icon: Icon(Icons.car_rental_outlined, color: Colors.grey,size: 30),
+                icon: const Icon(Icons.car_rental_outlined, color: Colors.grey,size: 30),
               tooltip: 'rent a car',
             ),
           ),
@@ -123,7 +125,7 @@ class _MapState extends State<Map> {
 
 
               },
-              icon: Icon(Icons.person_outlined, color: Colors.grey,size: 30),
+              icon: const Icon(Icons.person_outlined, color: Colors.grey,size: 30),
               tooltip: 'open profil',
             ),
           ),
@@ -150,7 +152,7 @@ class _MapState extends State<Map> {
                 zoomControlsEnabled: false,
                 onMapCreated: _onMapCreated,
                 myLocationEnabled: true,
-                initialCameraPosition: CameraPosition(
+                initialCameraPosition: const CameraPosition(
                   target: LatLng(36.7762, 3.05997),
                   zoom: 13.0,
                 ),

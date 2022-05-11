@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, await_only_futures, prefer_typing_uninitialized_variables
+
 import 'package:autotec/Authentication/first_screens/on_boarding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

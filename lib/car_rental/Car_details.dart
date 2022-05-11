@@ -1,5 +1,7 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
-import 'Cars.dart';
+import 'cars.dart';
 
 class CarDetail extends StatefulWidget {
   final Car car ;

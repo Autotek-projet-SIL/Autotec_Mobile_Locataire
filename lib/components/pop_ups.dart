@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, avoid_unnecessary_containers
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -6,6 +6,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 
 class Deverouillage extends StatefulWidget {
+  const Deverouillage({Key? key}) : super(key: key);
+
   @override
   _DeverouillageState createState() => _DeverouillageState();
 }

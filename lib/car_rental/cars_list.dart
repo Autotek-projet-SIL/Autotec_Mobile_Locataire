@@ -1,11 +1,11 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, avoid_print, non_constant_identifier_names
 
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'Cars.dart';
+import 'cars.dart';
 import '/components/WviewCar.dart';
 import 'package:autotec/models/user_data.dart';
 
@@ -25,9 +25,9 @@ class _CarsListState extends State<CarsList> {
     return Scaffold(
 
       body: Column(
-        children: [
-          const Spacer(flex: 2,),
-          const Text(
+        children: const [
+          Spacer(flex: 2,),
+          Text(
             'veillez choisir une voiture',
             style: TextStyle(
               fontWeight: FontWeight.w800,
@@ -35,11 +35,11 @@ class _CarsListState extends State<CarsList> {
               fontSize: 20,
             ),
           ),
-          const Spacer(flex: 1,),
+          Spacer(flex: 1,),
           Center(
                 child: CarListView(),
           ),
-          const Spacer(flex: 1,),
+          Spacer(flex: 1,),
         ],
       ),
     );
@@ -48,7 +48,7 @@ class _CarsListState extends State<CarsList> {
 
 class CarListView extends StatelessWidget{
 
-  CarListView({Key? key}) : super(key: key);
+  const CarListView({Key? key}) : super(key: key);
 
 
   @override
@@ -115,7 +115,7 @@ class CarListView extends StatelessWidget{
       try{
         final querySnapshot = await FirebaseFirestore.instance.collection('CarLocation').where('batterie', isGreaterThan: 20)
             .where('disponible',isEqualTo: true).get();
-        list.removeWhere((element) => (! querySnapshot.docs.any((doc) => doc.id == element.numero_chasis)));
+        list.removeWhere((element) => (! querySnapshot.docs.any((doc) => doc.id == element.numeroChasis)));
       }catch (e){
         print (e.toString());
       }

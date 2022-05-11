@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
-import 'package:autotec/car_rental/presentation/real_time_tracking.dart';
+import 'package:autotec/car_rental/real_time_tracking.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';

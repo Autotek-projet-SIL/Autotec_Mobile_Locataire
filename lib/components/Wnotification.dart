@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, sized_box_for_whitespace
+
 import 'package:flutter/material.dart';
 
 
@@ -58,7 +60,7 @@ class WidgetNotification extends StatelessWidget {
                 Positioned(
                   top:15,
                   right: 30,
-                  child:  Text(time,style: const TextStyle(fontSize: 15,color: const Color(0xff263238)),),
+                  child:  Text(time,style: const TextStyle(fontSize: 15,color:  Color(0xff263238)),),
                 )
               ],
             ),

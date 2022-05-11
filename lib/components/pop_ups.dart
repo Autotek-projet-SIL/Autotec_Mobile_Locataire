@@ -51,8 +51,10 @@ class _DeverouillageState extends State<Deverouillage> {
   }
 }
 
+
 class EnCours extends StatefulWidget {
-  const EnCours({Key? key}) : super(key: key);
+  final String text;
+  const EnCours({Key? key,required this.text}) : super(key: key);
 
   @override
   State<EnCours> createState() => _EnCoursState();
@@ -66,10 +68,10 @@ class _EnCoursState extends State<EnCours> {
           borderRadius: BorderRadius.all(Radius.circular(20.0))),
       contentPadding: EdgeInsets.all(20.0),
       content: SizedBox(height: 120,child: Column(
-        children: const [
+        children:  [
           SpinKitThreeBounce(color: Color.fromRGBO(27, 146, 164, 0.7)),
           SizedBox(height: 5),
-          Text('traitement de la demande',style: TextStyle(fontSize: 15)),
+          Text(widget.text,style: TextStyle(fontSize: 15)),
           SizedBox(height: 5),
           Text('Veuillez patienter',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 17),)
         ],

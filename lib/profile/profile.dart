@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:autotec/car_rental/Car_details.dart';
+import 'package:autotec/components/WBack.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
@@ -9,6 +10,7 @@ import '../bloc/auth_bloc.dart';
 import 'package:autotec/car_rental/home_page.dart';
 import 'package:autotec/models/user_data.dart';
 
+import '../car_rental/search_screen.dart';
 import '../factures/locationList.dart';
 import 'edit_profile.dart';
 
@@ -88,6 +90,53 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      bottomNavigationBar: BottomAppBar(
+        shape:const CircularNotchedRectangle(),
+
+        color: Colors.white,
+        child: Row(
+
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(50.0, 5, 20, 5),
+              child: IconButton(
+                onPressed: ()async{
+                  await userCredentials.refresh();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SearchPlacesScreen()),
+                  );
+                },
+                icon: Icon(Icons.car_rental_outlined, color: Colors.grey,size: 30),
+                tooltip: 'rent a car',
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(50.0, 5, 50, 5),
+              child: IconButton(
+                onPressed: () async {
+                  //TODO navigate to profil
+                  await userCredentials.refresh();
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>
+                        Profile()
+                    ),
+                  );
+
+                },
+                icon: Icon(Icons.person_outlined, color:  Color(0xff2E9FB0),size: 30),
+                tooltip: 'open profil',
+              ),
+            ),
+
+
+
+          ],
+        ),
+        notchMargin: 5,
+      ),
       body: circular?Center(child: CircularProgressIndicator()): SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(35.0),
@@ -95,8 +144,9 @@ class _ProfileState extends State<Profile> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
+                  WidgetArrowBack(),
                   IconButton(onPressed: () {
                     name="${userProfile[0]["nom"]}";
                     prenom="${userProfile[0]["prenom"]}";
@@ -220,14 +270,21 @@ class _ProfileState extends State<Profile> {
                   ),
                 ),
               ),
-              RaisedButton(
+            /*  RaisedButton(
                 child: Text('click me'),
                 onPressed: (){
-                  print ("token : ${userCredentials.token}");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>
+                        Edit()
+                    ),
+                  );
+                  //print ("token : ${userCredentials.token}");
                  // print("id : ${userCredentials.uid}");
 
                 },
-              )
+              )*/
+
             ],
           )
         ),

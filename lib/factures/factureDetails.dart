@@ -58,9 +58,9 @@ class _FactureDetailsState extends State<FactureDetails> {
                   WidgetArrowBack(),
                   SizedBox(width: 10,),
                   Text(
-                      "Facture ",
+                      "Details de la facture ",
                   //  textAlign: TextAlign.center,
-                     style:TextStyle(fontWeight:FontWeight.bold,fontSize: 22,color: Color(0xff2E9FB0)),),
+                     style:TextStyle(fontWeight:FontWeight.bold,fontSize: 24,color: Color(0xff2E9FB0)),),
                 ],
               ),
               SizedBox(height: size.height*0.03,),
@@ -110,7 +110,7 @@ class _FactureDetailsState extends State<FactureDetails> {
               Container(
                   margin: EdgeInsets.only(top: 12),
                   padding: EdgeInsets.all(5),
-                  height: 45,
+                  height: 55,
                   width: size.width*0.7,
                   decoration: const BoxDecoration(
                     color: Color(0xff9AD4E2),
@@ -127,12 +127,12 @@ class _FactureDetailsState extends State<FactureDetails> {
                       Text(
                         "Prix Total :",
                         textAlign: TextAlign.center,
-                        style:TextStyle(fontSize: 22,color: Color(0xff042A2B),fontWeight: FontWeight.bold)),
+                        style:TextStyle(fontSize: 21,color: Color(0xff042A2B),fontWeight: FontWeight.bold)),
                       SizedBox(width: 5,),
                       Text(
                         "${widget.montant} DA",
                         textAlign: TextAlign.center,
-                        style:TextStyle(fontSize: 20,color: Color(0xff042A2B)),)
+                        style:TextStyle(fontSize: 24,color: Color(0xff042A2B)),)
                     ],
                   )
               ),
@@ -153,7 +153,7 @@ class _FactureDetailsState extends State<FactureDetails> {
                 padding: const EdgeInsets.only(top: 10,bottom: 10),
                 child: Column(
                   children: [
-                    Row(
+                   /* Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(" De : ", textAlign: TextAlign.center,style:TextStyle(fontSize: 19,fontWeight: FontWeight.bold)),
@@ -186,8 +186,42 @@ class _FactureDetailsState extends State<FactureDetails> {
                       children: [
                         Text(" Heure arrivée : ", textAlign: TextAlign.center,style:TextStyle(fontSize: 19,fontWeight: FontWeight.bold)),
                         Text("${widget.heureFin}", textAlign: TextAlign.center,style:TextStyle(fontSize: 19)),
-                      ],)
+                      ],)*/
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                        children:[
+                          Image.asset('assets/a.png',width: 65,),
+                          // SizedBox(width: 10,),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 10,),
+                              Text("${widget.dateDebut.day}-${widget.dateDebut.month}-${widget.dateDebut.year} ${widget.heureDebut}",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: 'Poppins',
+                                  fontSize: 18,
 
+                                ),
+
+                              ),
+                              SizedBox(height: 5,),
+                              Text("${widget.region}" ,style: TextStyle(fontWeight: FontWeight.bold),),
+                              SizedBox(height: 30,),
+                              Text("${widget.dateDebut.day}-${widget.dateDebut.month}-${widget.dateDebut.year} ${widget.heureFin}",
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontFamily: 'Poppins',
+                                  fontSize: 18,
+
+                                ),),
+                              SizedBox(height: 5,),
+                              Text("${widget.region}" ,style: TextStyle(fontWeight: FontWeight.bold),),
+                            ],
+                          ),]
+                    ),
                   ],
                 ),
               ),
@@ -216,7 +250,7 @@ class _FactureDetailsState extends State<FactureDetails> {
                       ],
                     ),
 
-                    SizedBox(height: size.height*0.01,),
+                    SizedBox(height: size.height*0.02,),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -224,6 +258,7 @@ class _FactureDetailsState extends State<FactureDetails> {
                         SizedBox(height: size.height*0.008,),
                         Text("${widget.marque} ${widget.modele}", textAlign: TextAlign.center,style:TextStyle(fontSize: 19)),
                       ],),
+                    SizedBox(height: size.height*0.03,),
                     const Divider(
                       thickness: 1,
                       indent: 10,
@@ -231,7 +266,7 @@ class _FactureDetailsState extends State<FactureDetails> {
                       color: Colors.black,
                       height: 25,
                     ),
-                    Text("Merci pou")
+                    Text("Merci pour ")
                   ],
                 ),
               ),

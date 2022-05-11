@@ -1,19 +1,24 @@
 import 'dart:convert';
 
+
 import 'package:autotec/components/WBack.dart';
 import 'package:autotec/profile/profile.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import '../bloc/auth_bloc.dart';
-
+import 'package:autotec/repositories/image_storage_repository.dart';
 import 'package:autotec/car_rental/home_page.dart';
 import 'package:autotec/models/user_data.dart';
 
 import '../components/WraisedButton.dart';
 import '../components/WtextField.dart';
 import '../components/WtextFieldDigit.dart';
+import '../components/pop_ups.dart';
 import '../components/text_field.dart';
+import 'dart:io';
 
 class EditProfile extends StatefulWidget {
   final String image;
@@ -38,8 +43,59 @@ class EditProfile extends StatefulWidget {
 }
 
 class _EditProfileState extends State<EditProfile> {
+  XFile? imageFile;
+  String? imageChanged;
+  bool loading=true;
+  //final Storage storage = Storage();
+  final ImagePicker _picker = ImagePicker();
 
-  void UpdateUser(String nom,String prenom,String num) async{
+  _openGallery(BuildContext context) async {
+    imageFile = (await _picker.pickImage(source: ImageSource.gallery));
+    // final String fileName  = path.basename(imageFile!.path);
+    // final File filePath = File(imageFile!.path);
+
+    // await storage.uploadFile(filePath.path, fileName).then((value) => debugPrint("done"));
+    imageChanged = imageFile!.path;
+    setState(() {});
+    Navigator.of(context).pop();
+  }
+
+  _openCamera(BuildContext context) async {
+    imageFile = (await _picker.pickImage(source: ImageSource.camera));
+    imageChanged = imageFile!.path;
+    setState(() {});
+    Navigator.of(context).pop();
+  }
+
+  Future<void> _showChoiceDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: [
+                  GestureDetector(
+                    child: const Text('Gallery'),
+                    onTap: () {
+                      _openGallery(context);
+                    },
+                  ),
+                  const Padding(padding: EdgeInsets.all(8.0)),
+                  GestureDetector(
+                    child: const Text('Camera'),
+                    onTap: () {
+                      _openCamera(context);
+                    },
+                  )
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  void UpdateUser(String nom,String prenom,String num,String image) async{
     var res=await http.put(
       Uri.parse('http://autotek-server.herokuapp.com/gestionprofils/modifier_locataire/${userCredentials.uid}'),
       body: {
@@ -52,22 +108,25 @@ class _EditProfileState extends State<EditProfile> {
         "numero_telephone": "$num",
         "photo_identite_recto": "test",
         "photo_identite_verso": "test",
-        "photo_selfie": "${widget.image}"
+        "photo_selfie": "${image}"
 
       },
     );
     if(res.statusCode==200){
-
+      setState(() {
+        loading=false;
+      });
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) =>
             Profile()
         ),
       );
-
-    }else{
+    }
+    else{
       print('errorrrrr');
     }
+
 
   }
 
@@ -143,9 +202,12 @@ class _EditProfileState extends State<EditProfile> {
                       backgroundColor:Colors.transparent ,
                       radius: 80,
                       backgroundImage:
-                      NetworkImage(widget.image),
+                     imageChanged==null? NetworkImage(widget.image) :Image.file(File(imageFile!.path)).image,
 
-                      child: Icon(Icons.edit,size: 40,),
+                      child: IconButton(
+                        icon:Icon(Icons.edit),
+                        iconSize: 40,
+                        onPressed: () { _showChoiceDialog(context); },),
                     )
                 ),
 
@@ -161,31 +223,48 @@ class _EditProfileState extends State<EditProfile> {
                   onChanged: (value){
                     numController.text=value;
                   },
-                  hintText: " Votre NUM",
+                  hintText: " Numero de telephone ",
                   controler: numController,
                   validationMode:
                   AutovalidateMode.onUserInteraction,
                   validator: (value) {
                     return value != null
-                        ? 'Enter a  valid email'
+                        ? 'Enter a  valid number'
                         : null;
                   },
                 ),
                 SizedBox(height: size.height*0.03,),
-                WidgetRaisedButton(press: () {
+                WidgetRaisedButton(press: () async {
                   //print(widget.image);
                  // print(widget.mdp);
                  // print(numController.text);
-                 UpdateUser(nomController.text,prenomController.text,numController.text);
+                  if(loading){
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return EnCours(text: "Traitement",);
+                        });
+                  }
+                  FirebaseStorage.instance.refFromURL(widget.image).delete();
+                  // print ("token : ${userCredentials.token}");
+                  // print("id : ${userCredentials.uid}");
+                  var img_url = await Storage.uploadFile(imageFile!.path, "Selfies/"+widget.nom!+" "+widget.prenom!);
+                  imageChanged = img_url ;
+                  print(img_url);
+                 UpdateUser(nomController.text,prenomController.text,numController.text,img_url);
 
                 }, text: 'Modifier',color: Color(0xff2E9FB0),textColor: Colors.white,),
 
 
-                /*RaisedButton(
+               /* RaisedButton(
                   child: Text('click me'),
-                  onPressed: (){
-                    print ("token : ${userCredentials.token}");
-                    print("id : ${userCredentials.uid}");
+                  onPressed: () async {
+                    FirebaseStorage.instance.refFromURL(widget.image).delete();
+                   // print ("token : ${userCredentials.token}");
+                   // print("id : ${userCredentials.uid}");
+                    var img_url = await Storage.uploadFile(imageFile!.path, "Selfies/"+widget.nom!+" "+widget.prenom!);
+                    imageChanged = img_url ;
+                    print(img_url);
                   },
                 )*/
               ],

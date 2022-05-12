@@ -236,6 +236,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size  size = MediaQuery.of(context).size;
     return Scaffold(
       key: homeScaffoldKey,
 
@@ -256,7 +257,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
         left: 0.0,
           child: Container(
               color: Colors.white,
-              width: 360,
+              width: size.width,
               height: 270,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,

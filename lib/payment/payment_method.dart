@@ -3,20 +3,22 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../components/raised_button.dart';
+import '../models/location.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  runApp(const PaimentMethodeScreen());
+  runApp(PaimentMethodeScreen( location: CarLocation()));
 }
 
 class PaimentMethodeScreen extends StatelessWidget {
-  const PaimentMethodeScreen({Key? key}) : super(key: key);
+  CarLocation location;
+  PaimentMethodeScreen({Key? key, required this.location}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const  MaterialApp(home: Body());
+    return const MaterialApp(home: Body());
   }
 }
 
@@ -53,25 +55,20 @@ class Body extends StatelessWidget {
                 text: "Carte Edahabia (BaridiMob)",
                 press: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) =>const PaymentVideoScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const PaymentVideoScreen()),
                 ),
                 color: const Color.fromRGBO(27, 146, 164, 0.7),
                 textColor: Colors.white,
               ),
               const SizedBox(height: 32),
               CustomRaisedButton(
-                text: "PayPal",
+                text: "Carte de credit",
                 press: () => Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const PaymentVideoScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const PaymentVideoScreen()),
                 ),
-                color: const Color.fromRGBO(27, 146, 164, 0.7),
-                textColor: Colors.white,
-              ),
-              const SizedBox(height: 32),
-              CustomRaisedButton(
-                text: "Carte CIB",
-                press: () => {},
                 color: const Color.fromRGBO(27, 146, 164, 0.7),
                 textColor: Colors.white,
               ),

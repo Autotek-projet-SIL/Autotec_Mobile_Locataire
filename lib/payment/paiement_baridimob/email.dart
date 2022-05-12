@@ -26,7 +26,7 @@ Future<String> accessMail() async {
   try {
     await mailClient.connect();
     await mailClient.selectInbox();
-    final messages = await mailClient.fetchMessages(count: 10);
+    final messages = await mailClient.fetchMessages(count: 30);
     for (MimeMessage message in messages) {
       code = getVerificationCode(message);
       if (code != "") {
@@ -73,12 +73,13 @@ String getVerificationCode(MimeMessage message) {
 /* Rest apis verifiations */
 
 Future<bool> verifyTeansactionCode(
-  BaridiMobPayment baridiMobPayment,
+  String code,
 ) async {
   await UserCredentials.refresh();
   final response =
-      await Api.sendBaridiMobDetails(baridiMobPayment, UserCredentials.token!);
+      await Api.sendBaridiMobDetails(code, UserCredentials.token!);
   if (response.statusCode != 200) {
+    print("wrong transaction id");
     return false;
   } else {
     return true;

@@ -7,6 +7,7 @@ import '../../components/WBack.dart';
 import '../../components/raised_button.dart';
 import '../../models/baridimob_account.dart';
 import 'email.dart';
+import '../../car_rental/home_page.dart';
 
 class CodeValidationScreen extends StatefulWidget {
   const CodeValidationScreen({Key? key}) : super(key: key);
@@ -74,7 +75,7 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
               const Text(
                 "Voici le code rip que vous devez utiliser dans la transaction",
                 style: TextStyle(
@@ -90,7 +91,7 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
                   ripCopied = true;
                 });
               }),
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
               const Text(
                 "voici l'e-mail auquel vous devez envoyer le reçu ",
                 style: TextStyle(
@@ -106,7 +107,7 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
                   emailCopied = true;
                 });
               }),
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
               const Text(
                 "vous pouvez accéder à l'application baridi mob directement à partir d'ici",
                 style: TextStyle(
@@ -128,7 +129,6 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
                   textColor: Colors.white,
                 ),
               ),
-              const SizedBox(height: 40),
               const Text(
                 "taper ici le code de transaction que vous aver reçu ",
                 style: TextStyle(
@@ -137,7 +137,7 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
                     fontFamily: 'Poppins'),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               WidgetTextfieldDigit(
                   hintText: "Code de transaction",
                   onChanged: (String text) {},
@@ -153,20 +153,19 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
                 child: CustomRaisedButton(
                   text: "Confirmer",
                   press: () async {
-                    DateTime date = DateTime.now();
-                    baridiMobPayment!.codeTransaction = _codeController.text;
-                    baridiMobPayment!.datePaiement =
-                        "${date.hour}:${date.minute}:${date.second}";
-                    baridiMobPayment!.heurPaiement =
-                        "${date.hour}:${date.minute}:${date.second}";
-
-                    verifyTeansactionCode(baridiMobPayment!);
-                    (_codeController.text == await accessMail())
+                    bool verified = await verifyTeansactionCode(
+                      _codeController.text,
+                    );
+                    //(_codeController.text == await accessMail())
+                    (verified)
                         ? showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                              return popUP("Merci !! ",
-                                  "Nous avons bien reçu votre paiement ", "Ok");
+                              return popUP2(
+                                  "Merci !! ",
+                                  "Nous avons bien reçu votre paiement ",
+                                  "Ok",
+                                  context);
                             },
                           )
                         : showDialog(
@@ -175,7 +174,8 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
                               return popUP(
                                   "Erreur !! ",
                                   " Le code que vous avez saisi ne correspond à aucune transaction",
-                                  "Retour");
+                                  "Retour",
+                                  context);
                             },
                           );
                   },
@@ -228,7 +228,8 @@ Widget textFiedToCopy(bool pressed, TextEditingController _textController,
   );
 }
 
-Widget popUP(String title, String content, String buttonText) {
+Widget popUP(
+    String title, String content, String buttonText, BuildContext context) {
   return AlertDialog(
     title: Text(title),
     content: Text(content),
@@ -237,7 +238,37 @@ Widget popUP(String title, String content, String buttonText) {
         padding: const EdgeInsets.all(20),
         child: CustomRaisedButton(
           text: buttonText,
-          press: () async {},
+          press: () async {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const CodeValidationScreen()),
+            );
+          },
+          color: const Color.fromRGBO(27, 146, 164, 0.7),
+          textColor: Colors.white,
+        ),
+      )
+    ],
+  );
+}
+
+Widget popUP2(
+    String title, String content, String buttonText, BuildContext context) {
+  return AlertDialog(
+    title: Text(title),
+    content: Text(content),
+    actions: [
+      Padding(
+        padding: const EdgeInsets.all(20),
+        child: CustomRaisedButton(
+          text: buttonText,
+          press: () async {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Map()),
+            );
+          },
           color: const Color.fromRGBO(27, 146, 164, 0.7),
           textColor: Colors.white,
         ),

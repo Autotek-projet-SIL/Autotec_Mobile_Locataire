@@ -2,46 +2,28 @@
 
 import 'dart:math';
 
-import 'package:autotec/models/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import './sliding_up_panel.dart';
-/*To do
 
-1 - the slider                               done
-4 - fix ui                                   done
-5 - the localisation pin                     done
-7 - the action button ( support )            done
-2 - the distance                             done
-6 - localization pin informations on click   done
-3 - the remaining time                       done
-
-8 - data from firebase ( 1st track)
-9 - data from firebase ( 2nd track)
-
- */
-
-class MyMap extends StatefulWidget {
+class MyMap2 extends StatefulWidget {
   final String carId;
   final String userId;
   final LatLng destinationLocation;
-  final CarLocation location;
-  const MyMap({
-    Key? key,
-    required this.carId,
-    required this.userId,
-    required this.destinationLocation,
-    required this.location,
-  }) : super(key: key);
+  const MyMap2(
+      {Key? key,
+      required this.carId,
+      required this.userId,
+      required this.destinationLocation})
+      : super(key: key);
   @override
-  _MyMapState createState() => _MyMapState();
+  _MyMap2State createState() => _MyMap2State();
 }
 
-class _MyMapState extends State<MyMap> {
+class _MyMap2State extends State<MyMap2> {
   final loc.Location location = loc.Location();
   late GoogleMapController _controller;
   bool _added = false;
@@ -158,16 +140,16 @@ class _MyMapState extends State<MyMap> {
       print(result.errorMessage);
     }
     double totalDistance = 0;
-    /*  for (var i = 0; i < polylineCoordinates.length - 1; i++) {
+    for (var i = 0; i < polylineCoordinates.length - 1; i++) {
       totalDistance += calculateDistance(
           polylineCoordinates[i].latitude,
           polylineCoordinates[i].longitude,
           polylineCoordinates[i + 1].latitude,
           polylineCoordinates[i + 1].longitude);
-    }*/
+    }
     print(totalDistance);
 
-    setState(() async {
+    setState(() {
       Polyline polyline = Polyline(
           polylineId: const PolylineId("poly"),
           color: const Color.fromRGBO(27, 146, 164, 0.7),
@@ -175,28 +157,17 @@ class _MyMapState extends State<MyMap> {
           visible: true,
           points: polylineCoordinates);
       _polylines.add(polyline);
-  
-      Distance.distance = await calculateDistance(
-          snapshot.data!.docs
-              .singleWhere((element) => element.id == widget.carId)['latitude'],
-          snapshot.data!.docs.singleWhere(
-              (element) => element.id == widget.carId)['longitude'],
-          widget.destinationLocation.latitude,
-          widget.destinationLocation.longitude) ;
-      
+      Distance.distance = totalDistance;
     });
   }
 
-  Future<double> calculateDistance(
-      double lat1, double lon1, double lat2, double lon2) async {
-    return await Geolocator.distanceBetween(lat1, lon1, lat2, lon2);
-  }
-  /*
+  double calculateDistance(lat1, lon1, lat2, lon2) {
     var p = 0.017453292519943295;
     var a = 0.5 -
         cos((lat2 - lat1) * p) / 2 +
         cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
-    return 12742 * asin(sqrt(a));*/
+    return 12742 * asin(sqrt(a));
+  }
 
   Future<void> mymap(AsyncSnapshot<QuerySnapshot> snapshot) async {
     await _controller.animateCamera(

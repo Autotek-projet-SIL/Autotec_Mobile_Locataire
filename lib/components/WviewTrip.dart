@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 
 
@@ -53,7 +55,7 @@ class WidgetViewTrip extends StatelessWidget {
                         width: 200,
                         child: Text(carName,
                           textAlign: TextAlign.start,
-                          style: TextStyle(
+                          style: const TextStyle(
                               color: Colors.black,
                               fontFamily: 'Poppins',
                               fontSize: 16,fontWeight: FontWeight.bold
@@ -77,7 +79,7 @@ class WidgetViewTrip extends StatelessWidget {
                                 children: [
                                   Text(start,
                                     textAlign: TextAlign.start,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Colors.black,
                                       fontFamily: 'Poppins',
                                       fontSize: 16,
@@ -85,10 +87,10 @@ class WidgetViewTrip extends StatelessWidget {
                                     ),
 
                                   ),
-                                  SizedBox(height: 20,),
+                                  const SizedBox(height: 20,),
                                   Text(end,
                                     textAlign: TextAlign.start,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Colors.black,
                                       fontFamily: 'Poppins',
                                       fontSize: 16,
@@ -107,7 +109,7 @@ class WidgetViewTrip extends StatelessWidget {
                   children: [
                     Text(carPrice,
                       textAlign: TextAlign.start,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.black,
                         fontFamily: 'Poppins',
                         fontSize: 16,
@@ -123,7 +125,7 @@ class WidgetViewTrip extends StatelessWidget {
                   children:  [
                     FlatButton(
                         onPressed :press ,
-                        color: Color(0xff2E9FB0),
+                        color: const Color(0xff2E9FB0),
                         textColor: Colors.white,
                         minWidth: 100,
                         height: 50,
@@ -133,7 +135,7 @@ class WidgetViewTrip extends StatelessWidget {
                             bottomRight: Radius.circular(20),
                           ),
                         ),
-                        child: Text('Details')),
+                        child: const Text('Details')),
 
                   ],
                 ) ,

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:autotec/car_rental/sliding_uo_panel2.dart';
 import 'package:autotec/models/location.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +17,40 @@ class DeverrouillageScreen extends StatefulWidget {
 }
 
 class _DeverrouillageScreenState extends State<DeverrouillageScreen> {
+
+
+ /* Timer? timer;
+    @override
+  void initState() {
+    timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+      setState(() {
+      
+      //TODO ecouter le cham
+      if (distance < 100) {                  
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DeverrouillageScreen(
+                location: widget.location,
+              ),
+            ),
+          );
+        }
+        /* if (deverrouillage == 20) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DeverrouillageScreen(
+                location: widget.location,
+              ),
+            ),
+          );
+        }*/
+      });
+    });
+    super.initState();
+  }*/
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -35,6 +71,10 @@ class _DeverrouillageScreenState extends State<DeverrouillageScreen> {
                   color: const Color.fromRGBO(27, 146, 164, 0.7),
                   textColor: Colors.white,
                   press: () => {
+                        //TODO update the car in firebase with the user id (locatair)
+                        //TODO ecouter le champ deverrouiller jusqua qu'il devient a vrai than push the new screen 
+                        //TODO change the state to trajet 
+                        //TODO in the end of this we get the starting time of the rental
                         Navigator.push(
                           context,
                           MaterialPageRoute(

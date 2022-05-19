@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ui';
+import 'package:autotec/car_rental/deverrouillage.dart';
 import 'package:autotec/car_rental/real_time_tracking.dart';
 import 'package:autotec/components/raised_button.dart';
 import 'package:autotec/models/location.dart';
@@ -41,7 +42,8 @@ class _TrackingScreenState extends State<TrackingScreen> {
       setState(() {
         distance = Distance.distance;
         deverrouillage++;
-     /*   if (distance < 200) {
+      if (distance < 100) {    
+        //TODO update la location stat to deverrouillage
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -50,7 +52,8 @@ class _TrackingScreenState extends State<TrackingScreen> {
               ),
             ),
           );
-        }*/
+        }
+        
         /* if (deverrouillage == 20) {
           Navigator.push(
             context,

@@ -7,6 +7,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../components/WraisedButton.dart';
 import 'package:flutter/material.dart';
 
+import '../models/rest_api.dart';
+
 class Demande extends StatefulWidget {
   const Demande({Key? key}) : super(key: key);
 
@@ -107,6 +109,7 @@ class _DemandeState extends State<Demande> {
                   print('uid\n');
                   print(UserCredentials.uid);
                   //TODO post method with the location info
+                  Api.postLocation("en attente");
                   print(_location.car!.numeroChasis);
                   Navigator.push(
                     context,

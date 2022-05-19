@@ -187,7 +187,7 @@ class _MyMapState extends State<MyMap> {
 
   Future<double> calculateDistance(
       double lat1, double lon1, double lat2, double lon2) async {
-    return await Geolocator.distanceBetween(lat1, lon1, lat2, lon2);
+    return Geolocator.distanceBetween(lat1, lon1, lat2, lon2);
   }
   /*
     var p = 0.017453292519943295;

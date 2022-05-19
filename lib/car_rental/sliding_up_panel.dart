@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:ui';
-import 'package:autotec/car_rental/deverrouillage.dart';
 import 'package:autotec/car_rental/real_time_tracking.dart';
 import 'package:autotec/components/raised_button.dart';
 import 'package:autotec/models/location.dart';
@@ -42,7 +41,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
       setState(() {
         distance = Distance.distance;
         deverrouillage++;
-        if (distance < 100) {
+     /*   if (distance < 200) {
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -51,7 +50,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
               ),
             ),
           );
-        }
+        }*/
         /* if (deverrouillage == 20) {
           Navigator.push(
             context,
@@ -212,7 +211,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: 30),
+              padding: const EdgeInsets.only(left: 30),
               child: ListTile(
                 leading: const Icon(Icons.directions_car,
                     color: Color.fromRGBO(27, 146, 164, 0.7)),
@@ -233,6 +232,12 @@ class _TrackingScreenState extends State<TrackingScreen> {
                 color: const Color.fromRGBO(27, 146, 164, 0.7),
                 textColor: Colors.white,
                 press: () => {
+                  //TODO request post endLocation
+
+                  //TODO request send email
+               
+             
+                  //TODO requst get getemail
                   Navigator.push(
                     context,
                     MaterialPageRoute(

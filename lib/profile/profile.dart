@@ -2,14 +2,12 @@
 
 import 'dart:convert';
 
-import 'package:autotec/car_rental/Car_details.dart';
 import 'package:autotec/components/WBack.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import '../bloc/auth_bloc.dart';
 
-import 'package:autotec/car_rental/home_page.dart';
 import 'package:autotec/models/user_data.dart';
 
 import '../car_rental/search_screen.dart';
@@ -44,7 +42,8 @@ class _ProfileState extends State<Profile> {
   void getUser() async {
     var res = await http.get(
       Uri.https('autotek-server.herokuapp.com',
-          'authentification_mobile/locataire_connexion/'),/*${UserCredentials.email}*/
+          'authentification_mobile/locataire_connexion/'),
+      /*${UserCredentials.email}*/
       headers: <String, String>{
         "token": "${UserCredentials.token}",
         "id_sender": "${UserCredentials.uid}",

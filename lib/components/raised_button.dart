@@ -17,6 +17,7 @@ class CustomRaisedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FractionallySizedBox(
       widthFactor: 1,
+      // ignore: deprecated_member_use
       child: RaisedButton(
         color: color,
         hoverColor: Colors.black,

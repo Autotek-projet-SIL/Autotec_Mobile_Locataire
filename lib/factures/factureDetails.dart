@@ -1,10 +1,7 @@
-import 'dart:convert';
+// ignore_for_file: prefer_const_constructors
 
-import 'package:autotec/components/WviewTrip.dart';
-import 'package:autotec/models/user_data.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 import '../components/WBack.dart';
 
@@ -101,7 +98,7 @@ class _FactureDetailsState extends State<FactureDetails> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(" Heure : ", textAlign: TextAlign.center,style:TextStyle(fontSize: 19,fontWeight: FontWeight.bold)),
-                        Text("${widget.heureDebut}", textAlign: TextAlign.center,style:TextStyle(fontSize: 19)),
+                        Text(widget.heureDebut, textAlign: TextAlign.center,style:TextStyle(fontSize: 19)),
                       ],)
 
                   ],
@@ -207,7 +204,7 @@ class _FactureDetailsState extends State<FactureDetails> {
 
                               ),
                               SizedBox(height: 5,),
-                              Text("${widget.region}" ,style: TextStyle(fontWeight: FontWeight.bold),),
+                              Text(widget.region ,style: TextStyle(fontWeight: FontWeight.bold),),
                               SizedBox(height: 30,),
                               Text("${widget.dateDebut.day}-${widget.dateDebut.month}-${widget.dateDebut.year} ${widget.heureFin}",
                                 textAlign: TextAlign.start,
@@ -218,7 +215,7 @@ class _FactureDetailsState extends State<FactureDetails> {
 
                                 ),),
                               SizedBox(height: 5,),
-                              Text("${widget.region}" ,style: TextStyle(fontWeight: FontWeight.bold),),
+                              Text(widget.region ,style: TextStyle(fontWeight: FontWeight.bold),),
                             ],
                           ),]
                     ),
@@ -233,7 +230,7 @@ class _FactureDetailsState extends State<FactureDetails> {
                 color: Colors.black,
                 height: 25,
               ),
-              Text(
+              const Text(
                 "Informations véhicule : ",
                 textAlign: TextAlign.center,
                 style:TextStyle(fontSize: 24, fontWeight: FontWeight.bold,color:Color(0xff2E9FB0),),
@@ -244,9 +241,10 @@ class _FactureDetailsState extends State<FactureDetails> {
                   children: [
                     Column(
                       children: [
+                        // ignore: prefer_const_constructors
                         Text(" Numero de chasis : ", textAlign: TextAlign.center,style:TextStyle(fontSize: 19,fontWeight: FontWeight.bold)),
                         SizedBox(height: size.height*0.008,),
-                        Text("${widget.numeroChassis}", textAlign: TextAlign.center,style:TextStyle(fontSize: 19)),
+                        Text(widget.numeroChassis, textAlign: TextAlign.center,style:TextStyle(fontSize: 19)),
                       ],
                     ),
 

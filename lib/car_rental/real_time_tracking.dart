@@ -1,7 +1,5 @@
 // ignore_for_file: avoid_print, prefer_final_fields
 
-import 'dart:math';
-
 import 'package:autotec/models/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

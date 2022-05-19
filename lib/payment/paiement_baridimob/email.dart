@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_print, prefer_adjacent_string_concatenation
 
 import 'package:enough_mail/enough_mail.dart';
-import '../../models/baridimob_payment.dart';
+
 import '../../models/rest_api.dart';
 import '../../models/user_data.dart';
 
@@ -76,8 +76,7 @@ Future<bool> verifyTeansactionCode(
   String code,
 ) async {
   await UserCredentials.refresh();
-  final response =
-      await Api.sendBaridiMobDetails(code, UserCredentials.token!);
+  final response = await Api.sendBaridiMobDetails(code, UserCredentials.token!);
   if (response.statusCode != 200) {
     print("wrong transaction id");
     return false;

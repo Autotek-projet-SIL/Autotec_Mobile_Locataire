@@ -6,7 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../models/location.dart';
-import '../payment/payment_method.dart';
+
 
 class Distance {
   static double distance = 0.0;
@@ -40,9 +40,9 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
       setState(() {
         distance = Distance.distance;
         cpt++;
-        if (distance < 20) {}
-        if (cpt == 20) {
-          Navigator.push(
+     //   if (distance < 20) {}
+        /*    if (cpt == 20) {
+         Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => PaimentMethodeScreen(
@@ -50,7 +50,7 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
               ),
             ),
           );
-        }
+        }*/
       });
     });
     super.initState();

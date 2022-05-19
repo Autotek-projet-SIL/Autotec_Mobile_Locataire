@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:autotec/models/location.dart';
 import 'package:http/http.dart' as http;
-import 'baridimob_payment.dart';
 import 'user_data.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
@@ -82,7 +81,6 @@ class Api {
         "id_sender": UserCredentials.uid!,
         "token": UserCredentials.token!,
         'date_debut': formattedDateNow(),
-
         'status_demande_location': status,
         'id_locataire': UserCredentials.uid!,
         'region': _location.region!,
@@ -95,6 +93,18 @@ class Api {
 
         //TODO add les positions de depart et d'arrive
       }),
+    );
+  }
+
+  static Future<http.Response> getLocations() async {
+    return http.get(
+      Uri.parse(_url+ "locations_encours"),
+    );
+  }
+  
+  static Future<http.Response> getLocationByID(String id) async {
+    return http.get(
+      Uri.parse(_url + id),
     );
   }
 
@@ -115,8 +125,23 @@ class Api {
         "heure_paiement": formattedhourNow(),
         "date_paiement": formattedDateNow(),
         "montant": "10000.0",
-       // "codetransaction": code,
+        "codetransaction": code,
         "id_transaction": "002021540661",
+      }),
+    );
+  }
+
+  static Future<http.Response> endLocation(
+      String code, String token, String id) async {
+    return await http.put(
+      Uri.parse(
+          'https://autotek-server.herokuapp.com/gestionlocations/end_location/' +
+              id),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        "heure": formattedhourNow(),
       }),
     );
   }

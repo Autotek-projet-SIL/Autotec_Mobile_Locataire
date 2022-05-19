@@ -1,23 +1,13 @@
-// ignore_for_file: avoid_print
-
-import 'dart:convert';
-
-
+// ignore_for_file: avoid_print, unnecessary_string_interpolations, non_constant_identifier_names, unnecessary_brace_in_string_interps
 import 'package:autotec/components/WBack.dart';
 import 'package:autotec/profile/profile.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import '../bloc/auth_bloc.dart';
 import 'package:autotec/repositories/image_storage_repository.dart';
-import 'package:autotec/car_rental/home_page.dart';
 import 'package:autotec/models/user_data.dart';
-
 import '../components/WraisedButton.dart';
-import '../components/WtextField.dart';
-import '../components/WtextFieldDigit.dart';
 import '../components/pop_ups.dart';
 import '../components/text_field.dart';
 import 'dart:io';
@@ -185,8 +175,8 @@ class _EditProfileState extends State<EditProfile> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const WidgetArrowBack()
+                  children: const [
+                    WidgetArrowBack()
                   ],
                 ),
                 SizedBox(height: size.height*0.02,),
@@ -250,7 +240,7 @@ class _EditProfileState extends State<EditProfile> {
                   FirebaseStorage.instance.refFromURL(widget.image).delete();
                   // print ("token : ${userCredentials.token}");
                   // print("id : ${userCredentials.uid}");
-                  var imgUrl = await Storage.uploadFile(imageFile!.path, "Selfies/"+widget.nom!+" "+widget.prenom!);
+                  var imgUrl = await Storage.uploadFile(imageFile!.path, "Selfies/"+widget.nom+" "+widget.prenom);
                   imageChanged = imgUrl ;
                   print(imgUrl);
                  UpdateUser(nomController.text,prenomController.text,numController.text,imgUrl);

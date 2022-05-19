@@ -12,6 +12,7 @@ Future<void> main() async {
   runApp(PaimentMethodeScreen( location: CarLocation()));
 }
 
+// ignore: must_be_immutable
 class PaimentMethodeScreen extends StatelessWidget {
   CarLocation location;
   PaimentMethodeScreen({Key? key, required this.location}) : super(key: key);

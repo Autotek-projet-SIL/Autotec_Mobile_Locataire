@@ -27,11 +27,11 @@ class _CarDetailState extends State<CarDetail> {
   }
   void getCarFromFirestore() async{
     try{
-      DocumentSnapshot variable=await FirebaseFirestore.instance.collection('CarLocation').doc(widget.car.numeroChasis).get();
+      DocumentSnapshot variable = await FirebaseFirestore.instance.collection('CarLocation').doc(widget.car.numeroChasis).get();
 
       setState(() {
         _carLocation=variable;
-        circular=false;
+        circular = false;
       });
     }catch(e){
       print(e.toString());

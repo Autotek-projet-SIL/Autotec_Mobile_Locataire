@@ -32,8 +32,9 @@ class carLocation{
   Car? car;
 
   static final carLocation _instance = carLocation._privateConstructor();
-
-  factory carLocation(){
-    return _instance;
+  carLocation();
+   factory carLocation.fromJson(Map<String, dynamic> json) {
+    return carLocation(
+    );
   }
 }

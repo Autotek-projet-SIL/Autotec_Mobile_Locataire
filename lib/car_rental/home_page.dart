@@ -1,16 +1,19 @@
+import 'dart:convert';
 
 import 'package:autotec/bloc/auth_bloc.dart';
 import 'package:autotec/models/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import '../models/Location.dart';
 import 'search_screen.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:autotec/Authentication/first_screens/home.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-
 final scaffoldKey = GlobalKey<ScaffoldState>();
+List<carLocation> listLocations = [];
 
 class Map extends StatefulWidget {
   const Map({Key? key}) : super(key: key);
@@ -19,21 +22,45 @@ class Map extends StatefulWidget {
   State<Map> createState() => _MapState();
 }
 
+Future<void> _fetchUserCurrentLocations() async {
+
+  var url = "autotek-server.herokuapp.com/get_locations_by_locataire/${UserCredentials.uid!}";
+  final response = await http.get(Uri.parse(url), headers: {'token':UserCredentials.token!,'id_sender':UserCredentials.uid!});
+
+  if (response.statusCode == 200) {
+    List jsonResponse = json.decode(response.body);
+
+    listLocations =  jsonResponse.map((json) =>  carLocation.fromJson(json)).toList();
+
+    if(listLocations.isEmpty){
+      print("no list");
+    }
+
+  } else if (response.statusCode == 403) {
+    throw Exception('access forbiden');
+  }else{
+    throw Exception('Failed to load Cars from API');
+  }
+}
+
 class _MapState extends State<Map> {
- late double latitude ;
- late double longitude ;
- late Position? _currentlocation ;
- @override
+  late double latitude;
+
+  late double longitude;
+
+  late Position? _currentlocation;
+
+  @override
   void initState() {
     super.initState();
-   // _getCurrentLocation();
+    // _getCurrentLocation();
   }
 
-  _getCurrentLocation(){
-     Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best,
-        forceAndroidLocationManager: false).then((Position position) {
-
+  _getCurrentLocation() {
+    Geolocator.getCurrentPosition(
+            desiredAccuracy: LocationAccuracy.best,
+            forceAndroidLocationManager: false)
+        .then((Position position) {
       setState(() {
         this._currentlocation = position;
       });
@@ -41,124 +68,117 @@ class _MapState extends State<Map> {
       print(e);
     });
 
-        setState(() {
-          this.latitude = this._currentlocation!.latitude;
-          this.longitude = this._currentlocation!.longitude;
-        });
-        print("***************");
-        print(latitude);
-        print(longitude);
-
+    setState(() {
+      this.latitude = this._currentlocation!.latitude;
+      this.longitude = this._currentlocation!.longitude;
+    });
+    print("***************");
+    print(latitude);
+    print(longitude);
   }
 
   late GoogleMapController mapController;
 
-
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
-    mapController.animateCamera(CameraUpdate.newLatLngZoom(LatLng(latitude,longitude), 13));
-
+    mapController.animateCamera(
+        CameraUpdate.newLatLngZoom(LatLng(latitude, longitude), 13));
   }
-
-
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       key: scaffoldKey,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        onPressed: ()async{
-          if( await Permission.location.isGranted){
-
-            if(await Permission.location.serviceStatus.isEnabled){
-
+        onPressed: () async {
+          if (await Permission.location.isGranted) {
+            if (await Permission.location.serviceStatus.isEnabled) {
               _getCurrentLocation();
-            }else{
-
-              scaffoldKey.currentState!.showSnackBar(SnackBar(content: Text("activer la localisation")));
+            } else {
+              scaffoldKey.currentState!.showSnackBar(
+                  SnackBar(content: Text("activer la localisation")));
             }
-          }else{
+          } else {
+            scaffoldKey.currentState!
+                .showSnackBar(SnackBar(content: Text("permission denied")));
 
-            scaffoldKey.currentState!.showSnackBar(SnackBar(content: Text("permission denied")));
-
-            await [Permission.location,].request();
+            await [
+              Permission.location,
+            ].request();
           }
 
-
-
-
-          mapController.animateCamera(CameraUpdate.newLatLngZoom(LatLng(latitude,longitude), 14));
+          mapController.animateCamera(
+              CameraUpdate.newLatLngZoom(LatLng(latitude, longitude), 14));
         },
-        backgroundColor: const Color.fromRGBO(27, 146, 164,1),
-        child: Icon(Icons.navigation_outlined, color: Colors.white,size: 30,),
+        backgroundColor: const Color.fromRGBO(27, 146, 164, 1),
+        child: Icon(
+          Icons.navigation_outlined,
+          color: Colors.white,
+          size: 30,
+        ),
       ),
-    bottomNavigationBar: BottomAppBar(
-      shape:const CircularNotchedRectangle(),
-
-      color: Colors.white,
-      child: Row(
-
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.fromLTRB(50.0, 5, 20, 5),
-            child: IconButton(
-                onPressed: ()async{
+      bottomNavigationBar: BottomAppBar(
+        shape: const CircularNotchedRectangle(),
+        color: Colors.white,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.fromLTRB(50.0, 5, 20, 5),
+              child: IconButton(
+                onPressed: () async {
                   await UserCredentials.refresh();
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SearchPlacesScreen()),
-                  );
-                  },
-                icon: Icon(Icons.car_rental_outlined, color: Colors.grey,size: 30),
-              tooltip: 'rent a car',
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(50.0, 5, 50, 5),
-            child: IconButton(
-              onPressed: (){
-                //TODO navigate to profil
-
-
-              },
-              icon: Icon(Icons.person_outlined, color: Colors.grey,size: 30),
-              tooltip: 'open profil',
-            ),
-          ),
-
-
-
-        ],
-      ),
-      notchMargin: 5,
-    ),
-      body: BlocListener<AuthBloc, AuthState>(
-    listener: (context, state) {
-    if (state is UnAuthenticated) {
-    // Navigate to the sign in screen when the user Signs Out
-    Navigator.of(context).pushAndRemoveUntil(
-    MaterialPageRoute(builder: (context) => const Home()),
-    (route) => false,
-    );
-    }
-    },
-        child:   Stack(
-            children: <Widget>[
-              GoogleMap(
-                zoomControlsEnabled: false,
-                onMapCreated: _onMapCreated,
-                myLocationEnabled: true,
-                initialCameraPosition: CameraPosition(
-                  target: LatLng(36.7762, 3.05997),
-                  zoom: 13.0,
-                ),
+                  _fetchUserCurrentLocations();
+                  if (listLocations.isEmpty) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SearchPlacesScreen()),
+                    );
+                  } },
+                icon: Icon(Icons.car_rental_outlined,
+                    color: Colors.grey, size: 30),
+                tooltip: 'rent a car',
               ),
-
-            ]
-        ),),
-
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(50.0, 5, 50, 5),
+              child: IconButton(
+                onPressed: () {
+                  //TODO navigate to profil
+                },
+                icon: Icon(Icons.person_outlined, color: Colors.grey, size: 30),
+                tooltip: 'open profil',
+              ),
+            ),
+          ],
+        ),
+        notchMargin: 5,
+      ),
+      body: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is UnAuthenticated) {
+            // Navigate to the sign in screen when the user Signs Out
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(builder: (context) => const Home()),
+              (route) => false,
+            );
+          }
+        },
+        child: Stack(children: <Widget>[
+          GoogleMap(
+            zoomControlsEnabled: false,
+            onMapCreated: _onMapCreated,
+            myLocationEnabled: true,
+            initialCameraPosition: CameraPosition(
+              target: LatLng(36.7762, 3.05997),
+              zoom: 13.0,
+            ),
+          ),
+        ]),
+      ),
     );
   }
 }

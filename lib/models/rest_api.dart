@@ -89,8 +89,26 @@ class Api {
         'en_cours': "t", // t or f
         'point_depart':_location.point_depart!,
         'point_arrive':_location.point_arrive!,
+        'suivi_location': 'en attente'
 
         //TODO add les positions de depart et d'arrive
+      }),
+    );
+  }
+
+  static Future<http.Response> editLocationState(String etat) async {
+
+    return await http.put(
+      Uri.parse('https://autotek-server.herokuapp.com/gestionlocations/update_suivi_location/${UserCredentials.uid!}'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String> {
+
+        "id_sender": UserCredentials.uid!,
+        "token": UserCredentials.token!,
+
+        "suivi_location":etat,
       }),
     );
   }

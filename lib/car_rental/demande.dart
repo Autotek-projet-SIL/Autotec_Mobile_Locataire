@@ -7,6 +7,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../components/WraisedButton.dart';
 import 'package:flutter/material.dart';
 
+import '../models/rest_api.dart';
+
 class Demande extends StatefulWidget {
   const Demande({Key? key}) : super(key: key);
 
@@ -107,13 +109,19 @@ class _DemandeState extends State<Demande> {
                   print('uid\n');
                   print(UserCredentials.uid);
                   //TODO post method with the location info
+                  print("numero de chasis");
                   print(_location.car!.numeroChasis);
-
+                  final response = await Api.postLocation("en attente", _location);
+                  if (response.statusCode != 200){
+                    print(response.statusCode);
+                  }
+                  else{
+                    print("location added");
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => TrackingScreen(
-                        //TODO we have to change to destinationLocation to the current position of the user
                         destinationLocation: LatLng(_location.latitude_depart!,
                             _location.longitude_depart!),
                         carid: _location.car!.numeroChasis,

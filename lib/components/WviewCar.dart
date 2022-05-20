@@ -1,12 +1,20 @@
-
-import 'package:autotec/models/Location.dart';
+// ignore_for_file: file_names, sized_box_for_whitespace
+/*
+import 'package:autotec/car_rental/cars.dart';
+import 'package:autotec/models/location.dart';
 import 'package:flutter/material.dart';
 
 import 'package:autotec/models/user_data.dart';
 import 'package:autotec/car_rental/demande.dart';
-import '../car_rental/Car_details.dart';
-import '../car_rental/Cars.dart';
+import '../car_rental/car_details.dart';
+*/
+import 'package:flutter/material.dart';
 
+import '../car_rental/car_details.dart';
+import '../car_rental/Cars.dart';
+import '../car_rental/demande.dart';
+import '../models/location.dart';
+import '../models/user_data.dart';
 
 class WidgetViewCar extends StatelessWidget {
   final Car car;
@@ -23,7 +31,7 @@ class WidgetViewCar extends StatelessWidget {
         GestureDetector(
           onTap: ()async{
             await UserCredentials.refresh();
-            carLocation _location = carLocation();
+            CarLocation _location = CarLocation();
             _location.car = car;
             Navigator.push(
               context,
@@ -65,7 +73,7 @@ class WidgetViewCar extends StatelessWidget {
                       Container(
                         height: 50,
                         width: 150,
-                        child: Text(car.modele!,
+                        child: Text(car.modele,
                           maxLines: 2,
                           style: const TextStyle(
                             color: Colors.black,
@@ -89,6 +97,7 @@ class WidgetViewCar extends StatelessWidget {
                   right: 0.0,
                   child:Column(
                     children:  [
+                      // ignore: deprecated_member_use
                       FlatButton(
                           onPressed :()async{
                             await UserCredentials.refresh();

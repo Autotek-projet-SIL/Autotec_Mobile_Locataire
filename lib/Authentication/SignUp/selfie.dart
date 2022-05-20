@@ -134,13 +134,13 @@ class _SelfieState extends State<Selfie> {
                 text: "Continuer",
                 press: buttonActivated()
                     ? () async {
-                  var img_url = await Storage.uploadFile(imageFile!.path, "Selfies/"+widget.u.nom!+" "+widget.u.prenom!);
-                  widget.u.photoSelfie = img_url ;
+                  var imgUrl = await Storage.uploadFile(imageFile!.path, "Selfies/"+widget.u.nom!+" "+widget.u.prenom!);
+                  widget.u.photoSelfie = imgUrl ;
 
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => Identite_recto(
+                            builder: (context) => IdentiteRecto(
                               u: widget.u,
                             ),
                           ),

@@ -1,4 +1,3 @@
-// ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
 
@@ -18,14 +17,17 @@ class CustomRaisedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FractionallySizedBox(
       widthFactor: 1,
+      // ignore: deprecated_member_use
       child: RaisedButton(
         color: color,
         hoverColor: Colors.black,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 14),
+     //   padding: const EdgeInsets.symmetric(horizontal: 70, vertical: 14),
         child: Text(
           text!,
           style: TextStyle(color: textColor, fontSize: 16),
+          maxLines: 1,
+          softWrap: false,
         ),
         onPressed: press,
       ),

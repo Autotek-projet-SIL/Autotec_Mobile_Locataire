@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 
@@ -13,8 +15,7 @@ class WidgetArrowBack extends StatelessWidget {
         children:[
 
           InkWell(
-            child: Container(
-              // margin: const EdgeInsets.only(top:40.0,left: 10.0, right: 10.0),
+            child: Container(          
               height: 40,
               width: 40,
               decoration:  const BoxDecoration(

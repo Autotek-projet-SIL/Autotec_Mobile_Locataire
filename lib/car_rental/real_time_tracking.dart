@@ -1,13 +1,14 @@
-import 'dart:math';
-import 'package:autotec/car_rental/sliding_up_panel.dart';
+// ignore_for_file: avoid_print, prefer_final_fields
+
+import 'package:autotec/models/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
-
+import './sliding_up_panel.dart';
 /*To do
-
 1 - the slider                               done
 4 - fix ui                                   done
 5 - the localisation pin                     done
@@ -15,22 +16,22 @@ import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 2 - the distance                             done
 6 - localization pin informations on click   done
 3 - the remaining time                       done
-
 8 - data from firebase ( 1st track)
 9 - data from firebase ( 2nd track)
-
  */
 
 class MyMap extends StatefulWidget {
   final String carId;
   final String userId;
   final LatLng destinationLocation;
-  const MyMap(
-      {Key? key,
-      required this.carId,
-      required this.userId,
-      required this.destinationLocation})
-      : super(key: key);
+  final CarLocation location;
+  const MyMap({
+    Key? key,
+    required this.carId,
+    required this.userId,
+    required this.destinationLocation,
+    required this.location,
+  }) : super(key: key);
   @override
   _MyMapState createState() => _MyMapState();
 }
@@ -53,11 +54,17 @@ class _MyMapState extends State<MyMap> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: StreamBuilder(
         stream:
-            FirebaseFirestore.instance.collection('CarLocation').snapshots(),
+        FirebaseFirestore.instance.collection('CarLocation').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (_added) {
             mymap(snapshot);
@@ -76,9 +83,9 @@ class _MyMapState extends State<MyMap> {
                 onTap: () {},
                 position: LatLng(
                   snapshot.data!.docs.singleWhere(
-                      (element) => element.id == widget.carId)['latitude'],
+                          (element) => element.id == widget.carId)['latitude'],
                   snapshot.data!.docs.singleWhere(
-                      (element) => element.id == widget.carId)['longitude'],
+                          (element) => element.id == widget.carId)['longitude'],
                 ),
                 markerId: const MarkerId('SourcePin'),
                 icon: sourceIcon!,
@@ -96,14 +103,14 @@ class _MyMapState extends State<MyMap> {
             initialCameraPosition: CameraPosition(
                 target: LatLng(
                   snapshot.data!.docs.singleWhere(
-                      (element) => element.id == widget.carId)['latitude'],
+                          (element) => element.id == widget.carId)['latitude'],
                   snapshot.data!.docs.singleWhere(
-                      (element) => element.id == widget.carId)['longitude'],
+                          (element) => element.id == widget.carId)['longitude'],
                 ),
                 zoom: 14.47),
             onMapCreated: (GoogleMapController controller) {
               setState(
-                () {
+                    () {
                   _controller = controller;
                   _added = true;
                   setPolylines(snapshot);
@@ -117,12 +124,11 @@ class _MyMapState extends State<MyMap> {
   }
 
   void setSourceAndDestinationIcons() async {
-    sourceIcon = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(devicePixelRatio: 9.2, size: Size(12, 12)),
-        'assets/car-placeholder.png');
-    destinationIcon = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(devicePixelRatio: 9.2, size: Size(12, 12)),
-        'assets/user-pin.png');
+    sourceIcon = BitmapDescriptor.defaultMarker;
+    //await BitmapDescriptor.fromAssetImage(const ImageConfiguration(devicePixelRatio: 9.2, size: Size(12, 12)),'assets/car-placeholder.png');
+
+    destinationIcon = BitmapDescriptor.defaultMarker;
+    //await BitmapDescriptor.fromAssetImage(const ImageConfiguration(devicePixelRatio: 9.2, size: Size(12, 12)),'assets/user-pin.png');
   }
 
   setPolylines(AsyncSnapshot<QuerySnapshot<Object?>> snapshot) async {
@@ -147,16 +153,16 @@ class _MyMapState extends State<MyMap> {
       print(result.errorMessage);
     }
     double totalDistance = 0;
-    for (var i = 0; i < polylineCoordinates.length - 1; i++) {
+    /*  for (var i = 0; i < polylineCoordinates.length - 1; i++) {
       totalDistance += calculateDistance(
           polylineCoordinates[i].latitude,
           polylineCoordinates[i].longitude,
           polylineCoordinates[i + 1].latitude,
           polylineCoordinates[i + 1].longitude);
-    }
+    }*/
     print(totalDistance);
 
-    setState(() {
+    setState(() async {
       Polyline polyline = Polyline(
           polylineId: const PolylineId("poly"),
           color: const Color.fromRGBO(27, 146, 164, 0.7),
@@ -164,17 +170,28 @@ class _MyMapState extends State<MyMap> {
           visible: true,
           points: polylineCoordinates);
       _polylines.add(polyline);
-      Distance.distance = totalDistance;
+
+      Distance.distance = await calculateDistance(
+          snapshot.data!.docs
+              .singleWhere((element) => element.id == widget.carId)['latitude'],
+          snapshot.data!.docs.singleWhere(
+                  (element) => element.id == widget.carId)['longitude'],
+          widget.destinationLocation.latitude,
+          widget.destinationLocation.longitude) ;
+
     });
   }
 
-  double calculateDistance(lat1, lon1, lat2, lon2) {
+  Future<double> calculateDistance(
+      double lat1, double lon1, double lat2, double lon2) async {
+    return await Geolocator.distanceBetween(lat1, lon1, lat2, lon2);
+  }
+  /*
     var p = 0.017453292519943295;
     var a = 0.5 -
         cos((lat2 - lat1) * p) / 2 +
         cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
-    return 12742 * asin(sqrt(a));
-  }
+    return 12742 * asin(sqrt(a));*/
 
   Future<void> mymap(AsyncSnapshot<QuerySnapshot> snapshot) async {
     await _controller.animateCamera(
@@ -182,9 +199,9 @@ class _MyMapState extends State<MyMap> {
         CameraPosition(
             target: LatLng(
               snapshot.data!.docs.singleWhere(
-                  (element) => element.id == widget.carId)['latitude'],
+                      (element) => element.id == widget.carId)['latitude'],
               snapshot.data!.docs.singleWhere(
-                  (element) => element.id == widget.carId)['longitude'],
+                      (element) => element.id == widget.carId)['longitude'],
             ),
             zoom: 12.47),
       ),

@@ -1,4 +1,5 @@
 // ignore_for_file: deprecated_member_use
+// ignore_for_file: file_names
 
 import 'package:flutter/material.dart';
 
@@ -17,7 +18,7 @@ class WidgetRaisedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    //Size size = MediaQuery.of(context).size;
     return FractionallySizedBox(
       widthFactor: 1,
 

@@ -1,13 +1,10 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, unused_field
 
 import 'package:autotec/Authentication/SignUp/sign_up2.dart';
-
-import 'selfie.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:autotec/components/text_field.dart';
 import 'package:autotec/components/text_field_digits.dart';
-import 'package:autotec/components/text_field_password.dart';
 import 'package:autotec/models/user_data.dart';
 
 class SignUp extends StatefulWidget {

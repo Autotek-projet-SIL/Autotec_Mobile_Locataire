@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, non_constant_identifier_names, avoid_print, unnecessary_brace_in_string_interps, avoid_unnecessary_containers, sized_box_for_whitespace
 
 import 'package:autotec/models/user_data.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +8,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_webservice/places.dart';
 import 'package:google_api_headers/google_api_headers.dart';
-import 'package:autotec/models/Location.dart';
+import 'package:autotec/models/location.dart';
 
 import 'cars_list.dart';
 const kGoogleApiKey = 'AIzaSyDgZadIjr0Xgvmeo6JZp5CN18Cv8Vy8j0E';
@@ -52,11 +52,11 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
         desiredAccuracy: LocationAccuracy.best,
         forceAndroidLocationManager: false)
         .then((Position position) async{
-          setState(() {
-            lat = position.latitude;
-            lng = position.longitude;
+      setState(() {
+        lat = position.latitude;
+        lng = position.longitude;
 
-          });
+      });
     }).catchError((e) {
       print(e);
     });
@@ -68,17 +68,17 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
     googleMapController.animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lng), 14.0));
   }
 
- Future<String> _getAdress(double latitude, double longitude)async{
-   final coordinates = Coordinates(latitude, longitude);
-   var addresses = await Geocoder.local.findAddressesFromCoordinates(
-       coordinates);
-   var first = addresses.first;
-   print('1. ${first.locality}, 2. ${first.adminArea}, 3. ${first.subLocality}, '
-       '4. ${first.subAdminArea}, 5. ${first.addressLine}, 6. ${first.featureName},'
-       '7, ${first.thoroughfare}, 8. ${first.subThoroughfare}');
+  Future<String> _getAdress(double latitude, double longitude)async{
+    final coordinates = Coordinates(latitude, longitude);
+    var addresses = await Geocoder.local.findAddressesFromCoordinates(
+        coordinates);
+    var first = addresses.first;
+    print('1. ${first.locality}, 2. ${first.adminArea}, 3. ${first.subLocality}, '
+        '4. ${first.subAdminArea}, 5. ${first.addressLine}, 6. ${first.featureName},'
+        '7, ${first.thoroughfare}, 8. ${first.subThoroughfare}');
 
-   return first.addressLine!;
- }
+    return first.addressLine!;
+  }
 
   Future<String> _getRegion(double latitude, double longitude)async{
     final coordinates = Coordinates(latitude, longitude);
@@ -236,6 +236,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size  size = MediaQuery.of(context).size;
     return Scaffold(
       key: homeScaffoldKey,
 
@@ -251,88 +252,88 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
               googleMapController = controller;
             },
           ),
-      Positioned(
-        bottom: 0.0,
-        left: 0.0,
-          child: Container(
-              color: Colors.white,
-              width: 360,
-              height: 270,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Container(
-                    height: 50,
-                    width: 300,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: const Color(0xff2E9FB0),
-                      ),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Row(
-                      children: [
-                        const Padding(
-                          padding:EdgeInsets.fromLTRB(5,10,0,10),
-                          child: Icon(Icons.pin_drop_outlined, color: Colors.grey,),
+          Positioned(
+            bottom: 0.0,
+            left: 0.0,
+            child: Container(
+                color: Colors.white,
+                width: size.width,
+                height: 270,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Container(
+                      height: 50,
+                      width: 300,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: const Color(0xff2E9FB0),
                         ),
-                        Expanded(
-                                child:Container(
-                                    child: SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        padding: const EdgeInsets.all(11),
-                                        child: GestureDetector(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Row(
+                        children: [
+                          const Padding(
+                            padding:EdgeInsets.fromLTRB(5,10,0,10),
+                            child: Icon(Icons.pin_drop_outlined, color: Colors.grey,),
+                          ),
+                          Expanded(
+                              child:Container(
+                                  child: SingleChildScrollView(
+                                      scrollDirection: Axis.horizontal,
+                                      padding: const EdgeInsets.all(11),
+                                      child: GestureDetector(
                                           onTap: (){
                                             _showDepartDialog(context);
                                           },
-                                            child: Text(this.depart? this.depart_adr : "point de départ", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)))))),
+                                          child: Text(depart? depart_adr : "point de départ", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)))))),
 
-                      ],
-                    ),
-                  ),
-                  Container(
-                    height: 50,
-                    width: 300,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: const Color(0xff2E9FB0),
+                        ],
                       ),
-                      borderRadius: BorderRadius.circular(10.0),
                     ),
-                    child: Row(
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.fromLTRB(5,10,0,10),
-                          child: const Icon(Icons.pin_drop_outlined, color: Colors.grey,),
+                    Container(
+                      height: 50,
+                      width: 300,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: const Color(0xff2E9FB0),
                         ),
-                        Expanded(
-                          child: Container(
-                            child: SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              padding: const EdgeInsets.all(10.0),
-                              child: GestureDetector(
-                                child: Text(arrive? arrive_adr : "point d'arrivé", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
-                                onTap: (){
-                                  _showArriveDialog(context);
-                                },
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Row(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.fromLTRB(5,10,0,10),
+                            child:  Icon(Icons.pin_drop_outlined, color: Colors.grey,),
+                          ),
+                          Expanded(
+                            child: Container(
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                padding: const EdgeInsets.all(10.0),
+                                child: GestureDetector(
+                                  child: Text(arrive? arrive_adr : "point d'arrivé", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                                  onTap: (){
+                                    _showArriveDialog(context);
+                                  },
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  Container(
-                    height: 50,
-                    width: 300,
+                    Container(
+                      height: 50,
+                      width: 300,
 
-                    child: ElevatedButton(
+                      child: ElevatedButton(
                         onPressed: ()async{
                           //TODO  regler les attributs a passer entre les pages
                           if(depart && arrive ){
                             if(depart_adr != arrive_adr){
-                              carLocation _carLocation = carLocation();
+                              CarLocation _carLocation = CarLocation();
                               _carLocation.region = region;
                               _carLocation.latitude_depart = latitude_dpr;
                               _carLocation.longitude_depart = longitude_dpr;
@@ -346,10 +347,10 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                                 MaterialPageRoute(builder: (context) => const CarsList()),
                               );
                             }else{
-                              homeScaffoldKey.currentState!.showSnackBar(const SnackBar(content: const Text('veuillez choisir des addresses différentes')));
+                              homeScaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text('veuillez choisir des addresses différentes')));
                             }
                           }else if(!depart){
-                            homeScaffoldKey.currentState!.showSnackBar(const SnackBar(content: const Text('veuillez choisir un point de départ')));
+                            homeScaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text('veuillez choisir un point de départ')));
                           }else{
                             homeScaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text('veuillez choisir un point d`arrivé')));
                           }
@@ -357,16 +358,16 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                         },
                         child:const Text("continuer"),
                         style: ButtonStyle(
-                       backgroundColor: MaterialStateProperty.all<Color>(const Color(0xff2E9FB0)),
+                          backgroundColor: MaterialStateProperty.all<Color>(const Color(0xff2E9FB0)),
 
                         ),
-                    ),
-                  )
-                ],
-              )
-          ),
+                      ),
+                    )
+                  ],
+                )
+            ),
 
-      ),
+          ),
         ],
       ),
     );

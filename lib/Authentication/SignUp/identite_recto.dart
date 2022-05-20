@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_unnecessary_containers
+// ignore_for_file: avoid_unnecessary_containers, avoid_print
 
 import 'package:autotec/Authentication/SignUp/identite_verso.dart';
 
@@ -15,14 +15,14 @@ import 'package:autotec/repositories/image_storage_repository.dart';
 
 
 // ignore: must_be_immutable
-class Identite_recto extends StatefulWidget {
+class IdentiteRecto extends StatefulWidget {
   UserData u;
-  Identite_recto({required this.u, Key? key}) : super(key: key);
+  IdentiteRecto({required this.u, Key? key}) : super(key: key);
   @override
-  _Identite_rectoState createState() => _Identite_rectoState();
+  _IdentiteRectoState createState() => _IdentiteRectoState();
 }
 
-class _Identite_rectoState extends State<Identite_recto> {
+class _IdentiteRectoState extends State<IdentiteRecto> {
   XFile? imageFile;
   final ImagePicker _picker = ImagePicker();
   bool isButtonActive = true;
@@ -156,19 +156,19 @@ class _Identite_rectoState extends State<Identite_recto> {
                       text: "Continuer",
                       press: buttonActivated()
                           ? () async {
-                              var id_url = await Storage.uploadFile(
+                              var idUrl = await Storage.uploadFile(
                                   imageFile!.path,
                                   "Pièces identité Recto/" +
                                       widget.u.nom! +
                                       " " +
                                       widget.u.prenom!);
-                              widget.u.photoIdentiteRecto = id_url;
+                              widget.u.photoIdentiteRecto = idUrl;
                               print("************************");
                               print(widget.u.photoIdentiteRecto);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => Identite_verso(
+                                  builder: (context) => IdentiteVerso(
                                     u: widget.u,
                                   ),
                                 ),

@@ -1,27 +1,21 @@
+// ignore_for_file: avoid_unnecessary_containers, avoid_print, prefer_final_fields
 
-import 'package:autotec/models/Location.dart';
+import 'package:autotec/car_rental/sliding_up_panel.dart';
+import 'package:autotec/models/location.dart';
 import 'package:autotec/models/user_data.dart';
-
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../components/WraisedButton.dart';
 import 'package:flutter/material.dart';
 
-
-
-
 class Demande extends StatefulWidget {
-
-  const Demande( {
-    Key? key
-  }): super(key: key);
+  const Demande({Key? key}) : super(key: key);
 
   @override
   State<Demande> createState() => _DemandeState();
 }
 
 class _DemandeState extends State<Demande> {
-
-  // ignore: prefer_final_fields
-  carLocation _location = carLocation();
+  CarLocation _location = CarLocation();
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +26,15 @@ class _DemandeState extends State<Demande> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            SizedBox(height: size.height*0.1),
+            SizedBox(height: size.height * 0.1),
             Image.asset(
               'assets/logo.png',
               width: 350,
             ),
             SizedBox(height: size.height * 0.05),
-            const Text('Louer une voiture',
-              style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold),
+            const Text(
+              'Louer une voiture',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 40),
             Container(
@@ -51,19 +46,18 @@ class _DemandeState extends State<Demande> {
                 ),
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              child:  Expanded(
+              child: Expanded(
                 child: Container(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.all(20.0),
                     child: Text(_location.point_depart!,
-                        style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
-
+                        style: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w600)),
                   ),
                 ),
               ),
             ),
-
             const SizedBox(height: 40),
             Container(
               height: 70,
@@ -74,19 +68,18 @@ class _DemandeState extends State<Demande> {
                 ),
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              child:  Expanded(
+              child: Expanded(
                 child: Container(
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.all(20.0),
-                      child: Text(_location.point_arrive!,
-                          style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
-
+                    child: Text(_location.point_arrive!,
+                        style: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w600)),
                   ),
                 ),
               ),
             ),
-
             const SizedBox(height: 20),
             Container(
               height: 70,
@@ -99,29 +92,43 @@ class _DemandeState extends State<Demande> {
               ),
               child: Padding(
                 padding: const EdgeInsets.all(20),
-                child: Text(_location.car!.modele!, style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
+                child: Text(_location.car!.modele,
+                    style: const TextStyle(
+                        fontSize: 15, fontWeight: FontWeight.w600)),
               ),
             ),
             const SizedBox(height: 20),
-            WidgetRaisedButton(text: 'valider',
-                press:()async{
-              await UserCredentials.refresh();
-              print("token\n");
-              print(UserCredentials.token);
-              print('uid\n');
-              print (UserCredentials.uid);
-              //TODO post method with the location info
-              /*Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ),
-              );*/
-            }, color: const Color(0xff2E9FB0), textColor: Colors.white)
+            WidgetRaisedButton(
+                text: 'valider',
+                press: () async {
+                  await UserCredentials.refresh();
+                  print("token\n");
+                  print(UserCredentials.token);
+                  print('uid\n');
+                  print(UserCredentials.uid);
+                  //TODO post method with the location info
+                  print(_location.car!.numeroChasis);
 
-
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => TrackingScreen(
+                        //TODO we have to change to destinationLocation to the current position of the user
+                        destinationLocation: LatLng(_location.latitude_depart!,
+                            _location.longitude_depart!),
+                        carid: _location.car!.numeroChasis,
+                        location: _location,
+                      ),
+                    ),
+                  );
+                  print("latitude" + _location.latitude_depart!.toString());
+                  print("longitude" + _location.longitude_arrive!.toString());
+                },
+                color: const Color(0xff2E9FB0),
+                textColor: Colors.white)
           ],
         ),
       ),
     );
   }
-
 }

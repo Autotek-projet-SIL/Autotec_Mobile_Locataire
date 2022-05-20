@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_unnecessary_containers
+// ignore_for_file: avoid_unnecessary_containers, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -12,14 +12,14 @@ import '../../../components/raised_button.dart';
 import 'package:autotec/car_rental/home_page.dart';
 import 'package:autotec/repositories/image_storage_repository.dart';
 // ignore: must_be_immutable
-class Identite_verso extends StatefulWidget {
+class IdentiteVerso extends StatefulWidget {
   UserData u;
-  Identite_verso({required this.u, Key? key}) : super(key: key);
+  IdentiteVerso({required this.u, Key? key}) : super(key: key);
   @override
-  _Identite_versoState createState() => _Identite_versoState();
+  _IdentiteVersoState createState() => _IdentiteVersoState();
 }
 
-class _Identite_versoState extends State<Identite_verso> {
+class _IdentiteVersoState extends State<IdentiteVerso> {
   XFile? imageFile;
   final ImagePicker _picker = ImagePicker();
   bool isButtonActive = true;
@@ -108,7 +108,7 @@ class _Identite_versoState extends State<Identite_verso> {
             // Navigating to the home screen if the user is authenticated
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => Map(),
+              MaterialPageRoute(builder: (context) => const Map(),
             ));
 
           }
@@ -152,8 +152,8 @@ class _Identite_versoState extends State<Identite_verso> {
                       press: buttonActivated()
                           ? () async {
                         //uploading the image to storage
-                        var id_url = await Storage.uploadFile(imageFile!.path,"Pièces identité Verso/"+widget.u.nom!+" "+widget.u.prenom!);
-                        widget.u.photoIdentiteVerso = id_url ;
+                        var idUrl = await Storage.uploadFile(imageFile!.path,"Pièces identité Verso/"+widget.u.nom!+" "+widget.u.prenom!);
+                        widget.u.photoIdentiteVerso = idUrl ;
 
                         print(widget.u.photoIdentiteVerso);
                         //inscription firebase and REST API

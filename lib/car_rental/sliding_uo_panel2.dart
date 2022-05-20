@@ -1,25 +1,23 @@
 import 'dart:async';
 import 'dart:ui';
-import 'package:autotec/car_rental/real_time_tracking.dart';
-import 'package:autotec/components/raised_button.dart';
-import 'package:autotec/models/location.dart';
+import 'package:autotec/car_rental/real_time_tracking2.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import "package:autotec/models/rest_api.dart";
 
-import '../payment/payment_method.dart';
+import '../models/location.dart';
+
 
 class Distance {
   static double distance = 0.0;
   static int time = 00;
 }
 
-class TrackingScreen extends StatefulWidget {
-  final CarLocation location;
+class TrackingScreen2 extends StatefulWidget {
   final LatLng destinationLocation;
   final String carid;
-  const TrackingScreen(
+  final CarLocation location;
+  const TrackingScreen2(
       {Key? key,
       required this.destinationLocation,
       required this.carid,
@@ -27,42 +25,27 @@ class TrackingScreen extends StatefulWidget {
       : super(key: key);
 
   @override
-  _TrackingScreenState createState() => _TrackingScreenState();
+  _TrackingScreen2State createState() => _TrackingScreen2State();
 }
 
-class _TrackingScreenState extends State<TrackingScreen> {
+class _TrackingScreen2State extends State<TrackingScreen2> {
   double _panelHeightOpen = 0;
   final double _panelHeightClosed = 95.0;
   double distance = 0.0;
-  int deverrouillage = 0;
+  int cpt = 0;
   Timer? timer;
   @override
   void initState() {
     timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
-      setState(() async {
+      setState(() {
         distance = Distance.distance;
-        deverrouillage++;
-        final response = await Api.editLocationState("deverouillage","2");
-        if (response.statusCode != 200) {
-          throw Exception('status update failed');
-        } else{
-          print("status modifié avec succés");
-        }
-        /*   if (distance < 200) {
-          Navigator.push(
+        cpt++;
+     //   if (distance < 20) {}
+        /*    if (cpt == 20) {
+         Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => DeverrouillageScreen(
-                location: widget.location,
-              ),
-            ),
-          );
-        }*/
-        /* if (deverrouillage == 20) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DeverrouillageScreen(
+              builder: (context) => PaimentMethodeScreen(
                 location: widget.location,
               ),
             ),
@@ -91,13 +74,14 @@ class _TrackingScreenState extends State<TrackingScreen> {
             minHeight: _panelHeightClosed,
             parallaxEnabled: true,
             parallaxOffset: .5,
-            body: MyMap(
-              carId: widget.carid, // "0267712213",
+            body: MyMap2(
+              destinationLocation: LatLng(widget.location.latitude_arrive!,
+                  widget.location.longitude_arrive!),
+              carId: widget.location.car!.numeroChasis,
               userId:
                   "USER", // we use it to get the car's location from firebase
-              destinationLocation: widget.destinationLocation,
+
               //LatLng(36.713819, 3.174251), // client location , it's fixed at first
-              location: widget.location,
             ),
             panelBuilder: (sc) => _panel(),
             borderRadius: const BorderRadius.only(
@@ -208,8 +192,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                 leading: const Icon(Icons.pin_drop_rounded,
                     color: Color.fromRGBO(27, 146, 164, 0.7)),
                 title: Text(
-                    Distance.distance.toStringAsFixed(2) +
-                        "metres pour arriver",
+                    Distance.distance.toStringAsFixed(2) + " km pour arriver",
                     style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -220,11 +203,9 @@ class _TrackingScreenState extends State<TrackingScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 30),
               child: ListTile(
-                leading: const Icon(Icons.directions_car,
+                leading: const Icon(Icons.countertops,
                     color: Color.fromRGBO(27, 146, 164, 0.7)),
-                title: Text(
-                    //"909-163-09",
-                    widget.location.car!.numeroChasis,
+                title: Text(Distance.distance.toStringAsFixed(2) + "1231 DZD",
                     style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -232,29 +213,19 @@ class _TrackingScreenState extends State<TrackingScreen> {
                         color: Colors.black)),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(left: 30, right: 30),
-              child: CustomRaisedButton(
-                text: " passer le suivi",
-                color: const Color.fromRGBO(27, 146, 164, 0.7),
-                textColor: Colors.white,
-                press: () => {
-                  //TODO request post endLocation
-
-                  //TODO request send email
-               
-             
-                  //TODO requst get getemail
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PaimentMethodeScreen(
-                              location: widget.location,
-                            )),
-                  )
-                },
+            const Padding(
+              padding: EdgeInsets.only(left: 30),
+              child: ListTile(
+                leading: Icon(Icons.directions_car,
+                    color: Color.fromRGBO(27, 146, 164, 0.7)),
+                title: Text("909-163-09",
+                    style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Poppins',
+                        color: Colors.black)),
               ),
-            )
+            ),
           ],
         ));
   }

@@ -36,7 +36,7 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
   Timer? timer;
   @override
   void initState() {
-    timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+    timer = Timer.periodic(const Duration(seconds: 10), (Timer t) {
       setState(() {
         distance = Distance.distance;
         cpt++;

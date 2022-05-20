@@ -109,8 +109,15 @@ class _DemandeState extends State<Demande> {
                   print('uid\n');
                   print(UserCredentials.uid);
                   //TODO post method with the location info
-                  Api.postLocation("en attente");
+                  print("numero de chasis");
                   print(_location.car!.numeroChasis);
+                  final response = await Api.postLocation("en attente", _location);
+                  if (response.statusCode != 200){
+                     print(response.statusCode);
+                   }
+                   else{
+                     print("location added");
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(

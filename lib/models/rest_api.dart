@@ -1,6 +1,7 @@
 import 'dart:convert';
-import 'package:autotec/models/location.dart';
+import 'package:autotec/models/location.dart' as prefix;
 import 'package:http/http.dart' as http;
+import 'location.dart';
 import 'user_data.dart';
 import 'package:intl/intl.dart';
 import 'dart:async';
@@ -69,8 +70,8 @@ class Api {
     return false;
   }
 
-  static Future<http.Response> postLocation(String status) async {
-    CarLocation _location = CarLocation();
+  static Future<http.Response> postLocation(String status,
+      CarLocation _location) async {
     return await http.post(
       Uri.parse(
           'https://autotek-server.herokuapp.com/gestionlocations/ajouter_location/'),
@@ -78,38 +79,37 @@ class Api {
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, String>{
-        "id_sender": UserCredentials.uid!,
-        "token": UserCredentials.token!,
-        'date_debut': formattedDateNow(),
-        'status_demande_location': status,
-        'id_locataire': UserCredentials.uid!,
-        'region': _location.region!,
-        'numero_chassis': _location
-            .numero_chassis!, //TODO notice them that it can be null in case demande rejetee
-        'id_trajet': "1", //TODO no idea what's this and how th get it
-        'en_cours': "t", // t or f
-        'point_depart': _location.point_depart!,
-        'point_arrive': _location.point_arrive!,
-
-        //TODO add les positions de depart et d'arrive
+      "id_sender": UserCredentials.uid!,
+      "token": UserCredentials.token!,
+      'date_debut': formattedDateNow(),
+      'status_demande_location': status,
+      'id_locataire': UserCredentials.uid!,
+      'region': _location.region!,
+      'numero_chassis': _location.car!.numeroChasis, //TODO notice them that it can be null in case demande rejetee
+      'en_cours': "t", // t or f
+      'latitude_depart': _location.latitude_depart!.toString(),
+      'longitude_depart': _location.longitude_depart!.toString(),
+      'latitude_arrive': _location.latitude_arrive!.toString(),
+      'longitude_arrive': _location.longitude_arrive!.toString()
       }),
     );
   }
 
   static Future<http.Response> getLocations() async {
     return http.get(
-      Uri.parse(_url+ "locations_encours"),
-    );
-  }
-  
-  static Future<http.Response> getLocationByID(String id) async {
-    return http.get(
-      Uri.parse(_url + id),
+      Uri.parse(_url + "locations_encours"),
     );
   }
 
-  static Future<http.Response> sendBaridiMobDetails(
-      String code, String token) async {
+  static Future<http.Response> getLocationEnCoursByID(String id) async {
+    print("get_locations_by_locataire");
+    return http.get(
+      Uri.parse(_url + "get_locations_by_locataire" + id),
+    );
+  }
+
+  static Future<http.Response> sendBaridiMobDetails(String code,
+      String token) async {
     return await http.post(
       Uri.parse(
           'https://autotek-server.herokuapp.com/paiement/verifier_paiement/'),
@@ -131,8 +131,8 @@ class Api {
     );
   }
 
-  static Future<http.Response> endLocation(
-      String code, String token, String id) async {
+  static Future<http.Response> endLocation(String code, String token,
+      String id) async {
     return await http.put(
       Uri.parse(
           'https://autotek-server.herokuapp.com/gestionlocations/end_location/' +

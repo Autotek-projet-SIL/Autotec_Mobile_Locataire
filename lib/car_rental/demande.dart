@@ -115,7 +115,7 @@ class _DemandeState extends State<Demande> {
                   if (response.statusCode != 200){
                     print(response.statusCode);
                   }
-                  else{
+                  else {
                     print("location added");
                   }
                   Navigator.push(

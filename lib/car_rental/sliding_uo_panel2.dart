@@ -36,21 +36,16 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
   Timer? timer;
   @override
   void initState() {
-    timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+    timer = Timer.periodic(const Duration(seconds: 10), (Timer t) {
       setState(() {
         distance = Distance.distance;
         cpt++;
-     //   if (distance < 20) {}
-        /*    if (cpt == 20) {
-         Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PaimentMethodeScreen(
-                location: widget.location,
-              ),
-            ),
-          );
-        }*/
+      if (distance < 20) {
+        //TODO change the state to payment
+        //call end location and give it time 
+        //calcule de la facture 
+        //TODO get la facture 
+      }       
       });
     });
     super.initState();

@@ -104,7 +104,7 @@ class Api {
   static Future<http.Response> getLocationEnCoursByID(String id) async {
     print("get_locations_by_locataire");
     return http.get(
-      Uri.parse(_url + "get_locations_by_locataire" + id),
+      Uri.parse("https://autotek-server.herokuapp.com/get_locations_by_locataire/$id"),
     );
   }
 

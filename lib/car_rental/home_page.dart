@@ -120,8 +120,6 @@ class _MapState extends State<Map> {
               child: IconButton(
                 onPressed: (){
                   //TODO navigate to profil
-
-
                 },
                 icon: const Icon(Icons.person_outlined, color: Colors.grey,size: 30),
                 tooltip: 'open profil',

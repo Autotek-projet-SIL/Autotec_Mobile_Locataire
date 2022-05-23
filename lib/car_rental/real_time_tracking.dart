@@ -16,8 +16,8 @@ import './sliding_up_panel.dart';
 2 - the distance                             done
 6 - localization pin informations on click   done
 3 - the remaining time                       done
-8 - data from firebase ( 1st track)
-9 - data from firebase ( 2nd track)
+8 - data from firebase ( 1st track)          done
+9 - data from firebase ( 2nd track)          done
  */
 
 class MyMap extends StatefulWidget {
@@ -74,7 +74,7 @@ class _MyMapState extends State<MyMap> {
           }
           return GoogleMap(
             mapType: MapType.normal,
-            myLocationEnabled: true,
+            myLocationEnabled: false,
             compassEnabled: true,
             tiltGesturesEnabled: false,
             markers: {
@@ -184,7 +184,7 @@ class _MyMapState extends State<MyMap> {
 
   Future<double> calculateDistance(
       double lat1, double lon1, double lat2, double lon2) async {
-    return await Geolocator.distanceBetween(lat1, lon1, lat2, lon2);
+    return Geolocator.distanceBetween(lat1, lon1, lat2, lon2);
   }
   /*
     var p = 0.017453292519943295;

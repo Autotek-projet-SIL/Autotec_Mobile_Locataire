@@ -70,8 +70,8 @@ class Api {
     return false;
   }
 
-  static Future<http.Response> postLocation(String status,
-      CarLocation _location) async {
+  static Future<http.Response> postLocation(
+      String status, CarLocation _location) async {
     return await http.post(
       Uri.parse(
           'https://autotek-server.herokuapp.com/gestionlocations/ajouter_location/'),
@@ -85,7 +85,8 @@ class Api {
         'status_demande_location': status,
         'id_locataire': UserCredentials.uid!,
         'region': _location.region!,
-        'numero_chassis': _location.car!.numeroChasis, //TODO notice them that it can be null in case demande rejetee
+        'numero_chassis': _location.car!
+            .numeroChasis, //TODO notice them that it can be null in case demande rejetee
         'en_cours': "t", // t or f
         'latitude_depart': _location.latitude_depart!.toString(),
         'longitude_depart': _location.longitude_depart!.toString(),
@@ -101,15 +102,23 @@ class Api {
     );
   }
 
-  static Future<http.Response> getLocationEnCoursByID(String id) async {
+  static Future<http.Response> getLocationsEnCoursByID(String id) async {
     print("get_locations_by_locataire");
+    print(
+        "https://autotek-server.ù.com/gestionlocations/get_locations_by_locataire/$id");
+
     return http.get(
-      Uri.parse(_url + "get_locations_by_locataire" + id),
+      Uri.parse(
+          "https://autotek-server.herokuapp.com/gestionlocations/get_locations_termines_by_locataire/:$id"),
+      headers: <String, String>{
+        "id_sender": UserCredentials.uid!,
+        "token": UserCredentials.token!,
+      },
     );
   }
 
-  static Future<http.Response> sendBaridiMobDetails(String code,
-      String token) async {
+  static Future<http.Response> sendBaridiMobDetails(
+      String code, String token) async {
     return await http.post(
       Uri.parse(
           'https://autotek-server.herokuapp.com/paiement/verifier_paiement/'),
@@ -131,8 +140,8 @@ class Api {
     );
   }
 
-  static Future<http.Response> endLocation(String code, String token,
-      String id) async {
+  static Future<http.Response> endLocation(
+      String code, String token, String id) async {
     return await http.put(
       Uri.parse(
           'https://autotek-server.herokuapp.com/gestionlocations/end_location/' +

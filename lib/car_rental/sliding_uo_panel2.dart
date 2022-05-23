@@ -6,6 +6,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
 import '../models/location.dart';
+import '../payment/payment_method.dart';
 
 
 class Distance {
@@ -34,14 +35,16 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
   double distance = 0.0;
   int cpt = 0;
   Timer? timer;
+  
   @override
   void initState() {
     timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
       setState(() {
         distance = Distance.distance;
         cpt++;
-     //   if (distance < 20) {}
-        /*    if (cpt == 20) {
+        if (distance < 20) {
+         //TODO request post endLocation
+
          Navigator.push(
             context,
             MaterialPageRoute(
@@ -50,7 +53,7 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
               ),
             ),
           );
-        }*/
+        }
       });
     });
     super.initState();

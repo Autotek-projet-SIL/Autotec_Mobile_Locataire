@@ -6,9 +6,10 @@ import 'package:autotec/models/location.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import "package:autotec/models/rest_api.dart";
+
 
 import '../payment/payment_method.dart';
+import 'deverrouillage.dart';
 
 class Distance {
   static double distance = 0.0;
@@ -38,45 +39,44 @@ class _TrackingScreenState extends State<TrackingScreen> {
   Timer? timer;
   @override
   void initState() {
+    super.initState();
     timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
-      setState(() async {
+      setState((){
         distance = Distance.distance;
         deverrouillage++;
-        final response = await Api.editLocationState("deverouillage","2");
+      /* final response = await Api.editLocationState("deverouillage","2");
         if (response.statusCode != 200) {
           throw Exception('status update failed');
         } else{
           print("status modifié avec succés");
+        }*/
+          if (distance < 100) {
+                 //TODO request post endLocation
+
+                  //TODO request send email
+               
+             
+                  //TODO requst get getemail
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DeverrouillageScreen(
+                location: widget.location,
+              ),
+            ),
+          );
         }
-        /*   if (distance < 200) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DeverrouillageScreen(
-                location: widget.location,
-              ),
-            ),
-          );
-        }*/
-        /* if (deverrouillage == 20) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DeverrouillageScreen(
-                location: widget.location,
-              ),
-            ),
-          );
-        }*/
       });
     });
-    super.initState();
+    
   }
 
-  @override
+ @override
   void dispose() {
+     super.dispose();
     timer!.cancel();
-    super.dispose();
+   
   }
 
   @override

@@ -1,12 +1,15 @@
 // ignore_for_file: avoid_unnecessary_containers, avoid_print, prefer_final_fields
 
+import 'dart:convert';
+
 import 'package:autotec/car_rental/sliding_up_panel.dart';
 import 'package:autotec/models/location.dart';
 import 'package:autotec/models/user_data.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../components/WraisedButton.dart';
 import 'package:flutter/material.dart';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import '../models/location.dart';
 import '../models/rest_api.dart';
 
 class Demande extends StatefulWidget {
@@ -21,7 +24,9 @@ class _DemandeState extends State<Demande> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery
+        .of(context)
+        .size;
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(20),
@@ -111,22 +116,32 @@ class _DemandeState extends State<Demande> {
                   //TODO post method with the location info
                   print("numero de chasis");
                   print(_location.car!.numeroChasis);
-                  final response = await Api.postLocation("en attente", _location);
-                  if (response.statusCode != 200){
+                  final response = await Api.postLocation(
+                      "en attente", _location);
+                  if (response.statusCode != 200) {
                     print(response.statusCode);
                   }
-                  else{
+                  else {
                     print("location added");
+                    //TODO get the current location id 
+                    final response = await Api.getLocationsEnCoursByID(
+                        UserCredentials.uid!);
+                    String? id = await _getLocationId();
+                    print( id);
+                    print(response.statusCode);
+                    print(response.body);
                   }
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => TrackingScreen(
-                        destinationLocation: LatLng(_location.latitude_depart!,
-                            _location.longitude_depart!),
-                        carid: _location.car!.numeroChasis,
-                        location: _location,
-                      ),
+                      builder: (context) =>
+                          TrackingScreen(
+                            destinationLocation: LatLng(
+                                _location.latitude_depart!,
+                                _location.longitude_depart!),
+                            carid: _location.car!.numeroChasis,
+                            location: _location,
+                          ),
                     ),
                   );
                   print("latitude" + _location.latitude_depart!.toString());
@@ -138,5 +153,22 @@ class _DemandeState extends State<Demande> {
         ),
       ),
     );
+  }
+
+  Future<String?> _getLocationId() async {
+    final response = await Api.getLocationsEnCoursByID(UserCredentials.uid!);
+    if (response.statusCode == 200) {
+      var jsonResponse = json.decode(response.body);
+      List<dynamic> list = jsonResponse.map((json) =>
+          LocationId.fromJson(json)).toList();
+      print(list);
+      if (list.isEmpty) {
+        print("list is empty");
+      }
+      else {
+        print("we're done");
+      }
+      return list.first.id;
+    }
   }
 }

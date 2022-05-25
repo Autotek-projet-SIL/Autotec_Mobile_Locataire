@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'package:autotec/models/location.dart' as prefix;
 import 'package:http/http.dart' as http;

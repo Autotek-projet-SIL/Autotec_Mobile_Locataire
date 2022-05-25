@@ -1,24 +1,33 @@
-// ignore_for_file: unnecessary_string_interpolations
-
 import 'package:flutter/material.dart';
 import '../components/WBack.dart';
 
+void main() {
+  runApp(MaterialApp(
+    home: FactureDetails(
+        nomLoc: "someone",
+        numeroChassis: "numeroChassis",
+        heureDebut: "heureDebut",
+        heureFin: " heureFin",
+        region: "region",
+        dateDebut: DateTime.now(),
+        idFacture: 1,
+        montant: 121323,
+        marque: " marque",
+        modele: " modele"),
+  ));
+}
 
 class FactureDetails extends StatefulWidget {
   final String nomLoc;
- final String numeroChassis;
- final String heureDebut;
- final String heureFin;
- final String region;
- final DateTime dateDebut;
- final int idFacture;
-//  DateTime dateFacture;
+  final String numeroChassis;
+  final String heureDebut;
+  final String heureFin;
+  final String region;
+  final DateTime dateDebut;
+  final int idFacture;
   final int montant;
-  // String heure;
   final String marque;
   final String modele;
-  //String couleur;
-  //String imageVehicule;
   const FactureDetails({
     Key? key,
     required this.nomLoc,
@@ -32,7 +41,6 @@ class FactureDetails extends StatefulWidget {
     required this.marque,
     required this.modele,
   }) : super(key: key);
-
 
   @override
   State<FactureDetails> createState() => _FactureDetailsState();
@@ -51,54 +59,94 @@ class _FactureDetailsState extends State<FactureDetails> {
               Row(
                 children: const [
                   WidgetArrowBack(),
-                  SizedBox(width: 10,),
+                  SizedBox(
+                    width: 10,
+                  ),
                   Text(
-                      "Details de la facture ",
-                  //  textAlign: TextAlign.center,
-                     style:TextStyle(fontWeight:FontWeight.bold,fontSize: 24,color: Color(0xff2E9FB0)),),
+                    "Details de la facture ",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                        color: Color(0xff2E9FB0)),
+                  ),
                 ],
               ),
-              SizedBox(height: size.height*0.03,),
+              SizedBox(
+                height: size.height * 0.03,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     widget.nomLoc.toUpperCase(),
                     textAlign: TextAlign.center,
-                    style:const TextStyle(fontSize: 22),),
-                  Image.asset("assets/logo.png",width: 120,)
+                    style: const TextStyle(fontSize: 22),
+                  ),
+                  Image.asset(
+                    "assets/logo.png",
+                    width: 120,
+                  )
                 ],
               ),
-              SizedBox(height: size.height*0.03,),
+              SizedBox(
+                height: size.height * 0.03,
+              ),
               const Text(
                 "Informations facture : ",
                 textAlign: TextAlign.center,
-                style:TextStyle(fontSize: 24, fontWeight: FontWeight.bold,color:Color(0xff2E9FB0),),),
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff2E9FB0),
+                ),
+              ),
               Padding(
-                padding: const EdgeInsets.only(top: 10,bottom: 10),
+                padding: const EdgeInsets.only(top: 10, bottom: 10),
                 child: Column(
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                      const Text(" N° : ", textAlign: TextAlign.center,style:TextStyle(fontSize: 19,fontWeight: FontWeight.bold)),
-                      Text("${widget.idFacture}", textAlign: TextAlign.center,style:const TextStyle(fontSize: 19)),
-                    ],),
-                    SizedBox(height: size.height*0.01,),
+                        const Text(" N° : ",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 19, fontWeight: FontWeight.bold)),
+                        Text("${widget.idFacture}",
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 19)),
+                      ],
+                    ),
+                    SizedBox(
+                      height: size.height * 0.01,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(" Date : ", textAlign: TextAlign.center,style:TextStyle(fontSize: 19,fontWeight: FontWeight.bold)),
-                        Text("${widget.dateDebut.day}-${widget.dateDebut.month}-${widget.dateDebut.year}", textAlign: TextAlign.center,style:const TextStyle(fontSize: 19)),
-                      ],),
-                    SizedBox(height: size.height*0.01,),
+                        const Text(" Date : ",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 19, fontWeight: FontWeight.bold)),
+                        Text(
+                            "${widget.dateDebut.day}-${widget.dateDebut.month}-${widget.dateDebut.year}",
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 19)),
+                      ],
+                    ),
+                    SizedBox(
+                      height: size.height * 0.01,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(" Heure : ", textAlign: TextAlign.center,style:TextStyle(fontSize: 19,fontWeight: FontWeight.bold)),
-                        Text("${widget.heureDebut}", textAlign: TextAlign.center,style:const TextStyle(fontSize: 19)),
-                      ],)
-
+                        const Text(" Heure : ",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 19, fontWeight: FontWeight.bold)),
+                        Text("${widget.heureDebut}",
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 19)),
+                      ],
+                    )
                   ],
                 ),
               ),
@@ -106,7 +154,7 @@ class _FactureDetailsState extends State<FactureDetails> {
                   margin: const EdgeInsets.only(top: 12),
                   padding: const EdgeInsets.all(5),
                   height: 55,
-                  width: size.width*0.7,
+                  width: size.width * 0.7,
                   decoration: const BoxDecoration(
                     color: Color(0xff9AD4E2),
                     borderRadius: BorderRadius.only(
@@ -114,24 +162,31 @@ class _FactureDetailsState extends State<FactureDetails> {
                       topLeft: Radius.circular(10),
                       bottomRight: Radius.circular(10),
                       topRight: Radius.circular(10),
-                    ),),
-                  child:
-                  Row(
+                    ),
+                  ),
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Text(
-                        "Prix Total :",
-                        textAlign: TextAlign.center,
-                        style:TextStyle(fontSize: 21,color: Color(0xff042A2B),fontWeight: FontWeight.bold)),
-                      const SizedBox(width: 5,),
+                      const Text("Prix Total :",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              fontSize: 21,
+                              color: Color(0xff042A2B),
+                              fontWeight: FontWeight.bold)),
+                      const SizedBox(
+                        width: 5,
+                      ),
                       Text(
                         "${widget.montant} DA",
                         textAlign: TextAlign.center,
-                        style:const TextStyle(fontSize: 24,color: Color(0xff042A2B)),)
+                        style: const TextStyle(
+                            fontSize: 24, color: Color(0xff042A2B)),
+                      )
                     ],
-                  )
+                  )),
+              SizedBox(
+                height: size.height * 0.03,
               ),
-              SizedBox(height: size.height*0.03,),
               const Divider(
                 thickness: 1,
                 indent: 18,
@@ -142,85 +197,65 @@ class _FactureDetailsState extends State<FactureDetails> {
               const Text(
                 "Informations trajet : ",
                 textAlign: TextAlign.center,
-                style:TextStyle(fontSize: 24, fontWeight: FontWeight.bold,color:Color(0xff2E9FB0),),
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff2E9FB0),
+                ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 10,bottom: 10),
+                padding: const EdgeInsets.only(top: 10, bottom: 10),
                 child: Column(
-                  children: [
-                   /* Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                  children: [                
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(" De : ", textAlign: TextAlign.center,style:TextStyle(fontSize: 19,fontWeight: FontWeight.bold)),
-                        Text(" ${widget.region}", textAlign: TextAlign.center,style:TextStyle(fontSize: 19)),
-                      ],),
-                    SizedBox(height: size.height*0.01,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(" à : ", textAlign: TextAlign.center,style:TextStyle(fontSize: 19,fontWeight: FontWeight.bold)),
-                        Text(" ${widget.region}", textAlign: TextAlign.center,style:TextStyle(fontSize: 19)),
-                      ],),
-                    SizedBox(height: size.height*0.01,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(" Date : ", textAlign: TextAlign.center,style:TextStyle(fontSize: 19,fontWeight: FontWeight.bold)),
-                        Text("${widget.dateDebut.day}-${widget.dateDebut.month}-${widget.dateDebut.year}", textAlign: TextAlign.center,style:TextStyle(fontSize: 19)),
-                      ],),
-                    SizedBox(height: size.height*0.01,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(" Heure depart : : ", textAlign: TextAlign.center,style:TextStyle(fontSize: 19,fontWeight: FontWeight.bold)),
-                        Text("${widget.heureDebut}", textAlign: TextAlign.center,style:TextStyle(fontSize: 19)),
-                      ],),
-                    SizedBox(height: size.height*0.01,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(" Heure arrivée : ", textAlign: TextAlign.center,style:TextStyle(fontSize: 19,fontWeight: FontWeight.bold)),
-                        Text("${widget.heureFin}", textAlign: TextAlign.center,style:TextStyle(fontSize: 19)),
-                      ],)*/
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                        children:[
-                          Image.asset('assets/a.png',width: 65,),
-                          // SizedBox(width: 10,),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const SizedBox(height: 10,),
-                              Text("${widget.dateDebut.day}-${widget.dateDebut.month}-${widget.dateDebut.year} ${widget.heureDebut}",
-                                textAlign: TextAlign.start,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'Poppins',
-                                  fontSize: 18,
-
-                                ),
-
-                              ),
-                              const SizedBox(height: 5,),
-                              Text("${widget.region}" ,style: const TextStyle(fontWeight: FontWeight.bold),),
-                              const SizedBox(height: 30,),
-                              Text("${widget.dateDebut.day}-${widget.dateDebut.month}-${widget.dateDebut.year} ${widget.heureFin}",
-                                textAlign: TextAlign.start,
-                                style: const TextStyle(
-                                  color: Colors.black,
-                                  fontFamily: 'Poppins',
-                                  fontSize: 18,
-
-                                ),),
-                              const SizedBox(height: 5,),
-                              Text("${widget.region}" ,style: const TextStyle(fontWeight: FontWeight.bold),),
-                            ],
-                          ),]
+                        const SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          "${widget.dateDebut.day}-${widget.dateDebut.month}-${widget.dateDebut.year} ${widget.heureDebut}",
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'Poppins',
+                            fontSize: 18,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "${widget.region}",
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        Text(
+                          "${widget.dateDebut.day}-${widget.dateDebut.month}-${widget.dateDebut.year} ${widget.heureFin}",
+                          textAlign: TextAlign.start,
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontFamily: 'Poppins',
+                            fontSize: 18,
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Text(
+                          "${widget.region}",
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-              SizedBox(height: size.height*0.03,),
+              SizedBox(
+                height: size.height * 0.03,
+              ),
               const Divider(
                 thickness: 1,
                 indent: 18,
@@ -231,29 +266,51 @@ class _FactureDetailsState extends State<FactureDetails> {
               const Text(
                 "Informations véhicule : ",
                 textAlign: TextAlign.center,
-                style:TextStyle(fontSize: 24, fontWeight: FontWeight.bold,color:Color(0xff2E9FB0),),
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xff2E9FB0),
+                ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 10,bottom: 10),
+                padding: const EdgeInsets.only(top: 10, bottom: 10),
                 child: Column(
                   children: [
                     Column(
                       children: [
-                        const Text(" Numero de chasis : ", textAlign: TextAlign.center,style:TextStyle(fontSize: 19,fontWeight: FontWeight.bold)),
-                        SizedBox(height: size.height*0.008,),
-                        Text("${widget.numeroChassis}", textAlign: TextAlign.center,style:const TextStyle(fontSize: 19)),
+                        const Text(" Numero de chasis : ",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 19, fontWeight: FontWeight.bold)),
+                        SizedBox(
+                          height: size.height * 0.008,
+                        ),
+                        Text("${widget.numeroChassis}",
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 19)),
                       ],
                     ),
-
-                    SizedBox(height: size.height*0.02,),
+                    SizedBox(
+                      height: size.height * 0.02,
+                    ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(" Type de vehicule : ", textAlign: TextAlign.center,style:TextStyle(fontSize: 19,fontWeight: FontWeight.bold)),
-                        SizedBox(height: size.height*0.008,),
-                        Text("${widget.marque} ${widget.modele}", textAlign: TextAlign.center,style:const TextStyle(fontSize: 19)),
-                      ],),
-                    SizedBox(height: size.height*0.03,),
+                        const Text(" Type de vehicule : ",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                fontSize: 19, fontWeight: FontWeight.bold)),
+                        SizedBox(
+                          height: size.height * 0.008,
+                        ),
+                        Text("${widget.marque} ${widget.modele}",
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 19)),
+                      ],
+                    ),
+                    SizedBox(
+                      height: size.height * 0.03,
+                    ),
                     const Divider(
                       thickness: 1,
                       indent: 10,
@@ -265,7 +322,6 @@ class _FactureDetailsState extends State<FactureDetails> {
                   ],
                 ),
               ),
-
             ],
           ),
         ),

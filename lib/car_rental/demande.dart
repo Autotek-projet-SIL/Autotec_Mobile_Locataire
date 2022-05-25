@@ -122,14 +122,14 @@ class _DemandeState extends State<Demande> {
                     print(response.statusCode);
                   }
                   else {
-                    print("location added");
+                 /*   print("location added");
                     //TODO get the current location id 
                     final response = await Api.getLocationsEnCoursByID(
                         UserCredentials.uid!);
                     String? id = await _getLocationId();
                     print( id);
                     print(response.statusCode);
-                    print(response.body);
+                    print(response.body);*/
                   }
                   Navigator.push(
                     context,

@@ -1,13 +1,14 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:autotec/car_rental/real_time_tracking2.dart';
+import 'package:autotec/models/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-
+import '../components/raised_button.dart';
 import '../models/location.dart';
+import '../payment/facture.dart';
 import '../payment/payment_method.dart';
-
 
 class Distance {
   static double distance = 0.0;
@@ -35,34 +36,45 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
   double distance = 0.0;
   int cpt = 0;
   Timer? timer;
-  
+
   @override
   void initState() {
+    super.initState();
     timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
       setState(() {
         distance = Distance.distance;
         cpt++;
         if (distance < 20) {
-         //TODO request post endLocation
-
-         Navigator.push(
+          //TODO request post endLocation
+          timer?.cancel();
+          Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => PaimentMethodeScreen(
-                location: widget.location,
+              builder: (context) =>
+                  //PaimentMethodeScreen(location: widget.location,),
+                  FactureDetails(
+                nomLoc: UserCredentials.uid!,
+                numeroChassis: widget.location.car!.numeroChasis,
+                heureDebut: "widget.location.heureDebut.toString()",
+                heureFin: "widget.location.heureFin.toString()",
+                region: widget.location.region!,
+                dateDebut: widget.location.dateDebut!,
+                idFacture: 1,
+                montant: 12345,
+                marque: widget.location.car!.marque,
+                modele: widget.location.car!.modele,
               ),
             ),
           );
         }
       });
     });
-    super.initState();
   }
 
   @override
   void dispose() {
-    timer!.cancel();
     super.dispose();
+    timer!.cancel();
   }
 
   @override
@@ -229,6 +241,38 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
                         color: Colors.black)),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(left: 30, right: 30),
+              child: CustomRaisedButton(
+                text: " passer le suivi",
+                color: const Color.fromRGBO(27, 146, 164, 0.7),
+                textColor: Colors.white,
+                press: () => {
+                  //TODO request post endLocation
+                  //TODO request send email
+                  //TODO requst get getemail
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          //PaimentMethodeScreen(location: widget.location,)
+                          FactureDetails(
+                        nomLoc: UserCredentials.uid!,
+                        numeroChassis: widget.location.car!.numeroChasis,
+                        heureDebut: widget.location.heureDebut.toString(),
+                        heureFin: widget.location.heureFin.toString(),
+                        region: widget.location.region!,
+                        dateDebut: widget.location.dateDebut!,
+                        idFacture: 1,
+                        montant: 12345,
+                        marque: widget.location.car!.marque,
+                        modele: widget.location.car!.modele,
+                      ),
+                    ),
+                  ),
+                },
+              ),
+            )
           ],
         ));
   }

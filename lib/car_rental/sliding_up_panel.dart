@@ -7,7 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 
-
 import '../payment/payment_method.dart';
 import 'deverrouillage.dart';
 
@@ -41,23 +40,23 @@ class _TrackingScreenState extends State<TrackingScreen> {
   void initState() {
     super.initState();
     timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
-      setState((){
+      setState(() {
         distance = Distance.distance;
         deverrouillage++;
-      /* final response = await Api.editLocationState("deverouillage","2");
+        /* final response = await Api.editLocationState("deverouillage","2");
         if (response.statusCode != 200) {
           throw Exception('status update failed');
         } else{
           print("status modifié avec succés");
         }*/
-          if (distance < 100) {
-                 //TODO request post endLocation
+        print( distance);
+        if (distance < 20 && deverrouillage >3) {
+          timer?.cancel();
+          //TODO request post endLocation
 
-                  //TODO request send email
-               
-             
-                  //TODO requst get getemail
+          //TODO request send email
 
+          //TODO requst get getemail
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -69,14 +68,12 @@ class _TrackingScreenState extends State<TrackingScreen> {
         }
       });
     });
-    
   }
 
- @override
+  @override
   void dispose() {
-     super.dispose();
+    super.dispose();
     timer!.cancel();
-   
   }
 
   @override
@@ -242,15 +239,15 @@ class _TrackingScreenState extends State<TrackingScreen> {
                   //TODO request post endLocation
 
                   //TODO request send email
-               
-             
+
                   //TODO requst get getemail
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => PaimentMethodeScreen(
-                              location: widget.location,
-                            )),
+                      builder: (context) =>
+                          //PaimentMethodeScreen(location: widget.location,)
+                          DeverrouillageScreen(location: widget.location),
+                    ),
                   )
                 },
               ),

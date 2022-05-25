@@ -48,8 +48,7 @@ class Api {
         "statut": "en attente",
         "date_inscription": formattedDateNow()
       }),
-    );
-  }
+    );}
 
   static Future<http.Response> getUser(String email) async {
     return http.get(
@@ -70,8 +69,7 @@ class Api {
     return false;
   }
 
-  static Future<http.Response> postLocation(String status,
-      CarLocation _location) async {
+  static Future<http.Response> postLocation(String status, CarLocation _location) async {
     return await http.post(
       Uri.parse(
           'https://autotek-server.herokuapp.com/gestionlocations/ajouter_location/'),
@@ -101,15 +99,15 @@ class Api {
     );
   }
 
-  static Future<http.Response> getLocationEnCoursByID(String id) async {
+  static Future<http.Response> getLocationsEnCoursByID(String id) async {
     print("get_locations_by_locataire");
+    print("https://autotek-server.herokuapp.com/get_locations_by_locataire/$id");
     return http.get(
-      Uri.parse("https://autotek-server.herokuapp.com/get_locations_by_locataire/$id"),
-    );
+      Uri.parse(
+          "https://autotek-server.herokuapp.com/get_locations_by_locataire/$id"),);
   }
 
-  static Future<http.Response> sendBaridiMobDetails(String code,
-      String token) async {
+  static Future<http.Response> sendBaridiMobDetails(String code, String token) async {
     return await http.post(
       Uri.parse(
           'https://autotek-server.herokuapp.com/paiement/verifier_paiement/'),
@@ -145,4 +143,5 @@ class Api {
       }),
     );
   }
+
 }

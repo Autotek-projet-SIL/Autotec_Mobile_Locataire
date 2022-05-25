@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../car_rental/Cars.dart';
 
-class CarLocation{
-
+class CarLocation {
   CarLocation._privateConstructor();
 
   // the info related to the location
@@ -16,7 +15,7 @@ class CarLocation{
   TimeOfDay? heureFin;
 
   bool? enCours; // si y a une location en cours ou non
-  String? etat;// none,
+  String? etat; // none,
   // en attente (suivi du vehicule avant deverrouillage),
   // deverrouillage
   // trajet (suivi du trajet)
@@ -36,7 +35,8 @@ class CarLocation{
 
   static final CarLocation _instance = CarLocation._privateConstructor();
 
-  factory CarLocation(){
+  factory CarLocation() {
     return _instance;
   }
 }
+

@@ -117,6 +117,7 @@ class _DemandeState extends State<Demande> {
                   }
                   else {
                     print("location added");
+                    print(response);
                   }
                   Navigator.push(
                     context,

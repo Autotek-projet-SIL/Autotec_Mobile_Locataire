@@ -238,8 +238,8 @@ class _TrackingScreenState extends State<TrackingScreen> {
                 color: const Color.fromRGBO(27, 146, 164, 0.7),
                 textColor: Colors.white,
                 press: () => {
-                  print(widget.location.id),
-                  Api.updateLocationState("deverrouillage", widget.location.id!),
+                  print(widget.location.id_location),
+                  Api.updateLocationState("deverrouillage", widget.location.id_location!),
 
                   //TODO request post endLocation
 

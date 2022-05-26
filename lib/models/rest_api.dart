@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:autotec/factures/models/location.dart';
 import 'package:autotec/models/location.dart' as prefix;
+import 'package:autotec/payment/PaymentId.dart';
 import 'package:http/http.dart' as http;
 import 'location.dart';
 import 'user_data.dart';
@@ -20,7 +21,7 @@ class Api {
     return formattedDate; // 2016-01-25
   }
 
-  static String formattedhourNow() {
+  static String formattedhoureNow() {
     var now = DateTime.now();
     var formatter = DateFormat("HH:mm:ss");
     String formattedHour = formatter.format(now);
@@ -51,7 +52,8 @@ class Api {
         "statut": "en attente",
         "date_inscription": formattedDateNow()
       }),
-    );}
+    );
+  }
 
   static Future<http.Response> getUser(String email) async {
     return http.get(
@@ -87,43 +89,130 @@ class Api {
         'status_demande_location': status,
         'id_locataire': UserCredentials.uid!,
         'region': _location.region!,
-        'numero_chassis': _location.car!.numeroChasis, //TODO notice them that it can be null in case demande rejetee
-        'en_cours': "t", // t or f
+        'numero_chassis': _location.car!.numeroChasis,
+        //TODO notice them that it can be null in case demande rejetee
+        'en_cours': "t",
+        // t or f
         'latitude_depart': _location.latitude_depart!.toString(),
         'longitude_depart': _location.longitude_depart!.toString(),
         'latitude_arrive': _location.latitude_arrive!.toString(),
         'longitude_arrive': _location.longitude_arrive!.toString()
       }),
     );
-    if (response.statusCode == 200){
-      CarLocation locationId = CarLocation.fromJson(jsonDecode(response.body)[0]) ;
-      print(locationId.id);
-      return locationId.id;
+    if (response.statusCode == 200) {
+      CarLocation locationId = CarLocation.fromJson(
+          jsonDecode(response.body)[0]);
+      print(locationId.id_location);
+      return locationId.id_location;
     }
-
   }
 
-  static Future<http.Response> updateLocationState(String etat, int id_location) async {
+  static Future<http.Response> updateLocationState(String etat,
+      int id_location) async {
     UserCredentials.refresh();
     final http.Response response = await http.put(
-      Uri.parse('https://autotek-server.herokuapp.com/gestionlocations/update_suivi_location/$id_location'),
+      Uri.parse(
+          'https://autotek-server.herokuapp.com/gestionlocations/update_suivi_location/$id_location'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(<String, String> {
-        "suivi_location":etat,
+      body: jsonEncode(<String, String>{
+        "suivi_location": etat,
         "token": UserCredentials.token!,
         "id_sender": UserCredentials.uid!,
       }),
     );
-    if(response.statusCode == 200){
+    if (response.statusCode == 200) {
       print("status changed to {$etat}");
     }
-    else{
+    else {
       print(response.statusCode);
     }
     return response;
   }
+
+  static Future<http.Response> updateLocationHeureDebut(int id_location) async {
+    UserCredentials.refresh();
+    final http.Response response = await http.put(
+      Uri.parse(
+          'https://autotek-server.herokuapp.com/gestionlocations/update_location_heure_debut/$id_location'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        "heure": formattedhoureNow(),
+        "token": UserCredentials.token!,
+        "id_sender": UserCredentials.uid!,
+      }),
+    );
+    if (response.statusCode == 200) {
+      print("heure debut fixed");
+    }
+    else {
+      print(response.statusCode);
+    }
+    return response;
+  }
+
+  static Future<int?> verifierPaiement(String type_paiement, String email,
+      String montant, String type_card, String numero_card, String month,
+      String year, String cvc) async {
+    final response = await http.post(
+      Uri.parse(
+          'https://autotek-server.herokuapp.com/paiement/verifier_paiement/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        "id_sender": UserCredentials.uid!,
+        "token": UserCredentials.token!,
+        "id": UserCredentials.uid!,
+        "type_paiement": type_paiement,
+        "heure_paiement": formattedhoureNow(),
+        "date_paiement": formattedDateNow(),
+        "id_transaction": "",
+        "email": email,
+        "montant": montant,
+        "name": type_card,
+        "numero_card": numero_card,
+        "exp_month": month,
+        "exp_year": year,
+        "cvc": cvc
+      }),
+    );
+    if (response.statusCode == 200) {
+      PaymentId paymentId = PaymentId.fromJson(
+          jsonDecode(response.body)[0]);
+      print(paymentId.id_payment);
+      return paymentId.id_payment;
+    }
+    else {
+      print(response.statusCode);
+    }
+  }
+
+  static Future<http.Response> endLocation(CarLocation _location) async {
+    String id_location = _location.id_location.toString();
+    return await http.put(
+      Uri.parse(
+          'https://autotek-server.herokuapp.com/gestionlocations/end_location/$id_location'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        "id_sender": UserCredentials.uid!,
+        "token": UserCredentials.token!,
+        "heure": formattedhoureNow(),
+        "numero_chassis": _location.car!.numeroChasis,
+        "date_facture": formattedDateNow(),
+        "montant": _location.montant.toString(),
+        "tva": 17.toString(),
+        "id_louer": _location.id_location.toString(),
+        "id_payer": _location.id_paiement.toString()
+      }),
+    );
+  }
+
 
   static Future<http.Response> getLocations() async {
     return http.get(
@@ -132,13 +221,15 @@ class Api {
   }
 
   static Future<http.Response> getLocationsEnCoursByID(String id) async {
-    print("https://autotek-server.herokuapp.com/get_locations_by_locataire/$id");
+    print(
+        "https://autotek-server.herokuapp.com/get_locations_by_locataire/$id");
     return http.get(
       Uri.parse(
           "https://autotek-server.herokuapp.com/get_locations_by_locataire/$id"),);
   }
 
-  static Future<http.Response> sendBaridiMobDetails(String code, String token) async {
+  static Future<http.Response> sendBaridiMobDetails(String code,
+      String token) async {
     return await http.post(
       Uri.parse(
           'https://autotek-server.herokuapp.com/paiement/verifier_paiement/'),
@@ -151,7 +242,7 @@ class Api {
         "id": UserCredentials.uid!,
         "id_facture": "1",
         "type_paiement": "baridimob",
-        "heure_paiement": formattedhourNow(),
+        "heure_paiement": formattedhoureNow(),
         "date_paiement": formattedDateNow(),
         "montant": "10000.0",
         "codetransaction": code,
@@ -159,20 +250,4 @@ class Api {
       }),
     );
   }
-
-  static Future<http.Response> endLocation(
-      String code, String token, String id) async {
-    return await http.put(
-      Uri.parse(
-          'https://autotek-server.herokuapp.com/gestionlocations/end_location/' +
-              id),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, String>{
-        "heure": formattedhourNow(),
-      }),
-    );
-  }
-
 }

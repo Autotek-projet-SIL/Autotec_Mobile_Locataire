@@ -9,10 +9,13 @@ class CarLocation {
   CarLocation._privateConstructor();
 
   // the info related to the location
-  int? id;
+  int? id_location;
+  int? id_paiement;
   DateTime? dateDebut;
   TimeOfDay? heureDebut;
   TimeOfDay? heureFin;
+
+  int? montant;
 
   bool? enCours; // si y a une location en cours ou non
   String? etat; // none,
@@ -22,7 +25,6 @@ class CarLocation {
   // payement
   String? region;
   String? numero_chassis;
-
   String? point_depart;
   double? latitude_depart;
   double? longitude_depart;
@@ -38,12 +40,12 @@ class CarLocation {
   factory CarLocation() {
     return _instance;
   }
-  CarLocation.a({id})
+  CarLocation.a({id_location})
   {
-    this.id = id;
+    this.id_location = id_location;
   }
   factory CarLocation.fromJson(Map<String, dynamic> json) => CarLocation.a(
-      id : json["id_louer"]
+      id_location : json["id_louer"]
   );
 }
 

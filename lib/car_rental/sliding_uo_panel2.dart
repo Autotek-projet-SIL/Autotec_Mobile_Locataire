@@ -46,7 +46,7 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
         distance = Distance.distance;
         cpt++;
         if (distance < 20) {
-          Api.updateLocationState("paiement", widget.location.id!);
+          Api.updateLocationState("paiement", widget.location.id_location!);
           timer?.cancel();
           Navigator.push(
             context,

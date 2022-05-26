@@ -10,6 +10,8 @@ import 'package:path/path.dart';
 
 import '../components/raised_button.dart';
 import '../models/rest_api.dart';
+import '../models/rest_api.dart';
+import '../models/rest_api.dart';
 
 class DeverrouillageScreen extends StatefulWidget {
   final CarLocation location;
@@ -116,15 +118,15 @@ class _DeverrouillageScreenState extends State<DeverrouillageScreen> {
               .collection('CarLocation')
               .doc(widget.location.car!.numeroChasis)
               .set(data, SetOptions(merge: true));
-          Api.updateLocationState("trajet", widget.location.id!);
+          Api.updateLocationHeureDebut(widget.location.id_location!);
+          Api.updateLocationState("trajet", widget.location.id_location!);
           Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => TrackingScreen2(
                   destinationLocation: LatLng(
                       widget.location.latitude_arrive!,
-                      widget.location
-                          .longitude_arrive!), // LatLng(123123123, 1231231),
+                      widget.location.longitude_arrive!), // LatLng(123123123, 1231231),
                   carid: widget.location.car!.numeroChasis,
                   location: widget.location),
             ),

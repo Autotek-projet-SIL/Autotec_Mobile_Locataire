@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:autotec/car_rental/sliding_up_panel.dart';
 import 'package:autotec/models/location.dart';
 import 'package:autotec/models/user_data.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../components/WraisedButton.dart';
 import 'package:flutter/material.dart';
@@ -118,7 +119,7 @@ class _DemandeState extends State<Demande> {
                   print(_location.car!.numeroChasis);
                   final response = await Api.postLocation(
                       "en attente", _location);
-                  _location.id = response;
+                  _location.id_location = response;
                   print(response.toString());
                   Navigator.push(
                     context,

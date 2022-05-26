@@ -126,8 +126,8 @@ class CarListView extends StatelessWidget{
       return list;
     } else if (response.statusCode == 403) {
       throw Exception('access forbiden');
-    }else{
-
+    }
+    else{
       throw Exception('Failed to load Cars from API');
     }
   }

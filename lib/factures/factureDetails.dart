@@ -1,7 +1,6 @@
 
 // ignore_for_file: prefer_const_constructors
 
-
 import 'package:flutter/material.dart';
 
 import '../components/WBack.dart';
@@ -241,7 +240,7 @@ class _FactureDetailsState extends State<FactureDetails> {
                 child: Column(
                   children: [
                     Column(
-                      children: [                     
+                      children: [                        
                         Text(" Numero de chasis : ", textAlign: TextAlign.center,style:TextStyle(fontSize: 19,fontWeight: FontWeight.bold)),
                         SizedBox(height: size.height*0.008,),
                         Text(widget.numeroChassis, textAlign: TextAlign.center,style:TextStyle(fontSize: 19)),

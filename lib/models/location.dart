@@ -38,5 +38,12 @@ class CarLocation {
   factory CarLocation() {
     return _instance;
   }
+  CarLocation.a({id})
+  {
+    this.id = id;
+  }
+  factory CarLocation.fromJson(Map<String, dynamic> json) => CarLocation.a(
+      id : json["id_louer"]
+  );
 }
 

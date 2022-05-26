@@ -1,12 +1,15 @@
 import 'dart:async';
 import 'dart:ui';
 import 'package:autotec/car_rental/real_time_tracking2.dart';
+import 'package:autotec/models/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-
+import '../components/raised_button.dart';
 import '../models/location.dart';
-
+import '../models/rest_api.dart';
+import '../payment/facture.dart';
+import '../payment/payment_method.dart';
 
 class Distance {
   static double distance = 0.0;
@@ -19,9 +22,9 @@ class TrackingScreen2 extends StatefulWidget {
   final CarLocation location;
   const TrackingScreen2(
       {Key? key,
-      required this.destinationLocation,
-      required this.carid,
-      required this.location})
+        required this.destinationLocation,
+        required this.carid,
+        required this.location})
       : super(key: key);
 
   @override
@@ -34,27 +37,45 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
   double distance = 0.0;
   int cpt = 0;
   Timer? timer;
+
   @override
   void initState() {
-    timer = Timer.periodic(const Duration(seconds: 10), (Timer t) {
+    super.initState();
+    timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
       setState(() {
         distance = Distance.distance;
         cpt++;
-      if (distance < 20) {
-        //TODO change the state to payment
-        //call end location and give it time 
-        //calcule de la facture 
-        //TODO get la facture 
-      }       
+        if (distance < 20) {
+          Api.updateLocationState("paiement", widget.location.id!);
+          timer?.cancel();
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) =>
+              //PaimentMethodeScreen(location: widget.location,),
+              FactureDetails(
+                nomLoc: UserCredentials.uid!,
+                numeroChassis: widget.location.car!.numeroChasis,
+                heureDebut: "widget.location.heureDebut.toString()",
+                heureFin: "widget.location.heureFin.toString()",
+                region: widget.location.region!,
+                dateDebut: widget.location.dateDebut!,
+                idFacture: 1,
+                montant: 12345,
+                marque: widget.location.car!.marque,
+                modele: widget.location.car!.modele,
+              ),
+            ),
+          );
+        }
       });
     });
-    super.initState();
   }
 
   @override
   void dispose() {
-    timer!.cancel();
     super.dispose();
+    timer!.cancel();
   }
 
   @override
@@ -74,7 +95,7 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
                   widget.location.longitude_arrive!),
               carId: widget.location.car!.numeroChasis,
               userId:
-                  "USER", // we use it to get the car's location from firebase
+              "USER", // we use it to get the car's location from firebase
 
               //LatLng(36.713819, 3.174251), // client location , it's fixed at first
             ),
@@ -136,7 +157,7 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
                   decoration: BoxDecoration(
                       color: Colors.grey[300],
                       borderRadius:
-                          const BorderRadius.all(Radius.circular(12.0))),
+                      const BorderRadius.all(Radius.circular(12.0))),
                 ),
               ],
             ),
@@ -165,15 +186,15 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
                 title: Text(
                     ((Distance.distance / 80) > 1)
                         ? (Distance.distance ~/ 80).toStringAsFixed(0) +
-                            "h" +
-                            " " +
-                            (((Distance.distance / 80) -
-                                        (Distance.distance ~/ 80)) *
-                                    60)
-                                .toStringAsFixed(0) +
-                            " min restantes"
+                        "h" +
+                        " " +
+                        (((Distance.distance / 80) -
+                            (Distance.distance ~/ 80)) *
+                            60)
+                            .toStringAsFixed(0) +
+                        " min restantes"
                         : (Distance.distance * 60 ~/ 80).toStringAsFixed(0) +
-                            " minutes restantes",
+                        " minutes restantes",
                     style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -221,6 +242,38 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
                         color: Colors.black)),
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(left: 30, right: 30),
+              child: CustomRaisedButton(
+                text: "Passer le suivi",
+                color: const Color.fromRGBO(27, 146, 164, 0.7),
+                textColor: Colors.white,
+                press: () => {
+                  //TODO request post endLocation
+                  //TODO request send email
+                  //TODO requst get getemail
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                      //PaimentMethodeScreen(location: widget.location,)
+                      FactureDetails(
+                        nomLoc: UserCredentials.uid!,
+                        numeroChassis: widget.location.car!.numeroChasis,
+                        heureDebut: widget.location.heureDebut.toString(),
+                        heureFin: widget.location.heureFin.toString(),
+                        region: widget.location.region!,
+                        dateDebut: widget.location.dateDebut!,
+                        idFacture: 1,
+                        montant: 12345,
+                        marque: widget.location.car!.marque,
+                        modele: widget.location.car!.modele,
+                      ),
+                    ),
+                  ),
+                },
+              ),
+            )
           ],
         ));
   }

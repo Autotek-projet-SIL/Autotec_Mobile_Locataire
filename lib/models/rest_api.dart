@@ -1,4 +1,7 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
+import 'package:autotec/factures/models/location.dart';
 import 'package:autotec/models/location.dart' as prefix;
 import 'package:http/http.dart' as http;
 import 'location.dart';
@@ -69,8 +72,9 @@ class Api {
     return false;
   }
 
-  static Future<http.Response> postLocation(String status, CarLocation _location) async {
-    return await http.post(
+
+  static Future<int?> postLocation(String status, CarLocation _location) async {
+    final response = await http.post(
       Uri.parse(
           'https://autotek-server.herokuapp.com/gestionlocations/ajouter_location/'),
       headers: <String, String>{
@@ -91,6 +95,34 @@ class Api {
         'longitude_arrive': _location.longitude_arrive!.toString()
       }),
     );
+    if (response.statusCode == 200){
+      CarLocation locationId = CarLocation.fromJson(jsonDecode(response.body)[0]) ;
+      print(locationId.id);
+      return locationId.id;
+    }
+
+  }
+
+  static Future<http.Response> updateLocationState(String etat, int id_location) async {
+    UserCredentials.refresh();
+    final http.Response response = await http.put(
+      Uri.parse('https://autotek-server.herokuapp.com/gestionlocations/update_suivi_location/$id_location'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String> {
+        "suivi_location":etat,
+        "token": UserCredentials.token!,
+        "id_sender": UserCredentials.uid!,
+      }),
+    );
+    if(response.statusCode == 200){
+      print("status changed to {$etat}");
+    }
+    else{
+      print(response.statusCode);
+    }
+    return response;
   }
 
   static Future<http.Response> getLocations() async {
@@ -100,7 +132,6 @@ class Api {
   }
 
   static Future<http.Response> getLocationsEnCoursByID(String id) async {
-    print("get_locations_by_locataire");
     print("https://autotek-server.herokuapp.com/get_locations_by_locataire/$id");
     return http.get(
       Uri.parse(
@@ -129,8 +160,8 @@ class Api {
     );
   }
 
-  static Future<http.Response> endLocation(String code, String token,
-      String id) async {
+  static Future<http.Response> endLocation(
+      String code, String token, String id) async {
     return await http.put(
       Uri.parse(
           'https://autotek-server.herokuapp.com/gestionlocations/end_location/' +

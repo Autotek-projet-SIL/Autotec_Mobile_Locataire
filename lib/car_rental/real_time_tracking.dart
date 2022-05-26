@@ -16,8 +16,8 @@ import './sliding_up_panel.dart';
 2 - the distance                             done
 6 - localization pin informations on click   done
 3 - the remaining time                       done
-8 - data from firebase ( 1st track)
-9 - data from firebase ( 2nd track)
+8 - data from firebase ( 1st track)          done
+9 - data from firebase ( 2nd track)          done
  */
 
 class MyMap extends StatefulWidget {
@@ -74,7 +74,7 @@ class _MyMapState extends State<MyMap> {
           }
           return GoogleMap(
             mapType: MapType.normal,
-            myLocationEnabled: true,
+            myLocationEnabled: false,
             compassEnabled: true,
             tiltGesturesEnabled: false,
             markers: {

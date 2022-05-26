@@ -5,12 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../components/raised_button.dart';
 import '../models/location.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
 
-  runApp(PaimentMethodeScreen( location: CarLocation()));
-}
 
 // ignore: must_be_immutable
 class PaimentMethodeScreen extends StatelessWidget {
@@ -19,7 +14,7 @@ class PaimentMethodeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(home: Body());
+    return const MaterialApp(debugShowCheckedModeBanner: false, home: Body());
   }
 }
 

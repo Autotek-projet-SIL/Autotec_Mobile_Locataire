@@ -1,15 +1,16 @@
 import 'dart:async';
 import 'dart:ui';
-import 'package:autotec/car_rental/deverrouillage.dart';
 import 'package:autotec/car_rental/real_time_tracking.dart';
 import 'package:autotec/components/raised_button.dart';
 import 'package:autotec/models/location.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import "package:autotec/models/rest_api.dart";
+import '../models/rest_api.dart';
 
+import '../models/user_data.dart';
 import '../payment/payment_method.dart';
+import 'deverrouillage.dart';
 
 class Distance {
   static double distance = 0.0;
@@ -22,9 +23,9 @@ class TrackingScreen extends StatefulWidget {
   final String carid;
   const TrackingScreen(
       {Key? key,
-      required this.destinationLocation,
-      required this.carid,
-      required this.location})
+        required this.destinationLocation,
+        required this.carid,
+        required this.location})
       : super(key: key);
 
   @override
@@ -39,19 +40,25 @@ class _TrackingScreenState extends State<TrackingScreen> {
   Timer? timer;
   @override
   void initState() {
+    super.initState();
     timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
-      setState(() async {
+      setState(() {
         distance = Distance.distance;
         deverrouillage++;
-        /*final response = await Api.editLocationState("deverouillage","2");
+        /* final response = await Api.editLocationState("deverouillage","2");
         if (response.statusCode != 200) {
           throw Exception('status update failed');
         } else{
           print("status modifié avec succés");
         }*/
+        print( distance);
+        if (distance < 20 && deverrouillage >3) {
+          timer?.cancel();
+          //TODO request post endLocation
 
-      if (distance < 100) {    
-        //TODO update la location stat to deverrouillage
+          //TODO request send email
+
+          //TODO requst get getemail
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -61,26 +68,14 @@ class _TrackingScreenState extends State<TrackingScreen> {
             ),
           );
         }
-        
-        /* if (deverrouillage == 20) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DeverrouillageScreen(
-                location: widget.location,
-              ),
-            ),
-          );
-        }*/
       });
     });
-    super.initState();
   }
 
   @override
   void dispose() {
-    timer!.cancel();
     super.dispose();
+    timer!.cancel();
   }
 
   @override
@@ -98,7 +93,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
             body: MyMap(
               carId: widget.carid, // "0267712213",
               userId:
-                  "USER", // we use it to get the car's location from firebase
+              "USER", // we use it to get the car's location from firebase
               destinationLocation: widget.destinationLocation,
               //LatLng(36.713819, 3.174251), // client location , it's fixed at first
               location: widget.location,
@@ -161,7 +156,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                   decoration: BoxDecoration(
                       color: Colors.grey[300],
                       borderRadius:
-                          const BorderRadius.all(Radius.circular(12.0))),
+                      const BorderRadius.all(Radius.circular(12.0))),
                 ),
               ],
             ),
@@ -190,15 +185,15 @@ class _TrackingScreenState extends State<TrackingScreen> {
                 title: Text(
                     ((Distance.distance / 80) > 1)
                         ? (Distance.distance ~/ 80).toStringAsFixed(0) +
-                            "h" +
-                            " " +
-                            (((Distance.distance / 80) -
-                                        (Distance.distance ~/ 80)) *
-                                    60)
-                                .toStringAsFixed(0) +
-                            " min restantes"
+                        "h" +
+                        " " +
+                        (((Distance.distance / 80) -
+                            (Distance.distance ~/ 80)) *
+                            60)
+                            .toStringAsFixed(0) +
+                        " min restantes"
                         : (Distance.distance * 60 ~/ 80).toStringAsFixed(0) +
-                            " minutes restantes",
+                        " minutes restantes",
                     style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -227,7 +222,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                 leading: const Icon(Icons.directions_car,
                     color: Color.fromRGBO(27, 146, 164, 0.7)),
                 title: Text(
-                    //"909-163-09",
+                  //"909-163-09",
                     widget.location.car!.numeroChasis,
                     style: const TextStyle(
                         fontSize: 17,
@@ -243,18 +238,20 @@ class _TrackingScreenState extends State<TrackingScreen> {
                 color: const Color.fromRGBO(27, 146, 164, 0.7),
                 textColor: Colors.white,
                 press: () => {
+                  print(widget.location.id),
+                  Api.updateLocationState("deverrouillage", widget.location.id!),
+
                   //TODO request post endLocation
 
                   //TODO request send email
-               
-             
+
                   //TODO requst get getemail
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => PaimentMethodeScreen(
-                              location: widget.location,
-                            )),
+                      builder: (context) =>
+                      DeverrouillageScreen(location: widget.location),
+                    ),
                   )
                 },
               ),

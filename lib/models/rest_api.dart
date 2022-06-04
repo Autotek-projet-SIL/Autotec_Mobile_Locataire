@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
-import 'package:autotec/factures/models/location.dart';
 import 'package:autotec/models/location.dart' as prefix;
 import 'package:autotec/payment/PaymentId.dart';
 import 'package:http/http.dart' as http;
@@ -107,8 +106,7 @@ class Api {
     }
   }
 
-  static Future<http.Response> updateLocationState(String etat,
-      int id_location) async {
+  static Future<http.Response> updateLocationState(String etat, int id_location) async {
     UserCredentials.refresh();
     final http.Response response = await http.put(
       Uri.parse(
@@ -193,7 +191,7 @@ class Api {
 
   static Future<http.Response> endLocation(CarLocation _location) async {
     String id_location = _location.id_location.toString();
-    return await http.put(
+    final response = await http.put(
       Uri.parse(
           'https://autotek-server.herokuapp.com/gestionlocations/end_location/$id_location'),
       headers: <String, String>{
@@ -211,21 +209,24 @@ class Api {
         "id_payer": _location.id_paiement.toString()
       }),
     );
+    if(response.statusCode == 200){
+      print("end location is workinf");
+    }
+    return response;
   }
 
-
-  static Future<http.Response> getLocations() async {
-    return http.get(
-      Uri.parse(_url + "locations_encours"),
-    );
-  }
-
-  static Future<http.Response> getLocationsEnCoursByID(String id) async {
-    print(
-        "https://autotek-server.herokuapp.com/get_locations_by_locataire/$id");
-    return http.get(
+  static Future<http.Response> getLocationsEnCoursByID(int id_locataire) async {
+    id_locataire = UserCredentials.uid as int;
+    final response = await http.get(
       Uri.parse(
-          "https://autotek-server.herokuapp.com/get_locations_by_locataire/$id"),);
+          "https://autotek-server.herokuapp.com/getlocations/get_locations_by_locataire/$id_locataire"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        "id_sender": UserCredentials.uid!,
+        "token": UserCredentials.token!,
+      },
+    );
+    return response;
   }
 
   static Future<http.Response> sendBaridiMobDetails(String code,

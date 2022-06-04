@@ -14,6 +14,8 @@ import 'package:autotec/repositories/auth_repository.dart';
 import 'package:autotec/car_rental/home_page.dart';
 import 'package:autotec/Authentication/first_screens/home.dart';
 import 'package:autotec/models/user_data.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:month_year_picker/month_year_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 var userCred;
@@ -84,6 +86,11 @@ class MyApp extends StatelessWidget {
                   return const Home();
                 }
               }),
+          localizationsDelegates: [
+            GlobalWidgetsLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            MonthYearPickerLocalizations.delegate,
+          ],
         ),
       ),
     );

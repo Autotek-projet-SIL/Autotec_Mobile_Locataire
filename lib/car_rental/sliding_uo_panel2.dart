@@ -41,32 +41,17 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
   @override
   void initState() {
     super.initState();
-    timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+    Api.updateLocationHeureDebut(widget.location.id_location!);
+    widget.location.dateDebut = Api.formattedDateNow() ;
+    widget.location.heureDebut = Api.formattedhoureNow();
+    Api.updateLocationState("trajet", widget.location.id_location!);
+    timer = Timer.periodic(const Duration(seconds: 15), (Timer t) {
       setState(() {
         distance = Distance.distance;
         cpt++;
         if (distance < 20) {
           Api.updateLocationState("paiement", widget.location.id_location!);
           timer?.cancel();
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) =>
-              //PaimentMethodeScreen(location: widget.location,),
-              FactureDetails(
-                nomLoc: UserCredentials.uid!,
-                numeroChassis: widget.location.car!.numeroChasis,
-                heureDebut: "widget.location.heureDebut.toString()",
-                heureFin: "widget.location.heureFin.toString()",
-                region: widget.location.region!,
-                dateDebut: widget.location.dateDebut!,
-                idFacture: 1,
-                montant: 12345,
-                marque: widget.location.car!.marque,
-                modele: widget.location.car!.modele,
-              ),
-            ),
-          );
         }
       });
     });
@@ -256,13 +241,14 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                      //PaimentMethodeScreen(location: widget.location,)
-                      FactureDetails(
+                      Facture(
+                        location: widget.location,
                         nomLoc: UserCredentials.uid!,
                         numeroChassis: widget.location.car!.numeroChasis,
                         heureDebut: widget.location.heureDebut.toString(),
                         heureFin: widget.location.heureFin.toString(),
-                        region: widget.location.region!,
+                        pointDepart: widget.location.point_depart.toString(),
+                        pointArrive: widget.location.point_arrive.toString(),
                         dateDebut: widget.location.dateDebut!,
                         idFacture: 1,
                         montant: 12345,

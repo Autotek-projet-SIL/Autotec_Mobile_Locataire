@@ -22,7 +22,6 @@ class Demande extends StatefulWidget {
 
 class _DemandeState extends State<Demande> {
   CarLocation _location = CarLocation();
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery
@@ -117,8 +116,7 @@ class _DemandeState extends State<Demande> {
                   //TODO post method with the location info
                   print("numero de chasis");
                   print(_location.car!.numeroChasis);
-                  final response = await Api.postLocation(
-                      "en attente", _location);
+                  final response = await Api.postLocation("en attente", _location);
                   _location.id_location = response;
                   print(response.toString());
                   Navigator.push(

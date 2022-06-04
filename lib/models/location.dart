@@ -11,9 +11,9 @@ class CarLocation {
   // the info related to the location
   int? id_location;
   int? id_paiement;
-  DateTime? dateDebut;
-  TimeOfDay? heureDebut;
-  TimeOfDay? heureFin;
+  String? dateDebut;
+  String? heureDebut;
+  String? heureFin;
 
   int? montant;
 

@@ -81,18 +81,6 @@ class _DeverrouillageScreenState extends State<DeverrouillageScreen> {
                         //TODO ecouter le champ deverrouiller jusqua qu'il devient a vrai than push the new screen 
                         //TODO change the state to trajet 
                         //TODO in the end of this we get the starting time of the rental
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => TrackingScreen2(
-                                destinationLocation: LatLng(
-                                    widget.location.latitude_arrive!,
-                                    widget.location
-                                        .longitude_arrive!), // LatLng(123123123, 1231231),
-                                carid: "carid",
-                                location : widget.location),
-                          ),
-                        ),
                         //TODO keep listening to the car's deverrouillage value in firebase when it's true set the car's locatair id to the user cridentials .uid
                        listenDeverrouiallage(context),
                       })),
@@ -114,12 +102,7 @@ class _DeverrouillageScreenState extends State<DeverrouillageScreen> {
           //TODO  set uid a user cridentials.uid
           await UserCredentials.refresh();
           final data = {'locataire_uid': UserCredentials.uid};
-          db
-              .collection('CarLocation')
-              .doc(widget.location.car!.numeroChasis)
-              .set(data, SetOptions(merge: true));
-          Api.updateLocationHeureDebut(widget.location.id_location!);
-          Api.updateLocationState("trajet", widget.location.id_location!);
+          db.collection('CarLocation').doc(widget.location.car!.numeroChasis).set(data, SetOptions(merge: true));
           Navigator.push(
             context,
             MaterialPageRoute(

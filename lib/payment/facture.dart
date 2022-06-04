@@ -1,40 +1,32 @@
+import 'package:autotec/payment/paiement_stripe/paiement_stripe.dart';
 import 'package:flutter/material.dart';
 import '../components/WBack.dart';
+import '../components/WraisedButton.dart';
+import '../models/location.dart';
 
-void main() {
-  runApp(MaterialApp(
-    home: FactureDetails(
-        nomLoc: "someone",
-        numeroChassis: "numeroChassis",
-        heureDebut: "heureDebut",
-        heureFin: " heureFin",
-        region: "region",
-        dateDebut: DateTime.now(),
-        idFacture: 1,
-        montant: 121323,
-        marque: " marque",
-        modele: " modele"),
-  ));
-}
-
-class FactureDetails extends StatefulWidget {
+class Facture extends StatefulWidget {
+  final CarLocation location;
   final String nomLoc;
   final String numeroChassis;
   final String heureDebut;
   final String heureFin;
-  final String region;
-  final DateTime dateDebut;
+  final String pointDepart;
+  final String pointArrive;
+  final String dateDebut;
   final int idFacture;
   final int montant;
   final String marque;
   final String modele;
-  const FactureDetails({
+
+  const Facture({
     Key? key,
+    required this.location,
     required this.nomLoc,
     required this.numeroChassis,
     required this.heureDebut,
     required this.heureFin,
-    required this.region,
+    required this.pointDepart,
+    required this.pointArrive,
     required this.dateDebut,
     required this.idFacture,
     required this.montant,
@@ -43,10 +35,10 @@ class FactureDetails extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<FactureDetails> createState() => _FactureDetailsState();
+  State<Facture> createState() => _FactureDetailsState();
 }
 
-class _FactureDetailsState extends State<FactureDetails> {
+class _FactureDetailsState extends State<Facture> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -92,7 +84,7 @@ class _FactureDetailsState extends State<FactureDetails> {
                 height: size.height * 0.03,
               ),
               const Text(
-                "Informations facture : ",
+                "Informations facture: ",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 24,
@@ -107,7 +99,7 @@ class _FactureDetailsState extends State<FactureDetails> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(" N° : ",
+                        const Text(" N°: ",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 19, fontWeight: FontWeight.bold)),
@@ -126,8 +118,7 @@ class _FactureDetailsState extends State<FactureDetails> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 19, fontWeight: FontWeight.bold)),
-                        Text(
-                            "${widget.dateDebut.day}-${widget.dateDebut.month}-${widget.dateDebut.year}",
+                        Text("${widget.dateDebut}",
                             textAlign: TextAlign.center,
                             style: const TextStyle(fontSize: 19)),
                       ],
@@ -206,7 +197,7 @@ class _FactureDetailsState extends State<FactureDetails> {
               Padding(
                 padding: const EdgeInsets.only(top: 10, bottom: 10),
                 child: Column(
-                  children: [                
+                  children: [
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -214,7 +205,7 @@ class _FactureDetailsState extends State<FactureDetails> {
                           height: 10,
                         ),
                         Text(
-                          "${widget.dateDebut.day}-${widget.dateDebut.month}-${widget.dateDebut.year} ${widget.heureDebut}",
+                          "${widget.dateDebut}",
                           textAlign: TextAlign.start,
                           style: const TextStyle(
                             color: Colors.black,
@@ -226,14 +217,14 @@ class _FactureDetailsState extends State<FactureDetails> {
                           height: 5,
                         ),
                         Text(
-                          "${widget.region}",
+                          "${widget.pointDepart}",
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(
                           height: 30,
                         ),
                         Text(
-                          "${widget.dateDebut.day}-${widget.dateDebut.month}-${widget.dateDebut.year} ${widget.heureFin}",
+                          "${widget.dateDebut}",
                           textAlign: TextAlign.start,
                           style: const TextStyle(
                             color: Colors.black,
@@ -245,7 +236,7 @@ class _FactureDetailsState extends State<FactureDetails> {
                           height: 5,
                         ),
                         Text(
-                          "${widget.region}",
+                          "${widget.pointArrive}",
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -306,19 +297,22 @@ class _FactureDetailsState extends State<FactureDetails> {
                         Text("${widget.marque} ${widget.modele}",
                             textAlign: TextAlign.center,
                             style: const TextStyle(fontSize: 19)),
+                        WidgetRaisedButton(
+                            text: 'Payer votre facture',
+                            press: () async {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => StripePayment(
+                                    location: widget.location,
+                                  ),
+                                ),
+                              );
+                            },
+                            color: const Color(0xff2E9FB0),
+                            textColor: Colors.white)
                       ],
                     ),
-                    SizedBox(
-                      height: size.height * 0.03,
-                    ),
-                    const Divider(
-                      thickness: 1,
-                      indent: 10,
-                      endIndent: 10,
-                      color: Colors.black,
-                      height: 25,
-                    ),
-                    const Text("Merci pour ")
                   ],
                 ),
               ),

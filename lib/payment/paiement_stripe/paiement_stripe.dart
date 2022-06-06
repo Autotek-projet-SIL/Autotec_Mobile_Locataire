@@ -8,6 +8,8 @@ import '../../models/location.dart';
 import '../../models/rest_api.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 
+import '../paiement_baridimob/code_validation_screen.dart';
+
 class StripePayment extends StatefulWidget {
   final CarLocation location;
 
@@ -120,7 +122,7 @@ class StripePaymentState extends State<StripePayment> {
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     GestureDetector(
                       child: Container(
-                        height: size.height * 0.07,
+                        height: size.height * 0.06,
                         width: size.width * 0.6,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
@@ -175,12 +177,23 @@ class StripePaymentState extends State<StripePayment> {
                             DateFormat().add_y().format(_selected!),
                             // "year",
                             _cvcController.text) ;
-
                         widget.location.id_paiement  = response;
                         Api.endLocation(widget.location);
+                         showDialog(
+                           context: context,
+                           builder: (BuildContext context) {
+                             return popUP2(
+                                 "Merci !! ",
+                                 "Nous avons bien reçu votre paiement ",
+                                 "Ok",
+                                 context);
+                           },
+                         );
                       },
                       color: const Color.fromRGBO(27, 146, 164, 0.7),
                       textColor: Colors.white,
+
+
                     ),
                   ),
                 ],

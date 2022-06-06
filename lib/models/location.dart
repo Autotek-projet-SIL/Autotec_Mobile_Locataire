@@ -40,12 +40,18 @@ class CarLocation {
   factory CarLocation() {
     return _instance;
   }
-  CarLocation.a({id_location})
+  CarLocation.a({id_location, tarification})
   {
     this.id_location = id_location;
+    this.car?.tarification = tarification;
   }
   factory CarLocation.fromJson(Map<String, dynamic> json) => CarLocation.a(
-      id_location : json["id_louer"]
+      id_location : json["id_louer"],
+    tarification: json["tarification"]
   );
 }
+
+
+
+
 

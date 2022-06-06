@@ -21,8 +21,8 @@ class Map extends StatefulWidget {
 }
 
 class _MapState extends State<Map> {
-  late double latitude ;
-  late double longitude ;
+  double latitude = 0.0;
+  double longitude = 0.0 ;
   late Position? _currentlocation ;
   @override
   void initState() {

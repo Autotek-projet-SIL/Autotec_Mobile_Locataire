@@ -214,6 +214,23 @@ class Api {
     }
     return response;
   }
+  static Future<int?> getLocationById(int id_location) async {
+    final response = await http.get(
+      Uri.parse(
+          "https://autotek-server.herokuapp.com/getlocations/location/$id_location"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        "id_sender": UserCredentials.uid!,
+        "token": UserCredentials.token!,
+      },
+    );
+    if (response.statusCode == 200) {
+      CarLocation location = CarLocation.fromJson(
+          jsonDecode(response.body)[0]);
+      print(location.car?.tarification);
+      return location.car?.tarification ;
+    }
+  }
 
   static Future<http.Response> getLocationsEnCoursByID(int id_locataire) async {
     id_locataire = UserCredentials.uid as int;

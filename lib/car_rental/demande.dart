@@ -22,11 +22,10 @@ class Demande extends StatefulWidget {
 
 class _DemandeState extends State<Demande> {
   CarLocation _location = CarLocation();
+
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Container(
         padding: const EdgeInsets.all(20),
@@ -45,7 +44,7 @@ class _DemandeState extends State<Demande> {
             ),
             const SizedBox(height: 40),
             Container(
-              height: 70,
+              height: size.height * 0.1,
               width: size.width,
               decoration: BoxDecoration(
                 border: Border.all(
@@ -53,40 +52,30 @@ class _DemandeState extends State<Demande> {
                 ),
                 borderRadius: BorderRadius.circular(10.0),
               ),
-              child: Expanded(
-                child: Container(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.all(20.0),
-                    child: Text(_location.point_depart!,
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w600)),
-                  ),
-                ),
-              ),
+              padding: const EdgeInsets.all(20.0),
+              child: Text(_location.point_depart!,
+                  softWrap: true,
+                  maxLines: 2,
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.w600)),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 20),
             Container(
-              height: 70,
+              height: size.height * 0.1,
               width: size.width,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: const Color(0xff2E9FB0),
-                ),
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Expanded(
-                child: Container(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    padding: const EdgeInsets.all(20.0),
-                    child: Text(_location.point_arrive!,
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.w600)),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: const Color(0xff2E9FB0),
                   ),
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
-              ),
-            ),
+                  padding: const EdgeInsets.all(20.0),
+                  child: Text(_location.point_arrive!,
+                      softWrap: true,
+                      maxLines: 2,
+                      style: const TextStyle(
+                          fontSize: 15, fontWeight: FontWeight.w600)),
+                ),
             const SizedBox(height: 20),
             Container(
               height: 70,
@@ -116,20 +105,21 @@ class _DemandeState extends State<Demande> {
                   //TODO post method with the location info
                   print("numero de chasis");
                   print(_location.car!.numeroChasis);
-                  final response = await Api.postLocation("en attente", _location);
+                  final response =
+                      await Api.postLocation("en attente", _location);
                   _location.id_location = response;
+                  final responsee = await Api.getLocationById(_location.id_location!);
+                  print(responsee);
                   print(response.toString());
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                          TrackingScreen(
-                            destinationLocation: LatLng(
-                                _location.latitude_depart!,
-                                _location.longitude_depart!),
-                            carid: _location.car!.numeroChasis,
-                            location: _location,
-                          ),
+                      builder: (context) => TrackingScreen(
+                        destinationLocation: LatLng(_location.latitude_depart!,
+                            _location.longitude_depart!),
+                        carid: _location.car!.numeroChasis,
+                        location: _location,
+                      ),
                     ),
                   );
                   print("latitude" + _location.latitude_depart!.toString());
@@ -142,5 +132,4 @@ class _DemandeState extends State<Demande> {
       ),
     );
   }
-
 }

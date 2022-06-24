@@ -13,12 +13,14 @@ class MyMap2 extends StatefulWidget {
   final String carId;
   final String userId;
   final LatLng destinationLocation;
+
   const MyMap2(
       {Key? key,
       required this.carId,
       required this.userId,
       required this.destinationLocation})
       : super(key: key);
+
   @override
   _MyMap2State createState() => _MyMap2State();
 }

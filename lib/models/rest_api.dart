@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:autotec/models/location.dart' as prefix;
 import 'package:autotec/payment/PaymentId.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:http/http.dart' as http;
 import 'location.dart';
 import 'user_data.dart';
@@ -268,4 +269,41 @@ class Api {
       }),
     );
   }
+
+  static Future<http.Response> getUserPassword() async {
+    String? email = FirebaseAuth.instance.currentUser?.email;
+    print(email.toString());
+    final response = await http.get(
+      Uri.parse(
+          "https://autotek-server.herokuapp.com/authentification_mobile/locataire_connexion/$email"),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+        "id_sender": UserCredentials.uid!,
+        "token": UserCredentials.token!,
+      },
+    );
+    return response;
+  }
+
+  static Future<http.Response> addDemandeSupport(String descriptif, String objet, int id_louer) async {
+    String? email = FirebaseAuth.instance.currentUser?.email;
+    final response = await http.post(
+      Uri.parse(
+          'https://autotek-server.herokuapp.com/demande_support/ajouter_demande_support/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        "id_sender": UserCredentials.uid!,
+        "token": UserCredentials.token!,
+        "objet": objet,
+        "descriptif": descriptif,
+        "email": email.toString(),
+        "id_louer": id_louer.toString(),
+      }),
+    );
+    return response;
+  }
+
+
 }

@@ -10,7 +10,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:autotec/Authentication/first_screens/home.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-
 final scaffoldKey = GlobalKey<ScaffoldState>();
 
 class Map extends StatefulWidget {
@@ -22,21 +21,21 @@ class Map extends StatefulWidget {
 
 class _MapState extends State<Map> {
   double latitude = 0.0;
-  double longitude = 0.0 ;
-  late Position? _currentlocation ;
+  double longitude = 0.0;
+
+  late Position? _currentlocation;
+
   @override
   void initState() {
     super.initState();
     // _getCurrentLocation();
   }
 
-
-
-  _getCurrentLocation()  {
+  _getCurrentLocation() {
     Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best,
-        forceAndroidLocationManager: false).then((Position position) {
-
+            desiredAccuracy: LocationAccuracy.best,
+            forceAndroidLocationManager: false)
+        .then((Position position) {
       setState(() {
         _currentlocation = position;
       });
@@ -51,19 +50,15 @@ class _MapState extends State<Map> {
     print("***************");
     print(latitude);
     print(longitude);
-
   }
 
   late GoogleMapController mapController;
 
-
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
-    mapController.animateCamera(CameraUpdate.newLatLngZoom(LatLng(latitude,longitude), 13));
-
+    mapController.animateCamera(
+        CameraUpdate.newLatLngZoom(LatLng(latitude, longitude), 13));
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -71,63 +66,66 @@ class _MapState extends State<Map> {
       key: scaffoldKey,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: FloatingActionButton(
-        onPressed: ()async{
-          if( await Permission.location.isGranted){
-
-            if(await Permission.location.serviceStatus.isEnabled){
-
+        onPressed: () async {
+          if (await Permission.location.isGranted) {
+            if (await Permission.location.serviceStatus.isEnabled) {
               _getCurrentLocation();
-            }else{
-
-              scaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text("activer la localisation")));
+            } else {
+              scaffoldKey.currentState!.showSnackBar(
+                  const SnackBar(content: Text("activer la localisation")));
             }
-          }else{
+          } else {
+            scaffoldKey.currentState!.showSnackBar(
+                const SnackBar(content: Text("permission denied")));
 
-            scaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text("permission denied")));
-
-            await [Permission.location,].request();
+            await [
+              Permission.location,
+            ].request();
           }
 
-          mapController.animateCamera(CameraUpdate.newLatLngZoom(LatLng(latitude,longitude), 14));
+          mapController.animateCamera(
+              CameraUpdate.newLatLngZoom(LatLng(latitude, longitude), 14));
         },
-        backgroundColor: const Color.fromRGBO(27, 146, 164,1),
-        child: const Icon(Icons.navigation_outlined, color: Colors.white,size: 30,),
+        backgroundColor: const Color.fromRGBO(27, 146, 164, 1),
+        child: const Icon(
+          Icons.navigation_outlined,
+          color: Colors.white,
+          size: 30,
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
-        shape:const CircularNotchedRectangle(),
-
+        shape: const CircularNotchedRectangle(),
         color: Colors.white,
         child: Row(
-
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.fromLTRB(50.0, 5, 20, 5),
               child: IconButton(
-                onPressed: ()async{
+                onPressed: () async {
                   await UserCredentials.refresh();
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const SearchPlacesScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => const SearchPlacesScreen()),
                   );
                 },
-                icon: const Icon(Icons.car_rental_outlined, color: Colors.grey,size: 30),
+                icon: const Icon(Icons.car_rental_outlined,
+                    color: Colors.grey, size: 30),
                 tooltip: 'rent a car',
               ),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(50.0, 5, 50, 5),
               child: IconButton(
-                onPressed: (){
+                onPressed: () {
                   //TODO navigate to profil
                 },
-                icon: const Icon(Icons.person_outlined, color: Colors.grey,size: 30),
+                icon: const Icon(Icons.person_outlined,
+                    color: Colors.grey, size: 30),
                 tooltip: 'open profil',
               ),
             ),
-
-
-
           ],
         ),
         notchMargin: 5,
@@ -138,25 +136,22 @@ class _MapState extends State<Map> {
             // Navigate to the sign in screen when the user Signs Out
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(builder: (context) => const Home()),
-                  (route) => false,
+              (route) => false,
             );
           }
         },
-        child:   Stack(
-            children: <Widget>[
-              GoogleMap(
-                zoomControlsEnabled: false,
-                onMapCreated: _onMapCreated,
-                myLocationEnabled: true,
-                initialCameraPosition: const CameraPosition(
-                  target: LatLng(36.7762, 3.05997),
-                  zoom: 13.0,
-                ),
-              ),
-
-            ]
-        ),),
-
+        child: Stack(children: <Widget>[
+          GoogleMap(
+            zoomControlsEnabled: false,
+            onMapCreated: _onMapCreated,
+            myLocationEnabled: true,
+            initialCameraPosition: const CameraPosition(
+              target: LatLng(36.7762, 3.05997),
+              zoom: 13.0,
+            ),
+          ),
+        ]),
+      ),
     );
   }
 }

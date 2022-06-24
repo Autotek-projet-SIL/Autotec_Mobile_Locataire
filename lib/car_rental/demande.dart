@@ -5,7 +5,6 @@ import 'dart:convert';
 import 'package:autotec/car_rental/sliding_up_panel.dart';
 import 'package:autotec/models/location.dart';
 import 'package:autotec/models/user_data.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../components/WraisedButton.dart';
 import 'package:flutter/material.dart';
@@ -63,19 +62,19 @@ class _DemandeState extends State<Demande> {
             Container(
               height: size.height * 0.1,
               width: size.width,
-                decoration: BoxDecoration(
-                  border: Border.all(
-                    color: const Color(0xff2E9FB0),
-                  ),
-                  borderRadius: BorderRadius.circular(10.0),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: const Color(0xff2E9FB0),
                 ),
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text(_location.point_arrive!,
-                      softWrap: true,
-                      maxLines: 2,
-                      style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.w600)),
-                ),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              padding: const EdgeInsets.all(20.0),
+              child: Text(_location.point_arrive!,
+                  softWrap: true,
+                  maxLines: 2,
+                  style: const TextStyle(
+                      fontSize: 15, fontWeight: FontWeight.w600)),
+            ),
             const SizedBox(height: 20),
             Container(
               height: 70,
@@ -102,15 +101,21 @@ class _DemandeState extends State<Demande> {
                   print(UserCredentials.token);
                   print('uid\n');
                   print(UserCredentials.uid);
-                  //TODO post method with the location info
                   print("numero de chasis");
                   print(_location.car!.numeroChasis);
                   final response =
                       await Api.postLocation("en attente", _location);
                   _location.id_location = response;
-                  final responsee = await Api.getLocationById(_location.id_location!);
+                  //TODO (DONE) update loue à vrai
+                  var db = FirebaseFirestore.instance;
+                  final docRef = db
+                      .collection('CarLocation')
+                      .doc(_location.car!.numeroChasis);
+                  final data = {'loue': true};
+                  docRef.set(data, SetOptions(merge: true));
+                  /*final responsee = await Api.getLocationById(_location.id_location!);
                   print(responsee);
-                  print(response.toString());
+                  print(response.toString());*/
                   Navigator.push(
                     context,
                     MaterialPageRoute(

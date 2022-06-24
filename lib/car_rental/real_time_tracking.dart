@@ -8,23 +8,13 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import './sliding_up_panel.dart';
-/*To do
-1 - the slider                               done
-4 - fix ui                                   done
-5 - the localisation pin                     done
-7 - the action button ( support )            done
-2 - the distance                             done
-6 - localization pin informations on click   done
-3 - the remaining time                       done
-8 - data from firebase ( 1st track)          done
-9 - data from firebase ( 2nd track)          done
- */
 
 class MyMap extends StatefulWidget {
   final String carId;
   final String userId;
   final LatLng destinationLocation;
   final CarLocation location;
+
   const MyMap({
     Key? key,
     required this.carId,
@@ -32,6 +22,7 @@ class MyMap extends StatefulWidget {
     required this.destinationLocation,
     required this.location,
   }) : super(key: key);
+
   @override
   _MyMapState createState() => _MyMapState();
 }
@@ -64,7 +55,7 @@ class _MyMapState extends State<MyMap> {
     return Scaffold(
       body: StreamBuilder(
         stream:
-        FirebaseFirestore.instance.collection('CarLocation').snapshots(),
+            FirebaseFirestore.instance.collection('CarLocation').snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (_added) {
             mymap(snapshot);
@@ -83,9 +74,9 @@ class _MyMapState extends State<MyMap> {
                 onTap: () {},
                 position: LatLng(
                   snapshot.data!.docs.singleWhere(
-                          (element) => element.id == widget.carId)['latitude'],
+                      (element) => element.id == widget.carId)['latitude'],
                   snapshot.data!.docs.singleWhere(
-                          (element) => element.id == widget.carId)['longitude'],
+                      (element) => element.id == widget.carId)['longitude'],
                 ),
                 markerId: const MarkerId('SourcePin'),
                 icon: sourceIcon!,
@@ -103,14 +94,14 @@ class _MyMapState extends State<MyMap> {
             initialCameraPosition: CameraPosition(
                 target: LatLng(
                   snapshot.data!.docs.singleWhere(
-                          (element) => element.id == widget.carId)['latitude'],
+                      (element) => element.id == widget.carId)['latitude'],
                   snapshot.data!.docs.singleWhere(
-                          (element) => element.id == widget.carId)['longitude'],
+                      (element) => element.id == widget.carId)['longitude'],
                 ),
                 zoom: 14.47),
             onMapCreated: (GoogleMapController controller) {
               setState(
-                    () {
+                () {
                   _controller = controller;
                   _added = true;
                   setPolylines(snapshot);
@@ -175,10 +166,9 @@ class _MyMapState extends State<MyMap> {
           snapshot.data!.docs
               .singleWhere((element) => element.id == widget.carId)['latitude'],
           snapshot.data!.docs.singleWhere(
-                  (element) => element.id == widget.carId)['longitude'],
+              (element) => element.id == widget.carId)['longitude'],
           widget.destinationLocation.latitude,
-          widget.destinationLocation.longitude) ;
-
+          widget.destinationLocation.longitude);
     });
   }
 
@@ -186,6 +176,7 @@ class _MyMapState extends State<MyMap> {
       double lat1, double lon1, double lat2, double lon2) async {
     return Geolocator.distanceBetween(lat1, lon1, lat2, lon2);
   }
+
   /*
     var p = 0.017453292519943295;
     var a = 0.5 -
@@ -199,9 +190,9 @@ class _MyMapState extends State<MyMap> {
         CameraPosition(
             target: LatLng(
               snapshot.data!.docs.singleWhere(
-                      (element) => element.id == widget.carId)['latitude'],
+                  (element) => element.id == widget.carId)['latitude'],
               snapshot.data!.docs.singleWhere(
-                      (element) => element.id == widget.carId)['longitude'],
+                  (element) => element.id == widget.carId)['longitude'],
             ),
             zoom: 12.47),
       ),

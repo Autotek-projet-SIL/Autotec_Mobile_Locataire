@@ -4,6 +4,7 @@ import 'package:autotec/car_rental/real_time_tracking2.dart';
 import 'package:autotec/models/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../components/raised_button.dart';
 import '../models/location.dart';
@@ -20,11 +21,12 @@ class TrackingScreen2 extends StatefulWidget {
   final LatLng destinationLocation;
   final String carid;
   final CarLocation location;
+
   const TrackingScreen2(
       {Key? key,
-        required this.destinationLocation,
-        required this.carid,
-        required this.location})
+      required this.destinationLocation,
+      required this.carid,
+      required this.location})
       : super(key: key);
 
   @override
@@ -37,12 +39,13 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
   double distance = 0.0;
   int cpt = 0;
   Timer? timer;
+  var format, one, two;
 
   @override
   void initState() {
     super.initState();
     Api.updateLocationHeureDebut(widget.location.id_location!);
-    widget.location.dateDebut = Api.formattedDateNow() ;
+    widget.location.dateDebut = Api.formattedDateNow();
     widget.location.heureDebut = Api.formattedhoureNow();
     Api.updateLocationState("trajet", widget.location.id_location!);
     timer = Timer.periodic(const Duration(seconds: 15), (Timer t) {
@@ -80,7 +83,7 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
                   widget.location.longitude_arrive!),
               carId: widget.location.car!.numeroChasis,
               userId:
-              "USER", // we use it to get the car's location from firebase
+                  "USER", // we use it to get the car's location from firebase
 
               //LatLng(36.713819, 3.174251), // client location , it's fixed at first
             ),
@@ -142,7 +145,7 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
                   decoration: BoxDecoration(
                       color: Colors.grey[300],
                       borderRadius:
-                      const BorderRadius.all(Radius.circular(12.0))),
+                          const BorderRadius.all(Radius.circular(12.0))),
                 ),
               ],
             ),
@@ -171,15 +174,15 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
                 title: Text(
                     ((Distance.distance / 80) > 1)
                         ? (Distance.distance ~/ 80).toStringAsFixed(0) +
-                        "h" +
-                        " " +
-                        (((Distance.distance / 80) -
-                            (Distance.distance ~/ 80)) *
-                            60)
-                            .toStringAsFixed(0) +
-                        " min restantes"
+                            "h" +
+                            " " +
+                            (((Distance.distance / 80) -
+                                        (Distance.distance ~/ 80)) *
+                                    60)
+                                .toStringAsFixed(0) +
+                            " min restantes"
                         : (Distance.distance * 60 ~/ 80).toStringAsFixed(0) +
-                        " minutes restantes",
+                            " minutes restantes",
                     style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -230,18 +233,24 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
             Padding(
               padding: const EdgeInsets.only(left: 30, right: 30),
               child: CustomRaisedButton(
-                text: "Passer le suivi",
+                text: "Trajet terminé",
                 color: const Color.fromRGBO(27, 146, 164, 0.7),
                 textColor: Colors.white,
                 press: () => {
+                  print(widget.location.heureDebut),
+                  widget.location.heureFin = Api.formattedhoureNow(),
+                  format = DateFormat("HH:mm:ss"),
+                  one = format.parse(widget.location.heureDebut),
+                  two = format.parse(widget.location.heureFin),
+                  print("${two.difference(one)}"),
+                  print(widget.location.car?.tarification),
                   //TODO request post endLocation
                   //TODO request send email
                   //TODO requst get getemail
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) =>
-                      Facture(
+                      builder: (context) => Facture(
                         location: widget.location,
                         nomLoc: UserCredentials.uid!,
                         numeroChassis: widget.location.car!.numeroChasis,

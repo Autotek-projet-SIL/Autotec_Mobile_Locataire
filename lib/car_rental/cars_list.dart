@@ -9,24 +9,22 @@ import 'Cars.dart';
 import '/components/WviewCar.dart';
 import 'package:autotec/models/user_data.dart';
 
-
 class CarsList extends StatefulWidget {
-
-   const CarsList({Key? key}) : super(key: key);
+  const CarsList({Key? key}) : super(key: key);
 
   @override
   State<CarsList> createState() => _CarsListState();
 }
 
 class _CarsListState extends State<CarsList> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: Column(
         children: const [
-          Spacer(flex: 2,),
+          Spacer(
+            flex: 2,
+          ),
           Text(
             'veillez choisir une voiture',
             style: TextStyle(
@@ -35,21 +33,23 @@ class _CarsListState extends State<CarsList> {
               fontSize: 20,
             ),
           ),
-          Spacer(flex: 1,),
-          Center(
-                child: CarListView(),
+          Spacer(
+            flex: 1,
           ),
-          Spacer(flex: 1,),
+          Center(
+            child: CarListView(),
+          ),
+          Spacer(
+            flex: 1,
+          ),
         ],
       ),
     );
   }
 }
 
-class CarListView extends StatelessWidget{
-
+class CarListView extends StatelessWidget {
   const CarListView({Key? key}) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -58,76 +58,77 @@ class CarListView extends StatelessWidget{
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           List<Car>? data = snapshot.data;
-          return SizedBox(
-              height: 550,
-              width: 350,
-              child: _CarsListView(data));
+          return SizedBox(height: 550, width: 350, child: _CarsListView(data));
         } else if (snapshot.hasError) {
           return Text("${snapshot.error}");
         }
-        return  const CircularProgressIndicator();
+        return const CircularProgressIndicator();
       },
     );
   }
 
-  Future<void> _showFailDialog( BuildContext context) {
+  Future<void> _showFailDialog(BuildContext context) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
             content: SingleChildScrollView(
                 child: SizedBox(
-                  height: 160,
-                  width: 280,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Expanded(child:
-                      Text("aucune voiture n'est disponible en ce moment, veuillez réessayer plus tard")
-                      ),
-                      Center(
-                        child: FlatButton(
-                            onPressed: (){
-                              //TODO send a post with rejected demande de location
-                              Navigator.pop(context);
-                            },
-                            child: const Text("ok")),
-                      )
-                    ],
-                  ),
-                )
-            ),
+              height: 160,
+              width: 280,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Expanded(
+                      child: Text(
+                          "aucune voiture n'est disponible en ce moment, veuillez réessayer plus tard")),
+                  Center(
+                    child: FlatButton(
+                        onPressed: () {
+                          //TODO send a post with rejected demande de location
+                          Navigator.pop(context);
+                        },
+                        child: const Text("ok")),
+                  )
+                ],
+              ),
+            )),
           );
         });
   }
 
   Future<List<Car>> _fetchCars(BuildContext context) async {
-
-    var Url = Uri.http("autotek-server.herokuapp.com","/flotte/vehicule");
-    print (Url.toString());
-    final response = await http.get(Url, headers: {'token':UserCredentials.token!,'id_sender':UserCredentials.uid!});
+    var Url = Uri.http("autotek-server.herokuapp.com", "/flotte/vehicule");
+    print(Url.toString());
+    final response = await http.get(Url, headers: {
+      'token': UserCredentials.token!,
+      'id_sender': UserCredentials.uid!
+    });
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
-      List<Car> list =  jsonResponse.map((json) =>  Car.fromJson(json)).toList();
+      List<Car> list = jsonResponse.map((json) => Car.fromJson(json)).toList();
       //recuperer ceux dispo et batterie > 20
-      try{
-        final querySnapshot = await FirebaseFirestore.instance.collection('CarLocation').where('batterie', isGreaterThan: 20)
-            .where('disponible',isEqualTo: true).get();
-        list.removeWhere((element) => (! querySnapshot.docs.any((doc) => doc.id == element.numeroChasis)));
-      }catch (e){
-        print (e.toString());
+      try {
+        final querySnapshot = await FirebaseFirestore.instance
+            .collection('CarLocation')
+            .where('batterie', isGreaterThan: 20)
+            .where('disponible', isEqualTo: true)
+            .get();
+        list.removeWhere((element) =>
+            (!querySnapshot.docs.any((doc) => doc.id == element.numeroChasis)));
+      } catch (e) {
+        print(e.toString());
       }
 
-      if(list.isEmpty){
-         _showFailDialog(context);
+      if (list.isEmpty) {
+        _showFailDialog(context);
       }
       return list;
     } else if (response.statusCode == 403) {
       throw Exception('access forbiden');
-    }
-    else{
+    } else {
       throw Exception('Failed to load Cars from API');
     }
   }
@@ -136,7 +137,7 @@ class CarListView extends StatelessWidget{
     return ListView.builder(
         itemCount: data.length,
         itemBuilder: (context, index) {
-          return WidgetViewCar(car:data[index]);
+          return WidgetViewCar(car: data[index]);
         });
   }
 }

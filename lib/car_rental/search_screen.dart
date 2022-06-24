@@ -11,6 +11,7 @@ import 'package:google_api_headers/google_api_headers.dart';
 import 'package:autotec/models/location.dart';
 
 import 'cars_list.dart';
+
 const kGoogleApiKey = 'AIzaSyDgZadIjr0Xgvmeo6JZp5CN18Cv8Vy8j0E';
 final homeScaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -21,10 +22,9 @@ class SearchPlacesScreen extends StatefulWidget {
   State<SearchPlacesScreen> createState() => _SearchPlacesScreenState();
 }
 
-
 class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
-
-  static const CameraPosition initialCameraPosition = CameraPosition(target: LatLng(36.7762, 3.05997 ), zoom: 14.0);
+  static const CameraPosition initialCameraPosition =
+      CameraPosition(target: LatLng(36.7762, 3.05997), zoom: 14.0);
 
   Set<Marker> markersList = {};
 
@@ -32,8 +32,8 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
 
   final Mode _mode = Mode.overlay;
 
-  late double latitude_dpr=0.0;
-  late double longitude_dpr=0.0;
+  late double latitude_dpr = 0.0;
+  late double longitude_dpr = 0.0;
 
   late double latitude_arv = 0.0;
   late double longitude_arv = 0.0;
@@ -45,53 +45,57 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
   String arrive_adr = "";
   String region = "";
 
-  Future<Map<String, double>> _getCurrentLocation() async{
+  Future<Map<String, double>> _getCurrentLocation() async {
     double? lat;
     double? lng;
     await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.best,
-        forceAndroidLocationManager: false)
-        .then((Position position) async{
+            desiredAccuracy: LocationAccuracy.best,
+            forceAndroidLocationManager: false)
+        .then((Position position) async {
       setState(() {
         lat = position.latitude;
         lng = position.longitude;
-
       });
     }).catchError((e) {
       print(e);
     });
-    return {'latitude':lat!, 'longitude':lng!};
+    return {'latitude': lat!, 'longitude': lng!};
   }
 
-  void _setMarker(String id, double lat, double lng){
-    markersList.add(Marker(markerId:  MarkerId(id),position: LatLng(lat, lng),));
-    googleMapController.animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lng), 14.0));
+  void _setMarker(String id, double lat, double lng) {
+    markersList.add(Marker(
+      markerId: MarkerId(id),
+      position: LatLng(lat, lng),
+    ));
+    googleMapController
+        .animateCamera(CameraUpdate.newLatLngZoom(LatLng(lat, lng), 14.0));
   }
 
-  Future<String> _getAdress(double latitude, double longitude)async{
+  Future<String> _getAdress(double latitude, double longitude) async {
     final coordinates = Coordinates(latitude, longitude);
-    var addresses = await Geocoder.local.findAddressesFromCoordinates(
-        coordinates);
+    var addresses =
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
     var first = addresses.first;
-    print('1. ${first.locality}, 2. ${first.adminArea}, 3. ${first.subLocality}, '
+    print(
+        '1. ${first.locality}, 2. ${first.adminArea}, 3. ${first.subLocality}, '
         '4. ${first.subAdminArea}, 5. ${first.addressLine}, 6. ${first.featureName},'
         '7, ${first.thoroughfare}, 8. ${first.subThoroughfare}');
 
     return first.addressLine!;
   }
 
-  Future<String> _getRegion(double latitude, double longitude)async{
+  Future<String> _getRegion(double latitude, double longitude) async {
     final coordinates = Coordinates(latitude, longitude);
-    var addresses = await Geocoder.local.findAddressesFromCoordinates(
-        coordinates);
+    var addresses =
+        await Geocoder.local.findAddressesFromCoordinates(coordinates);
     var first = addresses.first;
-    print('1. ${first.locality}, 2. ${first.adminArea}, 3. ${first.subLocality}, '
+    print(
+        '1. ${first.locality}, 2. ${first.adminArea}, 3. ${first.subLocality}, '
         '4. ${first.subAdminArea}, 5. ${first.addressLine}, 6. ${first.featureName},'
         '7, ${first.thoroughfare}, 8. ${first.subThoroughfare}');
 
     return first.adminArea!;
   }
-
 
   Future<Prediction?> _searchPlace() async {
     Prediction? p = await PlacesAutocomplete.show(
@@ -104,32 +108,34 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
         types: [""],
         decoration: InputDecoration(
             hintText: 'Search',
-            focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(20), borderSide: const BorderSide(color: Colors.white))),
-        components: [Component(Component.country,"DZ")]);
+            focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(20),
+                borderSide: const BorderSide(color: Colors.white))),
+        components: [Component(Component.country, "DZ")]);
 
     return p!;
   }
 
-  void onError(PlacesAutocompleteResponse response){
-    homeScaffoldKey.currentState!.showSnackBar(SnackBar(content: Text(response.errorMessage!)));
+  void onError(PlacesAutocompleteResponse response) {
+    homeScaffoldKey.currentState!
+        .showSnackBar(SnackBar(content: Text(response.errorMessage!)));
   }
 
-  Future<Map<String, double>> _predictionToPosition(Prediction p, ScaffoldState? currentState) async {
-
+  Future<Map<String, double>> _predictionToPosition(
+      Prediction p, ScaffoldState? currentState) async {
     GoogleMapsPlaces places = GoogleMapsPlaces(
         apiKey: kGoogleApiKey,
-        apiHeaders: await const GoogleApiHeaders().getHeaders()
-    );
+        apiHeaders: await const GoogleApiHeaders().getHeaders());
 
     PlacesDetailsResponse detail = await places.getDetailsByPlaceId(p.placeId!);
 
     final lat = detail.result.geometry!.location.lat;
     final lng = detail.result.geometry!.location.lng;
 
-    return {'latitude': lat, 'longitude':lng};
+    return {'latitude': lat, 'longitude': lng};
   }
 
-  Future<void> _showDepartDialog( BuildContext context) {
+  Future<void> _showDepartDialog(BuildContext context) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -141,38 +147,45 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
                       child: const Text('votre position'),
-                      onTap: ()async{
+                      onTap: () async {
                         Navigator.pop(context);
-                        Map<String, double> position = await _getCurrentLocation();
+                        Map<String, double> position =
+                            await _getCurrentLocation();
                         latitude_dpr = position['latitude']!;
                         longitude_dpr = position['longitude']!;
-                        depart_adr = await _getAdress(latitude_dpr, longitude_dpr);
+                        depart_adr =
+                            await _getAdress(latitude_dpr, longitude_dpr);
                         region = await _getRegion(latitude_dpr, longitude_dpr);
 
-                        setState((){
+                        setState(() {
                           _setMarker("depart", latitude_dpr, longitude_dpr);
                           depart = true;
                         });
-                        print("depart : ${latitude_dpr},${longitude_dpr} : ${depart_adr}");
+                        print(
+                            "depart : ${latitude_dpr},${longitude_dpr} : ${depart_adr}");
                       },
                     ),
                   ),
                   const Padding(padding: EdgeInsets.all(8.0)),
                   GestureDetector(
                     child: const Text('choisir un endroid'),
-                    onTap: ()async{
+                    onTap: () async {
                       Navigator.pop(context);
                       Prediction? p = await _searchPlace();
-                      Map<String, double> position = await _predictionToPosition(p!, homeScaffoldKey.currentState);
+                      Map<String, double> position =
+                          await _predictionToPosition(
+                              p!, homeScaffoldKey.currentState);
                       latitude_dpr = position['latitude']!;
                       longitude_dpr = position['longitude']!;
-                      depart_adr = await _getAdress(latitude_dpr, longitude_dpr);
+                      depart_adr =
+                          await _getAdress(latitude_dpr, longitude_dpr);
 
-                      setState((){
+                      setState(() {
                         _setMarker("depart", latitude_dpr, longitude_dpr);
                         depart = true;
                       });
-                      print("depart : ${latitude_dpr},${longitude_dpr} : ${depart_adr}");
+                      print(
+                          "depart : ${latitude_dpr},${longitude_dpr} : ${depart_adr}");
                     },
                   )
                 ],
@@ -182,7 +195,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
         });
   }
 
-  Future<void> _showArriveDialog( BuildContext context) {
+  Future<void> _showArriveDialog(BuildContext context) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -194,36 +207,43 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(
                       child: const Text('votre position'),
-                      onTap: ()async{
+                      onTap: () async {
                         Navigator.pop(context);
-                        Map<String, double> position = await _getCurrentLocation();
+                        Map<String, double> position =
+                            await _getCurrentLocation();
                         latitude_arv = position['latitude']!;
-                        longitude_arv =  position['longitude']!;
-                        arrive_adr = await _getAdress(latitude_arv, longitude_arv);
+                        longitude_arv = position['longitude']!;
+                        arrive_adr =
+                            await _getAdress(latitude_arv, longitude_arv);
 
-                        setState((){
+                        setState(() {
                           _setMarker("arrive", latitude_arv, longitude_arv);
                           arrive = true;
                         });
-                        print("arrive : ${latitude_arv},${longitude_arv} : ${arrive_adr}");
+                        print(
+                            "arrive : ${latitude_arv},${longitude_arv} : ${arrive_adr}");
                       },
                     ),
                   ),
                   const Padding(padding: EdgeInsets.all(8.0)),
                   GestureDetector(
                     child: const Text('choisir un endroid'),
-                    onTap: ()async{
+                    onTap: () async {
                       Navigator.pop(context);
                       Prediction? p = await _searchPlace();
-                      Map<String, double> position = await _predictionToPosition(p!, homeScaffoldKey.currentState);
+                      Map<String, double> position =
+                          await _predictionToPosition(
+                              p!, homeScaffoldKey.currentState);
                       latitude_arv = position['latitude']!;
-                      longitude_arv =  position['longitude']!;
-                      arrive_adr = await _getAdress(latitude_arv, longitude_arv);
-                      setState((){
+                      longitude_arv = position['longitude']!;
+                      arrive_adr =
+                          await _getAdress(latitude_arv, longitude_arv);
+                      setState(() {
                         _setMarker("arrive", latitude_arv, longitude_arv);
                         arrive = true;
                       });
-                      print("arrive : ${latitude_arv},${longitude_arv} : ${arrive_adr}");
+                      print(
+                          "arrive : ${latitude_arv},${longitude_arv} : ${arrive_adr}");
                     },
                   )
                 ],
@@ -233,16 +253,13 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
         });
   }
 
-
   @override
   Widget build(BuildContext context) {
-    Size  size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       key: homeScaffoldKey,
-
       body: Stack(
         children: [
-
           GoogleMap(
             initialCameraPosition: initialCameraPosition,
             zoomControlsEnabled: false,
@@ -275,20 +292,33 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                       child: Row(
                         children: [
                           const Padding(
-                            padding:EdgeInsets.fromLTRB(5,10,0,10),
-                            child: Icon(Icons.pin_drop_outlined, color: Colors.grey,),
+                            padding: EdgeInsets.fromLTRB(5, 10, 0, 10),
+                            child: Icon(
+                              Icons.pin_drop_outlined,
+                              color: Colors.grey,
+                            ),
                           ),
                           Expanded(
-                              child:Container(
+                              child: Container(
                                   child: SingleChildScrollView(
                                       scrollDirection: Axis.horizontal,
                                       padding: const EdgeInsets.all(11),
                                       child: GestureDetector(
-                                          onTap: (){
+                                          onTap: () {
                                             _showDepartDialog(context);
                                           },
-                                          child: Text(depart? depart_adr : "point de départ", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)))))),
-
+                                          child: Text(
+                                              depart
+                                                  ? depart_adr
+                                                  : "point de départ",
+                                              style: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w600)
+                                          )
+                                      )
+                                  )
+                              )
+                          ),
                         ],
                       ),
                     ),
@@ -304,8 +334,11 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                       child: Row(
                         children: [
                           const Padding(
-                            padding: EdgeInsets.fromLTRB(5,10,0,10),
-                            child:  Icon(Icons.pin_drop_outlined, color: Colors.grey,),
+                            padding: EdgeInsets.fromLTRB(5, 10, 0, 10),
+                            child: Icon(
+                              Icons.pin_drop_outlined,
+                              color: Colors.grey,
+                            ),
                           ),
                           Expanded(
                             child: Container(
@@ -313,8 +346,12 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                                 scrollDirection: Axis.horizontal,
                                 padding: const EdgeInsets.all(10.0),
                                 child: GestureDetector(
-                                  child: Text(arrive? arrive_adr : "point d'arrivé", style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600)),
-                                  onTap: (){
+                                  child: Text(
+                                      arrive ? arrive_adr : "point d'arrivé",
+                                      style: const TextStyle(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600)),
+                                  onTap: () {
                                     _showArriveDialog(context);
                                   },
                                 ),
@@ -327,12 +364,11 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                     Container(
                       height: 50,
                       width: 300,
-
                       child: ElevatedButton(
-                        onPressed: ()async{
+                        onPressed: () async {
                           //TODO  regler les attributs a passer entre les pages
-                          if(depart && arrive ){
-                            if(depart_adr != arrive_adr){
+                          if (depart && arrive) {
+                            if (depart_adr != arrive_adr) {
                               CarLocation _carLocation = CarLocation();
                               _carLocation.region = region;
                               _carLocation.latitude_depart = latitude_dpr;
@@ -344,34 +380,39 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                               await UserCredentials.refresh();
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const CarsList()),
+                                MaterialPageRoute(
+                                    builder: (context) => const CarsList()),
                               );
-                            }else{
-                              homeScaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text('veuillez choisir des addresses différentes')));
+                            } else {
+                              homeScaffoldKey.currentState!.showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          'veuillez choisir des addresses différentes')));
                             }
-                          }else if(!depart){
-                            homeScaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text('veuillez choisir un point de départ')));
-                          }else{
-                            homeScaffoldKey.currentState!.showSnackBar(const SnackBar(content: Text('veuillez choisir un point d`arrivé')));
+                          } else if (!depart) {
+                            homeScaffoldKey.currentState!.showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'veuillez choisir un point de départ')));
+                          } else {
+                            homeScaffoldKey.currentState!.showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'veuillez choisir un point d`arrivé')));
                           }
-
                         },
-                        child:const Text("continuer"),
+                        child: const Text("continuer"),
                         style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(const Color(0xff2E9FB0)),
-
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              const Color(0xff2E9FB0)),
                         ),
                       ),
                     )
                   ],
-                )
-            ),
-
+                )),
           ),
         ],
       ),
     );
   }
-
-
 }

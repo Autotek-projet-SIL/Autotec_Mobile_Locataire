@@ -11,7 +11,7 @@ import '../bloc/auth_bloc.dart';
 import 'package:autotec/models/user_data.dart';
 
 import '../car_rental/search_screen.dart';
-import '../factures/locationList.dart';
+//import '../factures/locationList.dart';
 import 'edit_profile.dart';
 
 class Profile extends StatefulWidget {
@@ -235,13 +235,13 @@ class _ProfileState extends State<Profile> {
                         onTap: () {
                           nom =
                               "${userProfile[0]["nom"]} ${userProfile[0]["prenom"]}";
-                          Navigator.push(
+                          /*Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => LocationList(
                                       nomLocataire: nom,
                                     )),
-                          );
+                          );*/
                         },
                         child: Container(
                           margin: const EdgeInsets.only(

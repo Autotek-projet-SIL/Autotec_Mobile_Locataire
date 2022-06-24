@@ -33,13 +33,10 @@ class _DeverrouillageScreenState extends State<DeverrouillageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery
-        .of(context)
-        .size;
+    Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Center(
-        child: Column(
-            mainAxisAlignment: MainAxisAlignment.center, children: [
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           const Text(
             "Votre voiture est arrivé",
             style: TextStyle(
@@ -51,25 +48,31 @@ class _DeverrouillageScreenState extends State<DeverrouillageScreen> {
             child: Form(
               child: Column(
                 children: [
-                  CustomTextField(
-                    hintText: " Votre nom",
-                    validationMode: AutovalidateMode.onUserInteraction,
-                    controler: _nomController,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: CustomTextField(
+                      hintText: " Votre nom",
+                      validationMode: AutovalidateMode.onUserInteraction,
+                      controler: _nomController,
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
                   ),
                   SizedBox(height: size.height * 0.03),
-                  TextFieldPassword(
-                    hintText: " Votre mot de passe",
-                    onChanged: (value) {},
-                    validationMode: AutovalidateMode.onUserInteraction,
-                    controller: _passwordController,
-                    validator: (value) {
-                      return value != null && value.length < 6
-                          ? "Enter min. 6 characters"
-                          : null;
-                    },
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: TextFieldPassword(
+                      hintText: " Votre mot de passe",
+                      onChanged: (value) {},
+                      validationMode: AutovalidateMode.onUserInteraction,
+                      controller: _passwordController,
+                      validator: (value) {
+                        return value != null && value.length < 6
+                            ? "Enter min. 6 characters"
+                            : null;
+                      },
+                    ),
                   ),
                   const SizedBox(
                     height: 12,
@@ -86,36 +89,34 @@ class _DeverrouillageScreenState extends State<DeverrouillageScreen> {
                   color: const Color.fromRGBO(27, 146, 164, 0.7),
                   textColor: Colors.white,
                   press: () => {
-                    deverrouillage(),
-              })),
-        ]),),);
+                        deverrouillage(),
+                      })),
+        ]),
+      ),
+    );
   }
+
   Future<void> deverrouillage() async {
     final response = await Api.getUserPassword();
     var userInfo = jsonDecode(response.body);
     String mdp = userInfo[0]["mot_de_passe"];
     print("mdp is $mdp");
-    if (mdp.toString() == _passwordController.text)
-    {
+    if (mdp.toString() == _passwordController.text) {
       Navigator.push(
         this.context,
         MaterialPageRoute(
           builder: (context) => TrackingScreen2(
-              destinationLocation: LatLng(
-                  widget.location.latitude_arrive!,
+              destinationLocation: LatLng(widget.location.latitude_arrive!,
                   widget.location.longitude_arrive!),
               carid: widget.location.car!.numeroChasis,
               location: widget.location),
         ),
       );
       var db = FirebaseFirestore.instance;
-      final docRef = db
-          .collection('CarLocation')
-          .doc(widget.location.car!.numeroChasis);
+      final docRef =
+          db.collection('CarLocation').doc(widget.location.car!.numeroChasis);
       final data = {'nom_locataire': _nomController.text};
       docRef.set(data, SetOptions(merge: true));
     }
-    }
   }
-
-
+}

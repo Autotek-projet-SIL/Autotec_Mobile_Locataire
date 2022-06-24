@@ -159,16 +159,16 @@ class _TrackingScreenState extends State<TrackingScreen> {
                 leading: const Icon(Icons.access_time_filled_sharp,
                     color: Color.fromRGBO(27, 146, 164, 0.7)),
                 title: Text(
-                    ((Distance.distance / 80) > 1)
-                        ? (Distance.distance ~/ 80).toStringAsFixed(0) +
+                    ((Distance.distance / 70) > 1)
+                        ? (Distance.distance ~/ 70).toStringAsFixed(0) +
                             "h" +
                             " " +
-                            (((Distance.distance / 80) -
+                            (((Distance.distance /70) -
                                         (Distance.distance ~/ 80)) *
                                     60)
                                 .toStringAsFixed(0) +
                             " min restantes"
-                        : (Distance.distance * 60 ~/ 80).toStringAsFixed(0) +
+                        : (Distance.distance * 60 ~/ 70).toStringAsFixed(0) +
                             " minutes restantes",
                     style: const TextStyle(
                         fontSize: 17,
@@ -184,7 +184,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                     color: Color.fromRGBO(27, 146, 164, 0.7)),
                 title: Text(
                     Distance.distance.toStringAsFixed(2) +
-                        "metres pour arriver",
+                        "km pour arriver",
                     style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,

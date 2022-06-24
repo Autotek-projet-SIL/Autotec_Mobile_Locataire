@@ -169,6 +169,7 @@ class _MyMapState extends State<MyMap> {
               (element) => element.id == widget.carId)['longitude'],
           widget.destinationLocation.latitude,
           widget.destinationLocation.longitude);
+      Distance.distance = Distance.distance / 1000;
     });
   }
 

@@ -160,6 +160,7 @@ class _MyMap2State extends State<MyMap2> {
           points: polylineCoordinates);
       _polylines.add(polyline);
       Distance.distance = totalDistance;
+      Distance.distance = Distance.distance / 1000;
     });
   }
 

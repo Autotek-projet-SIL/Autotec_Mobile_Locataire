@@ -1,6 +1,5 @@
 
 class PaymentId {
-  // the info related to the location
   int? id_payment;
 
   PaymentId({id_payment})

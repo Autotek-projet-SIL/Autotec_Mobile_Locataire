@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:autotec/components/WBack.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
@@ -40,10 +41,10 @@ class _ProfileState extends State<Profile> {
   }
 
   void getUser() async {
+    String? email = FirebaseAuth.instance.currentUser?.email;
     var res = await http.get(
-      Uri.https('autotek-server.herokuapp.com',
-          'authentification_mobile/locataire_connexion/'),
-      /*${UserCredentials.email}*/
+      Uri.parse(
+          "https://autotek-server.herokuapp.com/authentification_mobile/locataire_connexion/$email"),
       headers: <String, String>{
         "token": "${UserCredentials.token}",
         "id_sender": "${UserCredentials.uid}",

@@ -100,6 +100,7 @@ class _DeverrouillageScreenState extends State<DeverrouillageScreen> {
     final response = await Api.getUserPassword();
     var userInfo = jsonDecode(response.body);
     String mdp = userInfo[0]["mot_de_passe"];
+    print(userInfo[0]);
     print("mdp is $mdp");
     if (mdp.toString() == _passwordController.text) {
       Navigator.push(

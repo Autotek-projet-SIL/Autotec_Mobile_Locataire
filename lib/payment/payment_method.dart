@@ -1,4 +1,5 @@
-import 'package:autotec/payment/paiement_baridimob/payment_video_screen.dart';
+import 'package:autotec/payment/paiement_baridimob/code_validation_screen.dart';
+import 'package:autotec/payment/paiement_stripe/paiement_stripe.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,18 +9,17 @@ import '../models/location.dart';
 
 
 // ignore: must_be_immutable
-class PaimentMethodeScreen extends StatelessWidget {
-  CarLocation location;
-  PaimentMethodeScreen({Key? key, required this.location}) : super(key: key);
+class PaymentMethodeScreen extends StatefulWidget {
+  final CarLocation location;
+
+  const PaymentMethodeScreen({Key? key, required this.location})
+      : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(debugShowCheckedModeBanner: false, home: Body());
-  }
+  PaymentMethodeScreenState createState() => PaymentMethodeScreenState();
 }
 
-class Body extends StatelessWidget {
-  const Body({Key? key}) : super(key: key);
+class PaymentMethodeScreenState extends State<PaymentMethodeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,7 +52,7 @@ class Body extends StatelessWidget {
                 press: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const PaymentVideoScreen()),
+                      builder: (context) =>  CodeValidationScreen(location: widget.location)),
                 ),
                 color: const Color.fromRGBO(27, 146, 164, 0.7),
                 textColor: Colors.white,
@@ -63,7 +63,7 @@ class Body extends StatelessWidget {
                 press: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => const PaymentVideoScreen()),
+                      builder: (context) =>  StripePayment(location: widget.location,)),
                 ),
                 color: const Color.fromRGBO(27, 146, 164, 0.7),
                 textColor: Colors.white,

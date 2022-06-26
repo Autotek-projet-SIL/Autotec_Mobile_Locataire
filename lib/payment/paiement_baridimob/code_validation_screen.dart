@@ -6,14 +6,18 @@ import 'package:external_app_launcher/external_app_launcher.dart';
 import '../../components/WBack.dart';
 import '../../components/raised_button.dart';
 import '../../models/baridimob_account.dart';
+import '../../models/location.dart';
+import '../../models/rest_api.dart';
 import 'email.dart';
 import '../../car_rental/home_page.dart';
 
 class CodeValidationScreen extends StatefulWidget {
-  const CodeValidationScreen({Key? key}) : super(key: key);
+  final CarLocation location;
+
+  const CodeValidationScreen({Key? key, required this.location}) : super(key: key);
 
   @override
-  State<StatefulWidget> createState() => CodeValidationScreenState();
+  CodeValidationScreenState createState() => CodeValidationScreenState();
 }
 
 class CodeValidationScreenState extends State<CodeValidationScreen> {
@@ -75,43 +79,43 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
               const Text(
                 "Voici le code rip que vous devez utiliser dans la transaction",
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 15,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Poppins'),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
               textFiedToCopy(ripCopied, _ripController, green, () {
                 _copyToClipboard(_ripController);
                 setState(() {
                   ripCopied = true;
                 });
               }),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
               const Text(
                 "voici l'e-mail auquel vous devez envoyer le reçu ",
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 15,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Poppins'),
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
               textFiedToCopy(emailCopied, _emailController, green, () {
                 _copyToClipboard(_emailController);
                 setState(() {
                   emailCopied = true;
                 });
               }),
-              const SizedBox(height: 20),
+              const SizedBox(height: 15),
               const Text(
                 "vous pouvez accéder à l'application baridi mob directement à partir d'ici",
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 15,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Poppins'),
                 textAlign: TextAlign.center,
@@ -132,7 +136,7 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
               const Text(
                 "taper ici le code de transaction que vous aver reçu ",
                 style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 15,
                     fontWeight: FontWeight.w500,
                     fontFamily: 'Poppins'),
                 textAlign: TextAlign.center,
@@ -153,11 +157,13 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
                 child: CustomRaisedButton(
                   text: "Confirmer",
                   press: () async {
-                    bool verified = await verifyTeansactionCode(
-                      _codeController.text,
-                    );
+                    final response = await Api.verifierPaiement(
+                        "baridimob",
+                        widget.location.montant.toString(),
+                        "", "", "", "", "", _codeController.text) ;
+                    widget.location.id_paiement  = response;
                     //(_codeController.text == await accessMail())
-                    (verified)
+                    /*(verified)
                         ? showDialog(
                             context: context,
                             builder: (BuildContext context) {
@@ -177,7 +183,7 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
                                   "Retour",
                                   context);
                             },
-                          );
+                          );*/
                   },
                   color: const Color.fromRGBO(27, 146, 164, 0.7),
                   textColor: Colors.white,
@@ -228,30 +234,6 @@ Widget textFiedToCopy(bool pressed, TextEditingController _textController,
   );
 }
 
-Widget popUP(
-    String title, String content, String buttonText, BuildContext context) {
-  return AlertDialog(
-    title: Text(title),
-    content: Text(content),
-    actions: [
-      Padding(
-        padding: const EdgeInsets.all(20),
-        child: CustomRaisedButton(
-          text: buttonText,
-          press: () async {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const CodeValidationScreen()),
-            );
-          },
-          color: const Color.fromRGBO(27, 146, 164, 0.7),
-          textColor: Colors.white,
-        ),
-      )
-    ],
-  );
-}
 
 Widget popUP2(
     String title, String content, String buttonText, BuildContext context) {

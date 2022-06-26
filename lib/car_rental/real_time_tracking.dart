@@ -143,17 +143,8 @@ class _MyMapState extends State<MyMap> {
     } else {
       print(result.errorMessage);
     }
-    double totalDistance = 0;
-    /*  for (var i = 0; i < polylineCoordinates.length - 1; i++) {
-      totalDistance += calculateDistance(
-          polylineCoordinates[i].latitude,
-          polylineCoordinates[i].longitude,
-          polylineCoordinates[i + 1].latitude,
-          polylineCoordinates[i + 1].longitude);
-    }*/
-    print(totalDistance);
 
-    setState(() async {
+    setState(()  {
       Polyline polyline = Polyline(
           polylineId: const PolylineId("poly"),
           color: const Color.fromRGBO(27, 146, 164, 0.7),
@@ -161,30 +152,24 @@ class _MyMapState extends State<MyMap> {
           visible: true,
           points: polylineCoordinates);
       _polylines.add(polyline);
-
-      Distance.distance = await calculateDistance(
+       double distance =  calculateDistance(
           snapshot.data!.docs
               .singleWhere((element) => element.id == widget.carId)['latitude'],
           snapshot.data!.docs.singleWhere(
               (element) => element.id == widget.carId)['longitude'],
           widget.destinationLocation.latitude,
           widget.destinationLocation.longitude);
-      Distance.distance = Distance.distance / 1000;
+      Distance.distance = distance;
+      print("distance1 ${Distance.distance}");
+
     });
   }
 
-  Future<double> calculateDistance(
-      double lat1, double lon1, double lat2, double lon2) async {
-    return Geolocator.distanceBetween(lat1, lon1, lat2, lon2);
+  double calculateDistance(
+      double lat1, double lon1, double lat2, double lon2)  {
+    double distance = Geolocator.distanceBetween(lat1, lon1, lat2, lon2);
+    return distance;
   }
-
-  /*
-    var p = 0.017453292519943295;
-    var a = 0.5 -
-        cos((lat2 - lat1) * p) / 2 +
-        cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
-    return 12742 * asin(sqrt(a));*/
-
   Future<void> mymap(AsyncSnapshot<QuerySnapshot> snapshot) async {
     await _controller.animateCamera(
       CameraUpdate.newCameraPosition(

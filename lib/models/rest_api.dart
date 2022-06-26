@@ -75,7 +75,7 @@ class Api {
   }
 
 
-  static Future<int?> postLocation(String status, CarLocation _location) async {
+  static Future<int?> postLocation(String status, CarLocation _location, String en_cours) async {
     final response = await http.post(
       Uri.parse(
           'https://autotek-server.herokuapp.com/gestionlocations/ajouter_location/'),
@@ -91,7 +91,7 @@ class Api {
         'region': _location.region!,
         'numero_chassis': _location.car!.numeroChasis,
         //TODO notice them that it can be null in case demande rejetee
-        'en_cours': "t",
+        'en_cours': en_cours,
         // t or f
         'latitude_depart': _location.latitude_depart!.toString(),
         'longitude_depart': _location.longitude_depart!.toString(),
@@ -153,9 +153,11 @@ class Api {
     return response;
   }
 
-  static Future<int?> verifierPaiement(String type_paiement, String email,
+  static Future<int?> verifierPaiement(String type_paiement,
       String montant, String type_card, String numero_card, String month,
-      String year, String cvc) async {
+      String year, String cvc, String id_transaction) async {
+    UserCredentials.refresh();
+    String? email = FirebaseAuth.instance.currentUser?.email;
     final response = await http.post(
       Uri.parse(
           'https://autotek-server.herokuapp.com/paiement/verifier_paiement/'),
@@ -169,8 +171,8 @@ class Api {
         "type_paiement": type_paiement,
         "heure_paiement": formattedhoureNow(),
         "date_paiement": formattedDateNow(),
-        "id_transaction": "",
-        "email": email,
+        "id_transaction": id_transaction,
+        "email": email.toString(),
         "montant": montant,
         "name": type_card,
         "numero_card": numero_card,
@@ -211,7 +213,9 @@ class Api {
       }),
     );
     if(response.statusCode == 200){
-      print("end location is workinf");
+      print("end location is working");
+    }else{
+      print(response.statusCode);
     }
     return response;
   }
@@ -282,11 +286,11 @@ class Api {
         "token": UserCredentials.token!,
       },
     );
+    print(response.statusCode);
     return response;
   }
 
-  static Future<http.Response> addDemandeSupport(String descriptif, String objet, int id_louer) async {
-    String? email = FirebaseAuth.instance.currentUser?.email;
+  static Future<http.Response> addDemandeSupport(String descriptif, String objet, String email, int id_louer) async {
     final response = await http.post(
       Uri.parse(
           'https://autotek-server.herokuapp.com/demande_support/ajouter_demande_support/'),

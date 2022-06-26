@@ -24,7 +24,7 @@ class StripePaymentState extends State<StripePayment> {
   final _controller = TextEditingController();
   final _numeroCardController = TextEditingController();
   final _cvcController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+  final _paiementKey = GlobalKey<FormState>();
 
   final items = ["Visa", 'MasterCard', 'American Express'];
   String dropdownValue = "Visa";
@@ -70,7 +70,7 @@ class StripePaymentState extends State<StripePayment> {
             ),
             const SizedBox(height: 32),
             Form(
-              key: _formKey,
+              key: _paiementKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -168,22 +168,20 @@ class StripePaymentState extends State<StripePayment> {
                       press: () async {
                          final response = await Api.verifierPaiement(
                             "stripe",
-                            "ij_terras@esi.dz",
-                            "10",
+                            widget.location.montant.toString(),
                             dropdownValue,
                             _numeroCardController.text,
                             DateFormat().add_M().format(_selected!),
-                            // "month",
                             DateFormat().add_y().format(_selected!),
-                            // "year",
-                            _cvcController.text) ;
+                            _cvcController.text, "") ;
                         widget.location.id_paiement  = response;
+                        print(response);
                         Api.endLocation(widget.location);
                          showDialog(
                            context: context,
                            builder: (BuildContext context) {
                              return popUP2(
-                                 "Merci !! ",
+                                 "Merci!",
                                  "Nous avons bien reçu votre paiement ",
                                  "Ok",
                                  context);

@@ -1,8 +1,10 @@
 import 'package:autotec/payment/paiement_stripe/paiement_stripe.dart';
+import 'package:autotec/payment/payment_method.dart';
 import 'package:flutter/material.dart';
 import '../components/WBack.dart';
 import '../components/WraisedButton.dart';
 import '../models/location.dart';
+import '../models/rest_api.dart';
 
 class Facture extends StatefulWidget {
   final CarLocation location;
@@ -299,11 +301,12 @@ class _FactureDetailsState extends State<Facture> {
                             style: const TextStyle(fontSize: 19)),
                         WidgetRaisedButton(
                             text: 'Payer votre facture',
-                            press: () async {
+                            press: ()  {
+                              Api.updateLocationState("paiement", widget.location.id_location!);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => StripePayment(
+                                  builder: (context) => PaymentMethodeScreen(
                                     location: widget.location,
                                   ),
                                 ),

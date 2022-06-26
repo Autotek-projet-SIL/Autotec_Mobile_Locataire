@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:autotec/car_rental/real_time_tracking2.dart';
 import 'package:autotec/models/user_data.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +11,7 @@ import '../components/raised_button.dart';
 import '../models/location.dart';
 import '../models/rest_api.dart';
 import '../payment/facture.dart';
-import '../payment/payment_method.dart';
+import '../support/support_page.dart';
 
 class Distance {
   static double distance = 0.0;
@@ -38,9 +39,8 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
   final double _panelHeightClosed = 95.0;
   double distance = 0.0;
   int cpt = 0;
-  Timer? timer;
-  var format, one, two;
-
+  var format, one, two, hours, minutes, tarification, montant;
+  late Duration diff;
   @override
   void initState() {
     super.initState();
@@ -48,22 +48,14 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
     widget.location.dateDebut = Api.formattedDateNow();
     widget.location.heureDebut = Api.formattedhoureNow();
     Api.updateLocationState("trajet", widget.location.id_location!);
-    timer = Timer.periodic(const Duration(seconds: 15), (Timer t) {
       setState(() {
         distance = Distance.distance;
-        cpt++;
-        if (distance < 20) {
-          Api.updateLocationState("paiement", widget.location.id_location!);
-          timer?.cancel();
-        }
       });
-    });
   }
 
   @override
   void dispose() {
     super.dispose();
-    timer!.cancel();
   }
 
   @override
@@ -99,7 +91,11 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
             top: 40.0,
             child: FloatingActionButton.extended(
               onPressed: () {
-                //  go to the support page²
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                    builder: (context) =>  DemandeSupportScreen(id_louer: widget.location.id_location! ,)
+                ));
               },
               label: const Text('demande de support',
                   style: TextStyle(
@@ -207,9 +203,20 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
             Padding(
               padding: const EdgeInsets.only(left: 30),
               child: ListTile(
-                leading: const Icon(Icons.countertops,
+                leading: const Icon(Icons.access_time_filled_sharp,
                     color: Color.fromRGBO(27, 146, 164, 0.7)),
-                title: Text(Distance.distance.toStringAsFixed(2) + "1231 DZD",
+                title: Text(
+                    ((Distance.distance / 70) > 1)
+                        ? (Distance.distance ~/ 70).toStringAsFixed(0) +
+                        "h" +
+                        " " +
+                        (((Distance.distance /70) -
+                            (Distance.distance ~/ 80)) *
+                            60)
+                            .toStringAsFixed(0) +
+                        "min restantes"
+                        : (Distance.distance * 60 ~/ 70).toStringAsFixed(0) +
+                        "minutes restantes",
                     style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -217,12 +224,12 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
                         color: Colors.black)),
               ),
             ),
-            const Padding(
+             Padding(
               padding: EdgeInsets.only(left: 30),
               child: ListTile(
                 leading: Icon(Icons.directions_car,
                     color: Color.fromRGBO(27, 146, 164, 0.7)),
-                title: Text("909-163-09",
+                title: Text(widget.location.car!.numeroChasis.toString(),
                     style: TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -231,7 +238,7 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 30, right: 30),
+              padding:  EdgeInsets.only(left: 30, right: 30),
               child: CustomRaisedButton(
                 text: "Trajet terminé",
                 color: const Color.fromRGBO(27, 146, 164, 0.7),
@@ -239,14 +246,22 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
                 press: () => {
                   print(widget.location.heureDebut),
                   widget.location.heureFin = Api.formattedhoureNow(),
-                  format = DateFormat("HH:mm:ss"),
+                  format = DateFormat("HH:mm"),
                   one = format.parse(widget.location.heureDebut),
                   two = format.parse(widget.location.heureFin),
-                  print("${two.difference(one)}"),
-                  print(widget.location.car?.tarification),
-                  //TODO request post endLocation
-                  //TODO request send email
-                  //TODO requst get getemail
+                  diff = two.difference(one),
+                  print(diff),
+                  if(diff.inMinutes >= 0 && diff.inMinutes <= 60)
+                    {
+                      hours = 1,
+                    } else{
+                  hours = diff.inHours
+                  },
+                  print(hours),
+                  tarification = widget.location.car?.tarification,
+                  montant = hours * tarification,
+                  widget.location.montant = montant,
+                  updates(),
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -260,7 +275,7 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
                         pointArrive: widget.location.point_arrive.toString(),
                         dateDebut: widget.location.dateDebut!,
                         idFacture: 1,
-                        montant: 12345,
+                        montant: montant,
                         marque: widget.location.car!.marque,
                         modele: widget.location.car!.modele,
                       ),
@@ -272,4 +287,11 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
           ],
         ));
   }
+  void updates() {
+      var db = FirebaseFirestore.instance;
+      final docRef =
+      db.collection('CarLocation').doc(widget.location.car!.numeroChasis);
+      final data = {'loue': false, 'arrive': true, 'disponible': true};
+      docRef.set(data, SetOptions(merge: true));
+    }
 }

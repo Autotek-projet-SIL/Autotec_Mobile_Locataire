@@ -37,25 +37,28 @@ class TrackingScreen extends StatefulWidget {
 class _TrackingScreenState extends State<TrackingScreen> {
   double _panelHeightOpen = 0;
   final double _panelHeightClosed = 95.0;
-  double distance = 0.0;
 
   @override
   void initState() {
+    super.initState();
+
+    listenFirestore();
+  }
+  listenFirestore() async {
     var db = FirebaseFirestore.instance;
     final docRef =
     db.collection('CarLocation').doc(widget.location.car!.numeroChasis);
-    docRef.snapshots().listen((event) async {
-      print("current data: ${event.data()}");
+    docRef.snapshots().listen((event) {
       if (event ["loue"] && event["arrive"]) {
-        await UserCredentials.refresh();
         Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => DeverrouillageScreen(location: widget.location)
             ));
+        final data = {'arrive': false};
+        docRef.set(data, SetOptions(merge: true));
       }
     });
-    super.initState();
   }
 
   @override
@@ -81,7 +84,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                 topLeft: Radius.circular(18.0),
                 topRight: Radius.circular(18.0)),
           ),
-          Positioned(
+          /*Positioned(
             right: 10.0,
             top: 40.0,
             child: FloatingActionButton.extended(
@@ -98,7 +101,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                   color: Color.fromRGBO(27, 146, 164, 0.7)),
               backgroundColor: Colors.white,
             ),
-          ),
+          ),*/
           Positioned(
               top: 0,
               child: ClipRRect(
@@ -159,17 +162,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                 leading: const Icon(Icons.access_time_filled_sharp,
                     color: Color.fromRGBO(27, 146, 164, 0.7)),
                 title: Text(
-                    ((Distance.distance / 70) > 1)
-                        ? (Distance.distance ~/ 70).toStringAsFixed(0) +
-                            "h" +
-                            " " +
-                            (((Distance.distance /70) -
-                                        (Distance.distance ~/ 80)) *
-                                    60)
-                                .toStringAsFixed(0) +
-                            " min restantes"
-                        : (Distance.distance * 60 ~/ 70).toStringAsFixed(0) +
-                            " minutes restantes",
+                    "minutes restantes",
                     style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -184,7 +177,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                     color: Color.fromRGBO(27, 146, 164, 0.7)),
                 title: Text(
                     Distance.distance.toStringAsFixed(2) +
-                        "km pour arriver",
+                        " metres pour arriver",
                     style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,

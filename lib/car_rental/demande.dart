@@ -104,18 +104,15 @@ class _DemandeState extends State<Demande> {
                   print("numero de chasis");
                   print(_location.car!.numeroChasis);
                   final response =
-                      await Api.postLocation("en attente", _location);
+                      await Api.postLocation("accepte", _location, "t");
                   _location.id_location = response;
                   //TODO (DONE) update loue à vrai
                   var db = FirebaseFirestore.instance;
                   final docRef = db
                       .collection('CarLocation')
                       .doc(_location.car!.numeroChasis);
-                  final data = {'loue': true};
+                  final data = {'loue': true, 'disponible': false};
                   docRef.set(data, SetOptions(merge: true));
-                  /*final responsee = await Api.getLocationById(_location.id_location!);
-                  print(responsee);
-                  print(response.toString());*/
                   Navigator.push(
                     context,
                     MaterialPageRoute(

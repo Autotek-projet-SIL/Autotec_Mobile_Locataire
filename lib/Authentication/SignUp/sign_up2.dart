@@ -13,11 +13,11 @@ class SignUp2 extends StatefulWidget {
 }
 
 class _SignUp2State extends State<SignUp2> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _form2Key = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
   TextEditingController mdpConfirmController = TextEditingController();
   dataNavigation(BuildContext context) {
-    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+    if (_form2Key.currentState != null && _form2Key.currentState!.validate()) {
       debugPrint("Form Validated");
       // _signupFormKey.currentState!.save();
       Navigator.push(
@@ -57,7 +57,7 @@ class _SignUp2State extends State<SignUp2> {
                 SizedBox(height: size.height * 0.06),
                 Center(
                   child: Form(
-                    key: _formKey,
+                    key: _form2Key,
                     child: Column(
                       children: [
                         SizedBox(height: size.height * 0.03),
@@ -99,7 +99,7 @@ class _SignUp2State extends State<SignUp2> {
                                   TextStyle(color: Colors.black, fontSize: 16),
                             ),
                             onPressed: () {
-                              if (_formKey.currentState!.validate()) {
+                              if (_form2Key.currentState!.validate()) {
                                 widget.user.motDePasse =
                                     _passwordController.text;
                                 dataNavigation(context);

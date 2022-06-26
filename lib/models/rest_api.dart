@@ -75,7 +75,7 @@ class Api {
   }
 
 
-  static Future<int?> postLocation(String status, CarLocation _location, String en_cours) async {
+  static Future<int?> postLocation(CarLocation _location) async {
     final response = await http.post(
       Uri.parse(
           'https://autotek-server.herokuapp.com/gestionlocations/ajouter_location/'),
@@ -86,17 +86,47 @@ class Api {
         "id_sender": UserCredentials.uid!,
         "token": UserCredentials.token!,
         'date_debut': formattedDateNow(),
-        'status_demande_location': status,
+        'status_demande_location': "accepte",
         'id_locataire': UserCredentials.uid!,
         'region': _location.region!,
         'numero_chassis': _location.car!.numeroChasis,
         //TODO notice them that it can be null in case demande rejetee
-        'en_cours': en_cours,
+        'en_cours': "t",
         // t or f
         'latitude_depart': _location.latitude_depart!.toString(),
         'longitude_depart': _location.longitude_depart!.toString(),
         'latitude_arrive': _location.latitude_arrive!.toString(),
         'longitude_arrive': _location.longitude_arrive!.toString()
+      }),
+    );
+    if (response.statusCode == 200) {
+      CarLocation locationId = CarLocation.fromJson(
+          jsonDecode(response.body)[0]);
+      print(locationId.id_location);
+      return locationId.id_location;
+    }
+  }
+  static Future<int?> postLocationRejected() async {
+    final response = await http.post(
+      Uri.parse(
+          'https://autotek-server.herokuapp.com/gestionlocations/ajouter_location/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        "id_sender": UserCredentials.uid!,
+        "token": UserCredentials.token!,
+        'date_debut': formattedDateNow(),
+        'status_demande_location': "rejete",
+        'id_locataire': UserCredentials.uid!,
+        'region': "",
+        'numero_chassis': "",
+        'en_cours': "f",
+        // t or f
+        'latitude_depart': "",
+        'longitude_depart': "",
+        'latitude_arrive': "",
+        'longitude_arrive': ""
       }),
     );
     if (response.statusCode == 200) {
@@ -153,9 +183,9 @@ class Api {
     return response;
   }
 
-  static Future<int?> verifierPaiement(String type_paiement,
+  static Future<int?> verifierPaiementStripe(String type_paiement,
       String montant, String type_card, String numero_card, String month,
-      String year, String cvc, String id_transaction) async {
+      String year, String cvc) async {
     UserCredentials.refresh();
     String? email = FirebaseAuth.instance.currentUser?.email;
     final response = await http.post(
@@ -171,7 +201,6 @@ class Api {
         "type_paiement": type_paiement,
         "heure_paiement": formattedhoureNow(),
         "date_paiement": formattedDateNow(),
-        "id_transaction": id_transaction,
         "email": email.toString(),
         "montant": montant,
         "name": type_card,
@@ -191,9 +220,43 @@ class Api {
       print(response.statusCode);
     }
   }
-
+  static Future<int?> verifierPaiementBaridiMob(String type_paiement,
+      String montant, String id_transaction) async {
+    UserCredentials.refresh();
+    String? email = FirebaseAuth.instance.currentUser?.email;
+    final response = await http.post(
+      Uri.parse(
+          'https://autotek-server.herokuapp.com/paiement/verifier_paiement/'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        "id_sender": UserCredentials.uid!,
+        "token": UserCredentials.token!,
+        "id": UserCredentials.uid!,
+        "type_paiement": type_paiement,
+        "heure_paiement": formattedhoureNow(),
+        "date_paiement": formattedDateNow(),
+        "email": email.toString(),
+        "id_transaction": id_transaction,
+        "montant": montant
+      }),
+    );
+    if (response.statusCode == 200) {
+      PaymentId paymentId = PaymentId.fromJson(
+          jsonDecode(response.body)[0]);
+      print(paymentId.id_payment);
+      return paymentId.id_payment;
+    }
+    else {
+      print(response.statusCode);
+    }
+  }
   static Future<http.Response> endLocation(CarLocation _location) async {
     String id_location = _location.id_location.toString();
+    print(id_location);
+    print(_location.id_paiement.toString());
+    UserCredentials.refresh();
     final response = await http.put(
       Uri.parse(
           'https://autotek-server.herokuapp.com/gestionlocations/end_location/$id_location'),

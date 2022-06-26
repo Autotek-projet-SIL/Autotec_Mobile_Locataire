@@ -1,5 +1,5 @@
 import 'package:autotec/components/raised_button.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../components/WBack.dart';
@@ -8,6 +8,7 @@ import '../../models/location.dart';
 import '../../models/rest_api.dart';
 import 'package:month_year_picker/month_year_picker.dart';
 
+import '../../models/user_data.dart';
 import '../paiement_baridimob/code_validation_screen.dart';
 
 class StripePayment extends StatefulWidget {
@@ -36,7 +37,8 @@ class StripePaymentState extends State<StripePayment> {
     Size size = MediaQuery.of(context).size;
     int id_payer;
     return Scaffold(
-      body: Column(
+      body: SingleChildScrollView(
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -56,19 +58,19 @@ class StripePaymentState extends State<StripePayment> {
                 ],
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 10),
             SizedBox(
               width: (size.width * 0.8) + 5,
               child: const Text(
                 "Veuillez entrez les informations de votre carte",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    fontSize: 22,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                     fontFamily: 'Poppins'),
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 10),
             Form(
               key: _paiementKey,
               child: Column(
@@ -122,7 +124,7 @@ class StripePaymentState extends State<StripePayment> {
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                     GestureDetector(
                       child: Container(
-                        height: size.height * 0.06,
+                        height: size.height * 0.068,
                         width: size.width * 0.6,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(15),
@@ -135,7 +137,7 @@ class StripePaymentState extends State<StripePayment> {
                         child: Padding(
                           padding: EdgeInsets.all(10),
                           child: (_selected == null)
-                              ? const Text("Date d'experation")
+                              ? const Text("Date d'expiration")
                               : Text(DateFormat().add_yM().format(_selected!)),
                         ),
                       ),
@@ -160,23 +162,26 @@ class StripePaymentState extends State<StripePayment> {
                     )
                   ]),
                   const SizedBox(height: 32),
+
                   SizedBox(
                     width: size.width * 0.8,
                     height: size.height * 0.05,
                     child: CustomRaisedButton(
                       text: "Confirmer",
                       press: () async {
-                         final response = await Api.verifierPaiement(
+                         final response = await Api.verifierPaiementStripe(
                             "stripe",
                             widget.location.montant.toString(),
                             dropdownValue,
                             _numeroCardController.text,
                             DateFormat().add_M().format(_selected!),
                             DateFormat().add_y().format(_selected!),
-                            _cvcController.text, "") ;
+                            _cvcController.text) ;
                         widget.location.id_paiement  = response;
                         print(response);
-                        Api.endLocation(widget.location);
+                         UserCredentials.refresh();
+                         Api.endLocation(widget.location);
+                         updates2();
                          showDialog(
                            context: context,
                            builder: (BuildContext context) {
@@ -197,10 +202,16 @@ class StripePaymentState extends State<StripePayment> {
                 ],
               ),
             ),
-          ]),
+          ]),)
     );
   }
-
+  void updates2() {
+    var db = FirebaseFirestore.instance;
+    final docRef =
+    db.collection('CarLocation').doc(widget.location.car!.numeroChasis);
+    final data = {'arrive': false};
+    docRef.set(data, SetOptions(merge: true));
+  }
   Future<void> _onPressed({
     required BuildContext context,
     String? locale,
@@ -218,24 +229,5 @@ class StripePaymentState extends State<StripePayment> {
         _selected = selected;
       });
     }
-  }
-}
-
-class PaymentDetails {
-  String? paymentType;
-  String? email;
-  String? cardType;
-  String? montant;
-  String? cardNumber;
-  String? month;
-  String? year;
-  String? CVC;
-
-  PaymentDetails._privateConstructor();
-
-  static final PaymentDetails _instance = PaymentDetails._privateConstructor();
-
-  factory PaymentDetails() {
-    return _instance;
   }
 }

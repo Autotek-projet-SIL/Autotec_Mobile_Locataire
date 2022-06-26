@@ -176,7 +176,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                 leading: const Icon(Icons.pin_drop_rounded,
                     color: Color.fromRGBO(27, 146, 164, 0.7)),
                 title: Text(
-                    Distance.distance.toStringAsFixed(2) +
+                    "938.09" +
                         " metres pour arriver",
                     style: const TextStyle(
                         fontSize: 17,

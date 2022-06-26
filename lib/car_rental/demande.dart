@@ -104,7 +104,7 @@ class _DemandeState extends State<Demande> {
                   print("numero de chasis");
                   print(_location.car!.numeroChasis);
                   final response =
-                      await Api.postLocation("accepte", _location, "t");
+                      await Api.postLocation(_location);
                   _location.id_location = response;
                   //TODO (DONE) update loue à vrai
                   var db = FirebaseFirestore.instance;

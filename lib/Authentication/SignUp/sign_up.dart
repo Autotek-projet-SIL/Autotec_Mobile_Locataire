@@ -14,7 +14,7 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _form1Key = GlobalKey<FormState>();
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -32,7 +32,7 @@ class _SignUpState extends State<SignUp> {
       motDePasse: "",
       numeroTelephone: numeroTelephoneController.text,
     );
-    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
+    if (_form1Key.currentState != null && _form1Key.currentState!.validate()) {
       debugPrint("Form Validated");
       // _signupFormKey.currentState!.save();
       Navigator.push(
@@ -71,7 +71,7 @@ class _SignUpState extends State<SignUp> {
 
                 Center(
                   child: Form(
-                    key: _formKey,
+                    key: _form1Key,
                     child: Column(
                       children: [
                         SizedBox(height: size.height * 0.03),
@@ -141,7 +141,7 @@ class _SignUpState extends State<SignUp> {
                               TextStyle(color: Colors.black, fontSize: 16),
                             ),
                             onPressed: () {
-                              if (_formKey.currentState!.validate()) {
+                              if (_form1Key.currentState!.validate()) {
                                 dataNavigation(context);
                               }
                             },

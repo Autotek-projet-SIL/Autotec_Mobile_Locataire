@@ -157,10 +157,8 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
                 child: CustomRaisedButton(
                   text: "Confirmer",
                   press: () async {
-                    final response = await Api.verifierPaiement(
-                        "baridimob",
-                        widget.location.montant.toString(),
-                        "", "", "", "", "", _codeController.text) ;
+                    final response = await Api.verifierPaiementBaridiMob(
+                        "baridimob", "10000.0", _codeController.text) ;
                     widget.location.id_paiement  = response;
                     //(_codeController.text == await accessMail())
                     /*(verified)

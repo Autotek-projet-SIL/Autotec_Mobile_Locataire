@@ -46,7 +46,7 @@ class _FactureDetailsState extends State<Facture> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(14.0),
+        padding: const EdgeInsets.all(8.0),
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -54,10 +54,10 @@ class _FactureDetailsState extends State<Facture> {
                 children: const [
                   WidgetArrowBack(),
                   SizedBox(
-                    width: 10,
+                    width: 5,
                   ),
                   Text(
-                    "Details de la facture ",
+                    "Informations facture: ",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 24,
@@ -66,36 +66,10 @@ class _FactureDetailsState extends State<Facture> {
                 ],
               ),
               SizedBox(
-                height: size.height * 0.03,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    widget.nomLoc.toUpperCase(),
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(fontSize: 22),
-                  ),
-                  Image.asset(
-                    "assets/logo.png",
-                    width: 120,
-                  )
-                ],
-              ),
-              SizedBox(
-                height: size.height * 0.03,
-              ),
-              const Text(
-                "Informations facture: ",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xff2E9FB0),
-                ),
+                height: size.height * 0.01,
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 10),
+                padding: const EdgeInsets.only(top: 0),
                 child: Column(
                   children: [
                     Row(
@@ -144,7 +118,7 @@ class _FactureDetailsState extends State<Facture> {
                 ),
               ),
               Container(
-                  margin: const EdgeInsets.only(top: 12),
+                  margin: const EdgeInsets.only(top: 5),
                   padding: const EdgeInsets.all(5),
                   height: 55,
                   width: size.width * 0.7,

@@ -89,7 +89,7 @@ class CarListView extends StatelessWidget {
                     child: FlatButton(
                         onPressed: () {
                           CarLocation _location = CarLocation();
-                          Api.postLocation("rejete", _location, "f" );
+                          Api.postLocationRejected();
                           Navigator.pop(context);
                         },
                         child: const Text("ok")),

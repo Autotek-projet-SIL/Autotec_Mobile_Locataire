@@ -19,6 +19,7 @@ class CarsList extends StatefulWidget {
 }
 
 class _CarsListState extends State<CarsList> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,9 +88,8 @@ class CarListView extends StatelessWidget {
                           "aucune voiture n'est disponible en ce moment, veuillez réessayer plus tard")),
                   Center(
                     child: FlatButton(
-                        onPressed: () {
-                          CarLocation _location = CarLocation();
-                          Api.postLocationRejected();
+                        onPressed: () async {
+                          await Api.postLocationRejected();
                           Navigator.pop(context);
                         },
                         child: const Text("ok")),
@@ -132,6 +132,7 @@ class CarListView extends StatelessWidget {
     } else if (response.statusCode == 403) {
       throw Exception('access forbiden');
     } else {
+      print(response.statusCode);
       throw Exception('Failed to load Cars from API');
     }
   }

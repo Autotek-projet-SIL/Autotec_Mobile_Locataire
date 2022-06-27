@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui';
 import 'package:autotec/car_rental/real_time_tracking.dart';
 import 'package:autotec/components/raised_button.dart';
@@ -37,12 +38,18 @@ class TrackingScreen extends StatefulWidget {
 class _TrackingScreenState extends State<TrackingScreen> {
   double _panelHeightOpen = 0;
   final double _panelHeightClosed = 95.0;
-
+  double distance = 0.0;
   @override
   void initState() {
     super.initState();
-
     listenFirestore();
+    setState(() {
+      Timer.periodic(const Duration(seconds: 1), (Timer t) {
+        setState(() {
+          distance = Distance.distance;
+        });
+      });
+    });
   }
   listenFirestore() async {
     var db = FirebaseFirestore.instance;
@@ -162,7 +169,10 @@ class _TrackingScreenState extends State<TrackingScreen> {
                 leading: const Icon(Icons.access_time_filled_sharp,
                     color: Color.fromRGBO(27, 146, 164, 0.7)),
                 title: Text(
-                    "minutes restantes",
+                    (Distance.distance / 5)
+                            .toStringAsFixed(0) +
+                        " min restantes"
+                        ,
                     style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -176,8 +186,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
                 leading: const Icon(Icons.pin_drop_rounded,
                     color: Color.fromRGBO(27, 146, 164, 0.7)),
                 title: Text(
-                    "938.09" +
-                        " metres pour arriver",
+                    Distance.distance.toStringAsFixed(2) + " metres pour arriver",
                     style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,

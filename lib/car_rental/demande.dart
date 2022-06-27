@@ -111,7 +111,7 @@ class _DemandeState extends State<Demande> {
                   final docRef = db
                       .collection('CarLocation')
                       .doc(_location.car!.numeroChasis);
-                  final data = {'loue': true, 'disponible': false};
+                  final data = {'loue': true};
                   docRef.set(data, SetOptions(merge: true));
                   Navigator.push(
                     context,

@@ -41,6 +41,7 @@ class _ProfileState extends State<Profile> {
   }
 
   void getUser() async {
+    UserCredentials.refresh();
     String? email = FirebaseAuth.instance.currentUser?.email;
     var res = await http.get(
       Uri.parse(
@@ -50,6 +51,7 @@ class _ProfileState extends State<Profile> {
         "id_sender": "${UserCredentials.uid}",
       },
     );
+    print(res.statusCode);
     setState(() {
       userProfile = json.decode(res.body);
       circular = false;

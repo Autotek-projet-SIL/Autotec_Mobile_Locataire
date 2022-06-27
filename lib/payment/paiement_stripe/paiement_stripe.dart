@@ -181,7 +181,7 @@ class StripePaymentState extends State<StripePayment> {
                         print(response);
                          UserCredentials.refresh();
                          Api.endLocation(widget.location);
-                         updates2();
+                         await updates2();
                          showDialog(
                            context: context,
                            builder: (BuildContext context) {
@@ -205,12 +205,13 @@ class StripePaymentState extends State<StripePayment> {
           ]),)
     );
   }
-  void updates2() {
-    var db = FirebaseFirestore.instance;
+  Future<void> updates2() async {
+    var db = await FirebaseFirestore.instance;
     final docRef =
     db.collection('CarLocation').doc(widget.location.car!.numeroChasis);
     final data = {'arrive': false};
     docRef.set(data, SetOptions(merge: true));
+    Api.updateLocationState("fin", widget.location.id_location!);
   }
   Future<void> _onPressed({
     required BuildContext context,

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:ui';
 import 'package:autotec/car_rental/real_time_tracking2.dart';
 import 'package:autotec/models/user_data.dart';
@@ -48,9 +49,12 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
     widget.location.dateDebut = Api.formattedDateNow();
     widget.location.heureDebut = Api.formattedhoureNow();
     Api.updateLocationState("trajet", widget.location.id_location!);
-      setState(() {
-        distance = Distance.distance;
-      });
+    Timer.periodic(const Duration(seconds: 1), (Timer t) {
+         setState(() {
+           distance = Distance.distance;
+         });
+    });
+
   }
 
   @override
@@ -168,17 +172,17 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
                 leading: const Icon(Icons.access_time_filled_sharp,
                     color: Color.fromRGBO(27, 146, 164, 0.7)),
                 title: Text(
-                    ((Distance.distance / 80) > 1)
-                        ? (Distance.distance ~/ 80).toStringAsFixed(0) +
-                            "h" +
-                            " " +
-                            (((Distance.distance / 80) -
-                                        (Distance.distance ~/ 80)) *
-                                    60)
-                                .toStringAsFixed(0) +
-                            " min restantes"
-                        : (Distance.distance * 60 ~/ 80).toStringAsFixed(0) +
-                            " minutes restantes",
+                    ((Distance.distance / 5) > 1)
+                        ? (Distance.distance ~/5).toStringAsFixed(0) +
+                        "h" +
+                        " " +
+                        (((Distance.distance /5) -
+                            (Distance.distance ~/ 5)) *
+                            60)
+                            .toStringAsFixed(0) +
+                        " min restantes"
+                        : (Distance.distance * 60 ~/5).toStringAsFixed(0) +
+                        " minutes restantes",
                     style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -192,31 +196,7 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
                 leading: const Icon(Icons.pin_drop_rounded,
                     color: Color.fromRGBO(27, 146, 164, 0.7)),
                 title: Text(
-                    Distance.distance.toStringAsFixed(2) + " km pour arriver",
-                    style: const TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Poppins',
-                        color: Colors.black)),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 30),
-              child: ListTile(
-                leading: const Icon(Icons.access_time_filled_sharp,
-                    color: Color.fromRGBO(27, 146, 164, 0.7)),
-                title: Text(
-                    ((Distance.distance / 70) > 1)
-                        ? (Distance.distance ~/ 70).toStringAsFixed(0) +
-                        "h" +
-                        " " +
-                        (((Distance.distance /70) -
-                            (Distance.distance ~/ 80)) *
-                            60)
-                            .toStringAsFixed(0) +
-                        "min restantes"
-                        : (Distance.distance * 60 ~/ 70).toStringAsFixed(0) +
-                        "minutes restantes",
+                    Distance.distance.toStringAsFixed(2) + " metres pour arriver",
                     style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -243,7 +223,8 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
                 text: "Trajet terminé",
                 color: const Color.fromRGBO(27, 146, 164, 0.7),
                 textColor: Colors.white,
-                press: () => {
+                press: () =>  {
+                  updates(),
                   print(widget.location.heureDebut),
                   widget.location.heureFin = Api.formattedhoureNow(),
                   format = DateFormat("HH:mm"),
@@ -261,7 +242,6 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
                   tarification = widget.location.car?.tarification,
                   montant = hours * tarification,
                   widget.location.montant = montant,
-                  updates(),
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -287,11 +267,11 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
           ],
         ));
   }
-  void updates() {
-      var db = FirebaseFirestore.instance;
+  Future<void> updates() async {
+      var db =  await FirebaseFirestore.instance;
       final docRef =
       db.collection('CarLocation').doc(widget.location.car!.numeroChasis);
-      final data = {'loue': false, 'arrive': true, 'disponible': true};
+      final data = {'loue': false, 'arrive': true};
       docRef.set(data, SetOptions(merge: true));
     }
 }

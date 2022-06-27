@@ -123,10 +123,10 @@ class Api {
         'numero_chassis': "",
         'en_cours': "f",
         // t or f
-        'latitude_depart': "",
-        'longitude_depart': "",
-        'latitude_arrive': "",
-        'longitude_arrive': ""
+        'latitude_depart': 0.toString(),
+        'longitude_depart': 0.toString(),
+        'latitude_arrive': 0.toString(),
+        'longitude_arrive': 0.toString()
       }),
     );
     if (response.statusCode == 200) {

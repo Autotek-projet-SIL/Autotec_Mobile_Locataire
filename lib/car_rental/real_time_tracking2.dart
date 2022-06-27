@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart' as loc;
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -141,15 +142,6 @@ class _MyMap2State extends State<MyMap2> {
     } else {
       print(result.errorMessage);
     }
-    double totalDistance = 0;
-    for (var i = 0; i < polylineCoordinates.length - 1; i++) {
-      totalDistance += calculateDistance(
-          polylineCoordinates[i].latitude,
-          polylineCoordinates[i].longitude,
-          polylineCoordinates[i + 1].latitude,
-          polylineCoordinates[i + 1].longitude);
-    }
-    print(totalDistance);
 
     setState(() {
       Polyline polyline = Polyline(
@@ -159,16 +151,22 @@ class _MyMap2State extends State<MyMap2> {
           visible: true,
           points: polylineCoordinates);
       _polylines.add(polyline);
-      Distance.distance = totalDistance;
+      double distance =  calculateDistance(
+          snapshot.data!.docs
+              .singleWhere((element) => element.id == widget.carId)['latitude'],
+          snapshot.data!.docs.singleWhere(
+                  (element) => element.id == widget.carId)['longitude'],
+          widget.destinationLocation.latitude,
+          widget.destinationLocation.longitude);
+      Distance.distance = distance;
+      print("distance1 ${Distance.distance}");
     });
   }
 
-  double calculateDistance(lat1, lon1, lat2, lon2) {
-    var p = 0.017453292519943295;
-    var a = 0.5 -
-        cos((lat2 - lat1) * p) / 2 +
-        cos(lat1 * p) * cos(lat2 * p) * (1 - cos((lon2 - lon1) * p)) / 2;
-    return 12742 * asin(sqrt(a));
+  double calculateDistance(
+      double lat1, double lon1, double lat2, double lon2)  {
+    double distance = Geolocator.distanceBetween(lat1, lon1, lat2, lon2);
+    return distance;
   }
 
   Future<void> mymap(AsyncSnapshot<QuerySnapshot> snapshot) async {

@@ -96,17 +96,11 @@ class _SignInState extends State<SignIn> {
                                   height: 10,
                                 ),
                                 SizedBox(height: size.height * 0.03),
-                                TextFieldPassword(
+                                CustomTextField(
                                   hintText: " Votre mot de passe",
-                                  controller: _passwordController,
-                                  onChanged: (value) {},
+                                  controler: _passwordController,
                                   validationMode:
-                                      AutovalidateMode.onUserInteraction,
-                                  validator: (value) {
-                                    return value != null && value.length < 6
-                                        ? "Enter min. 6 characters"
-                                        : null;
-                                  },
+                                  AutovalidateMode.onUserInteraction,
                                 ),
                                 const SizedBox(
                                   height: 12,

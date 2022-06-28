@@ -32,7 +32,7 @@ class _MyMap2State extends State<MyMap2> {
   Set<Polyline> _polylines = {};
   List<LatLng> polylineCoordinates = [];
   PolylinePoints polylinePoints = PolylinePoints();
-  String googleAPIKey = "AIzaSyCYFQXP0t1dUWtl9V4xm73lt-l_nQQIkcw";
+  String googleAPIKey = "API key";
   BitmapDescriptor? sourceIcon;
   BitmapDescriptor? destinationIcon;
 

@@ -9,11 +9,10 @@ class WidgetTextFieldPassword extends StatelessWidget {
   final ValueChanged<String> onChanged;
   const WidgetTextFieldPassword({
     Key? key,
-     this.controller,
+    this.controller,
     required this.hintText,
     required this.onChanged,
     required this.validator,
-
   }) : super(key: key);
 
   @override
@@ -23,14 +22,14 @@ class WidgetTextFieldPassword extends StatelessWidget {
       validator: validator,
       obscureText: true,
       onChanged: (value) {},
-      cursorColor:const Color.fromRGBO(27, 146, 164, 1),
+      cursorColor: const Color.fromRGBO(27, 146, 164, 1),
       decoration: InputDecoration(
         hintText: hintText,
         suffixIcon: const Icon(
           Icons.visibility,
           color: Colors.black,
         ),
-        contentPadding: const EdgeInsets.all(14.0) ,
+        contentPadding: const EdgeInsets.all(14.0),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),
         ),
@@ -39,10 +38,10 @@ class WidgetTextFieldPassword extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(width: 3, color: Color.fromRGBO(27, 146, 164, 1)),
+          borderSide: const BorderSide(
+              width: 3, color: Color.fromRGBO(27, 146, 164, 1)),
           borderRadius: BorderRadius.circular(15),
         ),
-
       ),
     );
   }

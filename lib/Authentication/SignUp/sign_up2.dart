@@ -18,8 +18,7 @@ class _SignUp2State extends State<SignUp2> {
   TextEditingController mdpConfirmController = TextEditingController();
   dataNavigation(BuildContext context) {
     if (_form2Key.currentState != null && _form2Key.currentState!.validate()) {
-      debugPrint("Form Validated");
-      // _signupFormKey.currentState!.save();
+      debugPrint("Form Validated");      
       Navigator.push(
         context,
         MaterialPageRoute(

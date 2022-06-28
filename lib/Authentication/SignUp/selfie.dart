@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_unnecessary_containers
 
-//import 'package:autotec/Authentication/data/repositories/image_storage_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
@@ -22,14 +21,11 @@ class Selfie extends StatefulWidget {
 class _SelfieState extends State<Selfie> {
   bool isButtonActive = true;
   XFile? imageFile;
-  //final Storage storage = Storage();
   final ImagePicker _picker = ImagePicker();
 
   _openGallery(BuildContext context) async {
     imageFile = (await _picker.pickImage(source: ImageSource.gallery));
-   // final String fileName  = path.basename(imageFile!.path); 
-   // final File filePath = File(imageFile!.path);
-   // await storage.uploadFile(filePath.path, fileName).then((value) => debugPrint("done"));
+
     widget.u.photoSelfie = imageFile!.path;
     setState(() {});
     Navigator.of(context).pop();

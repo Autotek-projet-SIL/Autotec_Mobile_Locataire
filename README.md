@@ -2,15 +2,13 @@
 
 A new Flutter project.
 
-## Getting Started
+Il s'agit d'une application de Flutter pour la location en ligne de voitures autopilotées.
 
-This project is a starting point for a Flutter application.
+L'application assure les fonctionnalités suivantes : 
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Sign up et authentification.
+- demande d'allocation d'une voiture.
+- le suivi en temps réel de la voiture sur une carte (Map).
+- Le paiement en ligne en utilisant les services de Stripe et BaridiMob.
+- La gestion des profils.
+- La demande d'assistance auprès des agents de maintenance en cas de problème. 

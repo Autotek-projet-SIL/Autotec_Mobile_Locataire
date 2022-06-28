@@ -9,26 +9,19 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class UserData {
-  String? id; //put the id of firebase user
+  String? id;
   String? token;
   String? nom;
   String? prenom;
   String? email;
   String? motDePasse;
   String? numeroTelephone;
-  /*XFile? photo_identite_recto;
-  XFile? photo_identite_verso;
-  XFile? photo_selfie;
-  var photoIdentiteRecto;
-  var photoIdentiteVerso;
-  var photoSelfie;*/
   String? photoIdentiteRecto;
   String? photoIdentiteVerso;
   String? photoSelfie;
   String? statutCompte;
   UserData.a();
-  UserData.n(
-   {
+  UserData.n({
     this.id,
     this.nom,
     this.prenom,
@@ -39,8 +32,7 @@ class UserData {
     this.photoIdentiteVerso,
     this.photoSelfie,
   });
-  UserData.m(
-   {
+  UserData.m({
     this.id,
     this.nom,
     this.prenom,
@@ -62,20 +54,10 @@ class UserData {
       this.photoSelfie);
 
   Future<String> imagetoBase64(File imagefile) async {
-    /* use this function to assign an image field, give it the file to the image
-
-     */
-
-    //File imagefile = File(path); //convert Path to File
-    Uint8List imagebytes = await imagefile.readAsBytes(); //convert to bytes
-    String base64string =
-        base64.encode(imagebytes); //convert bytes to base64 string
+    Uint8List imagebytes = await imagefile.readAsBytes();
+    String base64string = base64.encode(imagebytes);
     return base64string;
   }
-
-  /* use this function to get the user from the services
-      to check if his profil was validated or not
-   */
 
   factory UserData.fromJson(Map<String, dynamic> json) {
     return UserData.json(
@@ -94,26 +76,26 @@ class UserData {
 
 class UserCredentials {
   UserCredentials._privateConstructor();
-  static final UserCredentials _instance = UserCredentials._privateConstructor();
+  static final UserCredentials _instance =
+      UserCredentials._privateConstructor();
   static String? devicetoken;
   static String? uid;
   static String? token;
 
-  factory UserCredentials(){
+  factory UserCredentials() {
     return _instance;
   }
-  static setDeviceToken()async{
+  static setDeviceToken() async {
     devicetoken = await FirebaseMessaging.instance.getToken();
   }
 
-  static Future<void> refresh()async{
-    try{
+  static Future<void> refresh() async {
+    try {
       token = (await FirebaseAuth.instance.currentUser!.getIdToken());
-      uid = ( FirebaseAuth.instance.currentUser?.uid);
-    }on FirebaseAuthException catch (e){
+      uid = (FirebaseAuth.instance.currentUser?.uid);
+    } on FirebaseAuthException catch (e) {
       print('auth exception!\n');
       print(e);
     }
-
   }
 }

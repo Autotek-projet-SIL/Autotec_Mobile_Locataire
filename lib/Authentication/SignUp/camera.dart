@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:multi_image_picker/multi_image_picker.dart';
@@ -19,8 +18,6 @@ class _CameraState extends State<Camera> {
   }
 
   Future<void> pickImages() async {
-    //List<Asset> resultList = List<Asset>();
-
     try {
       resultList = await MultiImagePicker.pickImages(
         maxImages: 300,
@@ -53,10 +50,6 @@ class _CameraState extends State<Camera> {
               onPressed: pickImages,
               child: const Text("Pick images"),
             ),
-            /*RaisedButton(
-              child: const Text("Pick images"),
-              onPressed: pickImages,
-            ),*/
             Expanded(
               child: GridView.count(
                 crossAxisCount: 2,

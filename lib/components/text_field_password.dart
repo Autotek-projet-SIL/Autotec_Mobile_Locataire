@@ -23,7 +23,7 @@ class TextFieldPassword extends StatelessWidget {
       validator: validator,
       obscureText: true,
       onChanged: (value) {},
-      cursorColor:const Color.fromRGBO(27, 146, 164, 1),
+      cursorColor: const Color.fromRGBO(27, 146, 164, 1),
       decoration: InputDecoration(
         hintText: hintText,
         suffixIcon: const Icon(

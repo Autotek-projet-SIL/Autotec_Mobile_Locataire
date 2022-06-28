@@ -1,6 +1,4 @@
-// ignore_for_file: avoid_unnecessary_containers, avoid_print, prefer_final_fields
-
-import 'dart:convert';
+// ignore_for_file: avoid_unnecessary_containers, prefer_final_fields
 
 import 'package:autotec/car_rental/sliding_up_panel.dart';
 import 'package:autotec/models/location.dart';
@@ -96,17 +94,10 @@ class _DemandeState extends State<Demande> {
             WidgetRaisedButton(
                 text: 'valider',
                 press: () async {
-                  await UserCredentials.refresh();
-                  print("token\n");
-                  print(UserCredentials.token);
-                  print('uid\n');
-                  print(UserCredentials.uid);
-                  print("numero de chasis");
-                  print(_location.car!.numeroChasis);
+                  await UserCredentials.refresh();                
                   final response =
                       await Api.postLocation(_location);
-                  _location.id_location = response;
-                  //TODO (DONE) update loue à vrai
+                  _location.id_location = response;                 
                   var db = FirebaseFirestore.instance;
                   final docRef = db
                       .collection('CarLocation')
@@ -123,9 +114,7 @@ class _DemandeState extends State<Demande> {
                         location: _location,
                       ),
                     ),
-                  );
-                  print("latitude" + _location.latitude_depart!.toString());
-                  print("longitude" + _location.longitude_arrive!.toString());
+                  );                  
                 },
                 color: const Color(0xff2E9FB0),
                 textColor: Colors.white)

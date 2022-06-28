@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use, unused_field
+// ignore_for_file: deprecated_member_use,
 
 import 'package:autotec/Authentication/SignUp/sign_up2.dart';
 import 'package:email_validator/email_validator.dart';
@@ -18,7 +18,6 @@ class _SignUpState extends State<SignUp> {
   TextEditingController firstNameController = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
   TextEditingController dateinput = TextEditingController();
   TextEditingController mdpConfirmController = TextEditingController();
   TextEditingController numeroTelephoneController = TextEditingController();
@@ -34,7 +33,6 @@ class _SignUpState extends State<SignUp> {
     );
     if (_form1Key.currentState != null && _form1Key.currentState!.validate()) {
       debugPrint("Form Validated");
-      // _signupFormKey.currentState!.save();
       Navigator.push(
         context,
         MaterialPageRoute(

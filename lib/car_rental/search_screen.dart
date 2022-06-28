@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use, non_constant_identifier_names, avoid_print, unnecessary_brace_in_string_interps, avoid_unnecessary_containers, sized_box_for_whitespace
+// ignore_for_file: deprecated_member_use, non_constant_identifier_names, unnecessary_brace_in_string_interps, avoid_unnecessary_containers, sized_box_for_whitespace, avoid_print
 
 import 'package:autotec/models/user_data.dart';
 import 'package:flutter/material.dart';
@@ -76,11 +76,6 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
     var addresses =
         await Geocoder.local.findAddressesFromCoordinates(coordinates);
     var first = addresses.first;
-    print(
-        '1. ${first.locality}, 2. ${first.adminArea}, 3. ${first.subLocality}, '
-        '4. ${first.subAdminArea}, 5. ${first.addressLine}, 6. ${first.featureName},'
-        '7, ${first.thoroughfare}, 8. ${first.subThoroughfare}');
-
     return first.addressLine!;
   }
 
@@ -89,11 +84,6 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
     var addresses =
         await Geocoder.local.findAddressesFromCoordinates(coordinates);
     var first = addresses.first;
-    print(
-        '1. ${first.locality}, 2. ${first.adminArea}, 3. ${first.subLocality}, '
-        '4. ${first.subAdminArea}, 5. ${first.addressLine}, 6. ${first.featureName},'
-        '7, ${first.thoroughfare}, 8. ${first.subThoroughfare}');
-
     return first.adminArea!;
   }
 
@@ -161,8 +151,6 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                           _setMarker("depart", latitude_dpr, longitude_dpr);
                           depart = true;
                         });
-                        print(
-                            "depart : ${latitude_dpr},${longitude_dpr} : ${depart_adr}");
                       },
                     ),
                   ),
@@ -184,8 +172,6 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                         _setMarker("depart", latitude_dpr, longitude_dpr);
                         depart = true;
                       });
-                      print(
-                          "depart : ${latitude_dpr},${longitude_dpr} : ${depart_adr}");
                     },
                   )
                 ],
@@ -220,8 +206,6 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                           _setMarker("arrive", latitude_arv, longitude_arv);
                           arrive = true;
                         });
-                        print(
-                            "arrive : ${latitude_arv},${longitude_arv} : ${arrive_adr}");
                       },
                     ),
                   ),
@@ -242,8 +226,6 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                         _setMarker("arrive", latitude_arv, longitude_arv);
                         arrive = true;
                       });
-                      print(
-                          "arrive : ${latitude_arv},${longitude_arv} : ${arrive_adr}");
                     },
                   )
                 ],
@@ -313,12 +295,8 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                                                   : "point de départ",
                                               style: const TextStyle(
                                                   fontSize: 15,
-                                                  fontWeight: FontWeight.w600)
-                                          )
-                                      )
-                                  )
-                              )
-                          ),
+                                                  fontWeight:
+                                                      FontWeight.w600)))))),
                         ],
                       ),
                     ),
@@ -366,7 +344,6 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen> {
                       width: 300,
                       child: ElevatedButton(
                         onPressed: () async {
-                          //TODO  regler les attributs a passer entre les pages
                           if (depart && arrive) {
                             if (depart_adr != arrive_adr) {
                               CarLocation _carLocation = CarLocation();

@@ -1,5 +1,6 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'dart:async';
-import 'dart:io';
 import 'dart:ui';
 import 'package:autotec/car_rental/real_time_tracking2.dart';
 import 'package:autotec/models/user_data.dart';
@@ -50,11 +51,10 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
     widget.location.heureDebut = Api.formattedhoureNow();
     Api.updateLocationState("trajet", widget.location.id_location!);
     Timer.periodic(const Duration(seconds: 1), (Timer t) {
-         setState(() {
-           distance = Distance.distance;
-         });
+      setState(() {
+        distance = Distance.distance;
+      });
     });
-
   }
 
   @override
@@ -98,8 +98,9 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                    builder: (context) =>  DemandeSupportScreen(id_louer: widget.location.id_location! ,)
-                ));
+                        builder: (context) => DemandeSupportScreen(
+                              id_louer: widget.location.id_location!,
+                            )));
               },
               label: const Text('demande de support',
                   style: TextStyle(
@@ -173,16 +174,16 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
                     color: Color.fromRGBO(27, 146, 164, 0.7)),
                 title: Text(
                     ((Distance.distance / 5) > 1)
-                        ? (Distance.distance ~/5).toStringAsFixed(0) +
-                        "h" +
-                        " " +
-                        (((Distance.distance /5) -
-                            (Distance.distance ~/ 5)) *
-                            60)
-                            .toStringAsFixed(0) +
-                        " min restantes"
-                        : (Distance.distance * 60 ~/5).toStringAsFixed(0) +
-                        " minutes restantes",
+                        ? (Distance.distance ~/ 5).toStringAsFixed(0) +
+                            "h" +
+                            " " +
+                            (((Distance.distance / 5) -
+                                        (Distance.distance ~/ 5)) *
+                                    60)
+                                .toStringAsFixed(0) +
+                            " min restantes"
+                        : (Distance.distance * 60 ~/ 5).toStringAsFixed(0) +
+                            " minutes restantes",
                     style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -196,7 +197,8 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
                 leading: const Icon(Icons.pin_drop_rounded,
                     color: Color.fromRGBO(27, 146, 164, 0.7)),
                 title: Text(
-                    Distance.distance.toStringAsFixed(2) + " metres pour arriver",
+                    Distance.distance.toStringAsFixed(2) +
+                        " metres pour arriver",
                     style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
@@ -204,13 +206,13 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
                         color: Colors.black)),
               ),
             ),
-             Padding(
-              padding: EdgeInsets.only(left: 30),
+            Padding(
+              padding: const EdgeInsets.only(left: 30),
               child: ListTile(
-                leading: Icon(Icons.directions_car,
+                leading: const Icon(Icons.directions_car,
                     color: Color.fromRGBO(27, 146, 164, 0.7)),
                 title: Text(widget.location.car!.numeroChasis.toString(),
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold,
                         fontFamily: 'Poppins',
@@ -218,27 +220,24 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
               ),
             ),
             Padding(
-              padding:  EdgeInsets.only(left: 30, right: 30),
+              padding: const EdgeInsets.only(left: 30, right: 30),
               child: CustomRaisedButton(
                 text: "Trajet terminé",
                 color: const Color.fromRGBO(27, 146, 164, 0.7),
                 textColor: Colors.white,
-                press: () =>  {
+                press: () => {
                   updates(),
-                  print(widget.location.heureDebut),
                   widget.location.heureFin = Api.formattedhoureNow(),
                   format = DateFormat("HH:mm"),
                   one = format.parse(widget.location.heureDebut),
                   two = format.parse(widget.location.heureFin),
                   diff = two.difference(one),
-                  print(diff),
-                  if(diff.inMinutes >= 0 && diff.inMinutes <= 60)
+                  if (diff.inMinutes >= 0 && diff.inMinutes <= 60)
                     {
                       hours = 1,
-                    } else{
-                  hours = diff.inHours
-                  },
-                  print(hours),
+                    }
+                  else
+                    {hours = diff.inHours},
                   tarification = widget.location.car?.tarification,
                   montant = hours * tarification,
                   widget.location.montant = montant,
@@ -267,11 +266,12 @@ class _TrackingScreen2State extends State<TrackingScreen2> {
           ],
         ));
   }
+
   Future<void> updates() async {
-      var db =  await FirebaseFirestore.instance;
-      final docRef =
-      db.collection('CarLocation').doc(widget.location.car!.numeroChasis);
-      final data = {'loue': false, 'arrive': true};
-      docRef.set(data, SetOptions(merge: true));
-    }
+    var db = FirebaseFirestore.instance;
+    final docRef =
+        db.collection('CarLocation').doc(widget.location.car!.numeroChasis);
+    final data = {'loue': false, 'arrive': true};
+    docRef.set(data, SetOptions(merge: true));
+  }
 }

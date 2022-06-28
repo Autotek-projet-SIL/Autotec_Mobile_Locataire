@@ -1,12 +1,9 @@
 import 'package:autotec/payment/paiement_baridimob/code_validation_screen.dart';
 import 'package:autotec/payment/paiement_stripe/paiement_stripe.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../components/raised_button.dart';
 import '../models/location.dart';
-
-
 
 // ignore: must_be_immutable
 class PaymentMethodeScreen extends StatefulWidget {
@@ -52,7 +49,8 @@ class PaymentMethodeScreenState extends State<PaymentMethodeScreen> {
                 press: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>  CodeValidationScreen(location: widget.location)),
+                      builder: (context) =>
+                          CodeValidationScreen(location: widget.location)),
                 ),
                 color: const Color.fromRGBO(27, 146, 164, 0.7),
                 textColor: Colors.white,
@@ -63,7 +61,9 @@ class PaymentMethodeScreenState extends State<PaymentMethodeScreen> {
                 press: () => Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>  StripePayment(location: widget.location,)),
+                      builder: (context) => StripePayment(
+                            location: widget.location,
+                          )),
                 ),
                 color: const Color.fromRGBO(27, 146, 164, 0.7),
                 textColor: Colors.white,

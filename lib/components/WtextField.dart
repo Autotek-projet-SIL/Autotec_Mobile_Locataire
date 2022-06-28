@@ -11,7 +11,6 @@ class WidgetTextfield extends StatelessWidget {
     required this.hintText,
     required this.onChanged,
     required this.validator,
-
   }) : super(key: key);
 
   @override
@@ -30,10 +29,11 @@ class WidgetTextfield extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(width: 3, color: Color.fromRGBO(27, 146, 164, 1)),
+          borderSide: const BorderSide(
+              width: 3, color: Color.fromRGBO(27, 146, 164, 1)),
           borderRadius: BorderRadius.circular(15),
         ),
-        contentPadding: const EdgeInsets.all(14.0) ,
+        contentPadding: const EdgeInsets.all(14.0),
       ),
     );
   }

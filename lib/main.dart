@@ -1,16 +1,13 @@
-// ignore_for_file: avoid_print, await_only_futures, prefer_typing_uninitialized_variables
+// ignore_for_file:  await_only_futures, prefer_typing_uninitialized_variables
 
 import 'package:autotec/Authentication/first_screens/on_boarding.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
 import 'package:autotec/bloc/auth_bloc.dart';
 import 'package:autotec/repositories/auth_repository.dart';
-
 import 'package:autotec/car_rental/home_page.dart';
 import 'package:autotec/Authentication/first_screens/home.dart';
 import 'package:autotec/models/user_data.dart';
@@ -24,11 +21,7 @@ var initScreen;
 FirebaseMessaging messaging = FirebaseMessaging.instance;
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  // If you're going to use other Firebase services in the background, such as Firestore,
-  // make sure you call `initializeApp` before using other Firebase services.
   await Firebase.initializeApp();
-
-  print("Handling a background message: ${message.messageId}");
 }
 
 Future<void> main() async {
@@ -41,20 +34,9 @@ Future<void> main() async {
   userCred = UserCredentials();
   await Firebase.initializeApp();
 
-  //Get permission for notifications
-  NotificationSettings settings = await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
-  print('User granted permission: ${settings.authorizationStatus}');
 
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  //Get Device token
+
   UserCredentials.setDeviceToken();
 
   runApp(const MyApp());
@@ -76,7 +58,6 @@ class MyApp extends StatelessWidget {
           home: StreamBuilder<User?>(
               stream: FirebaseAuth.instance.authStateChanges(),
               builder: (context, snapshot) {
-                // If the snapshot has user data, then they're already signed in.
                 if (snapshot.hasData) {
                   return const Map();
                 } else {
@@ -86,7 +67,7 @@ class MyApp extends StatelessWidget {
                   return const Home();
                 }
               }),
-          localizationsDelegates: [
+          localizationsDelegates: const [
             GlobalWidgetsLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             MonthYearPickerLocalizations.delegate,

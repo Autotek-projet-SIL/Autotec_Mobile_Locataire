@@ -8,11 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import '../bloc/auth_bloc.dart';
-
 import 'package:autotec/models/user_data.dart';
-
 import '../car_rental/search_screen.dart';
-//import '../factures/locationList.dart';
 import 'edit_profile.dart';
 
 class Profile extends StatefulWidget {
@@ -51,7 +48,6 @@ class _ProfileState extends State<Profile> {
         "id_sender": "${UserCredentials.uid}",
       },
     );
-    print(res.statusCode);
     setState(() {
       userProfile = json.decode(res.body);
       circular = false;
@@ -131,7 +127,6 @@ class _ProfileState extends State<Profile> {
               padding: const EdgeInsets.fromLTRB(50.0, 5, 50, 5),
               child: IconButton(
                 onPressed: () async {
-                  //TODO navigate to profil
                   await UserCredentials.refresh();
                   Navigator.push(
                     context,
@@ -192,13 +187,6 @@ class _ProfileState extends State<Profile> {
                           ),
                         ],
                       ),
-                      /* RaisedButton(onPressed: (){
-                //print(" token : ${userCredentials.token}");
-                //print(" id : ${userCredentials.uid}");
-               print("${userProfile[0]}");
-              },
-              child: Text("click me"),)*/
-                      //SizedBox(height: size.height*0.0001,),
                       CircleAvatar(
                           radius: 85,
                           backgroundColor: const Color(0xff2E9FB0),
@@ -208,7 +196,6 @@ class _ProfileState extends State<Profile> {
                             backgroundImage: NetworkImage(
                                 "${userProfile[0]["photo_selfie"]}"),
                           )),
-
                       SizedBox(
                         height: size.height * 0.02,
                       ),
@@ -229,22 +216,13 @@ class _ProfileState extends State<Profile> {
                       ),
                       labelContainer("Numero de téléphone :"),
                       profileContainer("${userProfile[0]["numero_telephone"]}"),
-
                       SizedBox(
                         height: size.height * 0.03,
                       ),
-
                       GestureDetector(
                         onTap: () {
                           nom =
                               "${userProfile[0]["nom"]} ${userProfile[0]["prenom"]}";
-                          /*Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LocationList(
-                                      nomLocataire: nom,
-                                    )),
-                          );*/
                         },
                         child: Container(
                           margin: const EdgeInsets.only(
@@ -265,7 +243,6 @@ class _ProfileState extends State<Profile> {
                               children: [
                                 Row(
                                   children: [
-                                    // IconButton(onPressed: (){}, icon: Image.asset("assets/bill.png",width: 50,)),
                                     const Text(
                                       "Mes Factures",
                                       textAlign: TextAlign.center,
@@ -310,7 +287,6 @@ class _ProfileState extends State<Profile> {
                               children: [
                                 Row(
                                   children: [
-                                    // IconButton(onPressed: (){}, icon: Image.asset("assets/hello.png",width: 50,)),
                                     const Text(
                                       "Deconnexion",
                                       textAlign: TextAlign.center,
@@ -332,20 +308,6 @@ class _ProfileState extends State<Profile> {
                           ),
                         ),
                       ),
-                      /*  RaisedButton(
-                child: Text('click me'),
-                onPressed: (){
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) =>
-                        Edit()
-                    ),
-                  );
-                  //print ("token : ${userCredentials.token}");
-                 // print("id : ${userCredentials.uid}");
-
-                },
-              )*/
                     ],
                   )),
             ),

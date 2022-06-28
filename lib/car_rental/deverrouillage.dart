@@ -1,19 +1,13 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:autotec/car_rental/sliding_uo_panel2.dart';
 import 'package:autotec/models/location.dart';
-import 'package:autotec/models/user_data.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:path/path.dart';
 import '../components/raised_button.dart';
 import '../components/text_field.dart';
 import '../components/text_field_password.dart';
-import '../models/rest_api.dart';
-import '../models/rest_api.dart';
 import '../models/rest_api.dart';
 
 class DeverrouillageScreen extends StatefulWidget {
@@ -100,11 +94,9 @@ class _DeverrouillageScreenState extends State<DeverrouillageScreen> {
     final response = await Api.getUserPassword();
     var userInfo = jsonDecode(response.body);
     String mdp = userInfo[0]["mot_de_passe"];
-    print(userInfo[0]);
-    print("mdp is $mdp");
     if (mdp.toString() == _passwordController.text) {
       Navigator.push(
-        this.context,
+        context,
         MaterialPageRoute(
           builder: (context) => TrackingScreen2(
               destinationLocation: LatLng(widget.location.latitude_arrive!,

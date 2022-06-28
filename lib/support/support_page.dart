@@ -1,3 +1,5 @@
+// ignore_for_file: non_constant_identifier_names, unused_local_variable
+
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -85,10 +87,7 @@ class _DemandeSupportScreenState extends State<DemandeSupportScreen> {
                 press: () async {
                   final response =
                       await Api.addDemandeSupport(_descriptioncontroller.text, _objetcontroller.text, _emailController.text,  widget.id_louer);
-                  if(response.statusCode == 200){
-                    print("la demande de support a été créee avec succes");
-                  }
-                  },
+                                  },
                 color: const Color.fromRGBO(27, 146, 164, 0.7),
                 textColor: Colors.white,
               ),

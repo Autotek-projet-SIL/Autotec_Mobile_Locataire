@@ -5,16 +5,15 @@ class WidgetTextfieldDigit extends StatelessWidget {
   final String? Function(String?)? validator;
   final ValueChanged<String>? onChanged;
   final AutovalidateMode? validationMode;
-   final TextEditingController? controller;
-  const WidgetTextfieldDigit({
-    Key? key,
-    this.hintText,
-    this.onChanged,
-    this.validator,
-    this.validationMode,
-    this.controller
-
-  }) : super(key: key);
+  final TextEditingController? controller;
+  const WidgetTextfieldDigit(
+      {Key? key,
+      this.hintText,
+      this.onChanged,
+      this.validator,
+      this.validationMode,
+      this.controller})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +32,11 @@ class WidgetTextfieldDigit extends StatelessWidget {
           borderRadius: BorderRadius.circular(15),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(width: 3, color: Color.fromRGBO(27, 146, 164, 1)),
+          borderSide: const BorderSide(
+              width: 3, color: Color.fromRGBO(27, 146, 164, 1)),
           borderRadius: BorderRadius.circular(15),
         ),
-        contentPadding: const EdgeInsets.all(14.0) ,
+        contentPadding: const EdgeInsets.all(14.0),
       ),
     );
   }

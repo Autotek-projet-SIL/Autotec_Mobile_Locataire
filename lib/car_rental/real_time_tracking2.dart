@@ -1,6 +1,5 @@
-// ignore_for_file: avoid_print, prefer_final_fields
+// ignore_for_file: prefer_final_fields
 
-import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -115,10 +114,7 @@ class _MyMap2State extends State<MyMap2> {
 
   void setSourceAndDestinationIcons() async {
     sourceIcon = BitmapDescriptor.defaultMarker;
-    //await BitmapDescriptor.fromAssetImage(const ImageConfiguration(devicePixelRatio: 9.2, size: Size(12, 12)),'assets/car-placeholder.png');
-
     destinationIcon = BitmapDescriptor.defaultMarker;
-    //await BitmapDescriptor.fromAssetImage(const ImageConfiguration(devicePixelRatio: 9.2, size: Size(12, 12)),'assets/user-pin.png');
   }
 
   setPolylines(AsyncSnapshot<QuerySnapshot<Object?>> snapshot) async {
@@ -139,9 +135,7 @@ class _MyMap2State extends State<MyMap2> {
       for (var point in result.points) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       }
-    } else {
-      print(result.errorMessage);
-    }
+    } 
 
     setState(() {
       Polyline polyline = Polyline(
@@ -159,7 +153,6 @@ class _MyMap2State extends State<MyMap2> {
           widget.destinationLocation.latitude,
           widget.destinationLocation.longitude);
       Distance.distance = distance;
-      print("distance1 ${Distance.distance}");
     });
   }
 

@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, prefer_final_fields
+// ignore_for_file: prefer_final_fields
 
 import 'package:autotec/models/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -140,9 +140,7 @@ class _MyMapState extends State<MyMap> {
       for (var point in result.points) {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       }
-    } else {
-      print(result.errorMessage);
-    }
+    } 
 
     setState(()  {
       Polyline polyline = Polyline(
@@ -160,11 +158,9 @@ class _MyMapState extends State<MyMap> {
           widget.destinationLocation.latitude,
           widget.destinationLocation.longitude);
       Distance.distance = distance;
-      print("distance1 ${Distance.distance}");
 
     });
   }
-
   double calculateDistance(
       double lat1, double lon1, double lat2, double lon2)  {
     double distance = Geolocator.distanceBetween(lat1, lon1, lat2, lon2);

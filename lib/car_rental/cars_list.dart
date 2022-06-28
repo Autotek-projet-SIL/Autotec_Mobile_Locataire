@@ -1,8 +1,6 @@
 // ignore_for_file: deprecated_member_use, avoid_print, non_constant_identifier_names
 
 import 'dart:convert';
-
-import 'package:autotec/models/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -112,7 +110,6 @@ class CarListView extends StatelessWidget {
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
       List<Car> list = jsonResponse.map((json) => Car.fromJson(json)).toList();
-      //recuperer ceux dispo et batterie > 20
       try {
         final querySnapshot = await FirebaseFirestore.instance
             .collection('CarLocation')

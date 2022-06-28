@@ -1,15 +1,13 @@
-// ignore_for_file: avoid_unnecessary_containers
-// ignore_for_file: file_names
+// ignore_for_file: avoid_unnecessary_containers, file_names
 
 import 'package:flutter/material.dart';
-
 
 class WidgetCarInfo extends StatelessWidget {
   final String carName;
   final String carPrice;
   final String carImage;
   const WidgetCarInfo({
-     Key? key,
+    Key? key,
     required this.carName,
     required this.carPrice,
     required this.carImage,
@@ -20,7 +18,7 @@ class WidgetCarInfo extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          margin: const EdgeInsets.only(top:40.0,left: 130.0, right: 0.0),
+          margin: const EdgeInsets.only(top: 40.0, left: 130.0, right: 0.0),
           height: 350,
           decoration: const BoxDecoration(
             borderRadius: BorderRadius.only(
@@ -30,29 +28,29 @@ class WidgetCarInfo extends StatelessWidget {
             color: Color(0xff2E9FB0),
           ),
           child: Stack(
-            children:  [
+            children: [
               Positioned(
-                  top:260.0,
+                  top: 260.0,
                   right: 80,
                   child: Column(
                     children: [
-                      Text(carName,
+                      Text(
+                        carName,
                         style: const TextStyle(
                           color: Colors.white,
                           fontFamily: 'Poppins',
                           fontSize: 20,
-
                         ),
                       ),
                       const SizedBox(
                         height: 10,
                       ),
-                      Text(carPrice,
+                      Text(
+                        carPrice,
                         style: const TextStyle(
                           color: Colors.white,
                           fontFamily: 'Poppins',
                           fontSize: 20,
-
                         ),
                       ),
                     ],
@@ -66,14 +64,14 @@ class WidgetCarInfo extends StatelessWidget {
                 top: 110,
                 right: 50,
                 child: Container(
-                  child: Image.asset(carImage,width: 315,),
-
-
+                  child: Image.asset(
+                    carImage,
+                    width: 315,
+                  ),
                 ))
           ],
         ),
       ],
-
     );
   }
 }

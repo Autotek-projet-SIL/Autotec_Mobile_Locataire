@@ -6,13 +6,12 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:autotec/bloc/auth_bloc.dart';
-
+import 'package:autotec/car_rental/home_page.dart';
 import 'package:autotec/models/user_data.dart';
 import '../../../components/raised_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../Dashboard/dashboard.dart';
-import 'package:autotec/repositories/image_storage_repository.dart';
 
+import 'package:autotec/repositories/image_storage_repository.dart';
 
 // ignore: must_be_immutable
 class IdentiteRecto extends StatefulWidget {
@@ -108,28 +107,19 @@ class _IdentiteRectoState extends State<IdentiteRecto> {
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is Authenticated) {
-            // Navigating to the home screen if the user is authenticated
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => Dashboard(
-                  u: widget.u,
-                ),
-              ),
-            );
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (context) => const Map()));
           }
           if (state is AuthError) {
-            // Displaying the error message if the user is not authenticated
             ScaffoldMessenger.of(context)
                 .showSnackBar(SnackBar(content: Text(state.error)));
           }
         },
         builder: (context, state) {
           if (state is Loading) {
-            // Displaying the loading indicator while the user is signing up
             return const Center(child: CircularProgressIndicator());
           }
           if (state is UnAuthenticated) {
-            // Displaying the sign up form if the user is not authenticated
             return Container(
               child: Padding(
                 padding: const EdgeInsets.all(23.0),

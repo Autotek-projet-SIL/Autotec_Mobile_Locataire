@@ -11,10 +11,7 @@ class BaridiMobAccount {
     _rip = "0007934312342353";
   }
   get email => _email;
-
   set email(value) => _email = value;
-
   get rip => _rip;
-
   set rip(value) => _rip = value;
 }

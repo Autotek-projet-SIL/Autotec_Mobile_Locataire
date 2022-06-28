@@ -1,7 +1,6 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, file_names
 
 import 'package:flutter/material.dart';
-
 
 class WidgetViewTrip extends StatelessWidget {
   final String carName;
@@ -23,10 +22,9 @@ class WidgetViewTrip extends StatelessWidget {
     return Stack(
       children: [
         Container(
-          margin: const EdgeInsets.only(top:20.0,left: 10.0, right: 10.0),
+          margin: const EdgeInsets.only(top: 20.0, left: 10.0, right: 10.0),
           height: 170,
           decoration: const BoxDecoration(
-
             borderRadius: BorderRadius.only(
               bottomLeft: Radius.circular(20),
               topLeft: Radius.circular(20),
@@ -38,114 +36,110 @@ class WidgetViewTrip extends StatelessWidget {
                 color: Colors.grey,
                 spreadRadius: 2,
                 blurRadius: 10,
-                offset: Offset(0, 3), // changes position of shadow
+                offset: Offset(0, 3),
               ),
             ],
             color: Colors.white,
           ),
           child: Stack(
-            children:  [
+            children: [
               Positioned(
-                  top:15.0,
+                  top: 15.0,
                   left: 0.0,
                   child: Column(
                     children: [
                       SizedBox(
-                        height:50,
+                        height: 50,
                         width: 200,
-                        child: Text(carName,
+                        child: Text(
+                          carName,
                           textAlign: TextAlign.start,
                           style: const TextStyle(
                               color: Colors.black,
                               fontFamily: 'Poppins',
-                              fontSize: 16,fontWeight: FontWeight.bold
-
-                          ),
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
-
                       const SizedBox(
                         height: 12,
                       ),
                       SizedBox(
-                        //height: 400,
-                        width: 300,
-                        child: Row(
-                            children:[
-                              Image.asset('assets/a.png',width: 45,),
-                              // SizedBox(width: 10,),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(start,
-                                    textAlign: TextAlign.start,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16,
-
-                                    ),
-
+                          width: 300,
+                          child: Row(children: [
+                            Image.asset(
+                              'assets/a.png',
+                              width: 45,
+                            ),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                  start,
+                                  textAlign: TextAlign.start,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: 'Poppins',
+                                    fontSize: 16,
                                   ),
-                                  const SizedBox(height: 20,),
-                                  Text(end,
-                                    textAlign: TextAlign.start,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontFamily: 'Poppins',
-                                      fontSize: 16,
-
-                                    ),),
-                                ],
-                              ),]
-                        ),
-                      ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Text(
+                                  end,
+                                  textAlign: TextAlign.start,
+                                  style: const TextStyle(
+                                    color: Colors.black,
+                                    fontFamily: 'Poppins',
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ]))
                     ],
                   )),
               Positioned(
-                top:15.0,
+                top: 15.0,
                 right: 15.0,
-                child:Column(
+                child: Column(
                   children: [
                     Text(carPrice,
-                      textAlign: TextAlign.start,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontFamily: 'Poppins',
-                        fontSize: 16,
-
-                      ),),
+                        textAlign: TextAlign.start,
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontFamily: 'Poppins',
+                          fontSize: 16,
+                        ))
                   ],
-                ) ,
+                ),
               ),
               Positioned(
-                bottom:0.0,
+                bottom: 0.0,
                 right: 0.0,
-                child:Column(
-                  children:  [
+                child: Column(
+                  children: [
                     FlatButton(
-                        onPressed :press ,
+                        onPressed: press,
                         color: const Color(0xff2E9FB0),
                         textColor: Colors.white,
                         minWidth: 100,
                         height: 50,
-                        shape:  const RoundedRectangleBorder(
-                          borderRadius:  BorderRadius.only(
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
                             topLeft: Radius.circular(20),
                             bottomRight: Radius.circular(20),
                           ),
                         ),
                         child: const Text('Details')),
-
                   ],
-                ) ,
+                ),
               ),
             ],
           ),
         ),
-
       ],
-
     );
   }
 }

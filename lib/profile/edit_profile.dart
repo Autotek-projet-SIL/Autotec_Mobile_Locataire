@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, unnecessary_string_interpolations, non_constant_identifier_names, unnecessary_brace_in_string_interps
+// ignore_for_file: non_constant_identifier_names
 import 'package:autotec/components/WBack.dart';
 import 'package:autotec/profile/profile.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -20,8 +20,9 @@ class EditProfile extends StatefulWidget {
   final String mdp;
   final String recto_photo;
   final String verso_photo;
-  const EditProfile({Key? key,
-  required this.image,
+  const EditProfile({
+    Key? key,
+    required this.image,
     required this.nom,
     required this.prenom,
     required this.numTlph,
@@ -37,16 +38,11 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   XFile? imageFile;
   String? imageChanged;
-  bool loading=true;
-  //final Storage storage = Storage();
+  bool loading = true;
   final ImagePicker _picker = ImagePicker();
 
   _openGallery(BuildContext context) async {
     imageFile = (await _picker.pickImage(source: ImageSource.gallery));
-    // final String fileName  = path.basename(imageFile!.path);
-    // final File filePath = File(imageFile!.path);
-
-    // await storage.uploadFile(filePath.path, fileName).then((value) => debugPrint("done"));
     imageChanged = imageFile!.path;
     setState(() {});
     Navigator.of(context).pop();
@@ -87,51 +83,43 @@ class _EditProfileState extends State<EditProfile> {
         });
   }
 
-  void UpdateUser(String nom,String prenom,String num,String image) async{
-    var res=await http.put(
-      Uri.parse('http://autotek-server.herokuapp.com/gestionprofils/modifier_locataire/${UserCredentials.uid}'),
+  void UpdateUser(String nom, String prenom, String num, String image) async {
+    var res = await http.put(
+      Uri.parse(
+          'http://autotek-server.herokuapp.com/gestionprofils/modifier_locataire/${UserCredentials.uid}'),
       body: {
         "token": "${UserCredentials.token}",
         "id_sender": "${UserCredentials.uid}",
-        "nom": "$nom",
-        "prenom": "$prenom",
-     //   "email": "${UserCredentials.email}",
-        "mot_de_passe": "${widget.mdp}",
-        "numero_telephone": "$num",
+        "nom": nom,
+        "prenom": prenom,
+        "mot_de_passe": widget.mdp,
+        "numero_telephone": num,
         "photo_identite_recto": "test",
         "photo_identite_verso": "test",
-        "photo_selfie": "${image}"
-
+        "photo_selfie": image
       },
     );
-    if(res.statusCode==200){
+    if (res.statusCode == 200) {
       setState(() {
-        loading=false;
+        loading = false;
       });
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) =>
-            const Profile()
-        ),
+        MaterialPageRoute(builder: (context) => const Profile()),
       );
-    }
-    else{
-      print('errorrrrr');
-    }
-
-
+    } 
   }
 
-  Widget profileContainer(String text){
+  Widget profileContainer(String text) {
     Size size = MediaQuery.of(context).size;
-    return  Container(
-      margin: const EdgeInsets.only(top:5.0,left: 10.0, right: 10.0),
+    return Container(
+      margin: const EdgeInsets.only(top: 5.0, left: 10.0, right: 10.0),
       padding: const EdgeInsets.only(left: 20.0, right: 20.0),
       height: 43,
-      width: size.width*0.4,
+      width: size.width * 0.4,
       decoration: BoxDecoration(
         border: Border.all(
-          color:const Color(0xff2E9FB0),
+          color: const Color(0xff2E9FB0),
         ),
         borderRadius: BorderRadius.circular(20.0),
       ),
@@ -139,31 +127,40 @@ class _EditProfileState extends State<EditProfile> {
         padding: const EdgeInsets.all(4.0),
         child: Row(
           children: [
-            Text(text,textAlign: TextAlign.center,
-              style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 18),
+            Text(
+              text,
+              textAlign: TextAlign.center,
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
           ],
         ),
       ),
     );
   }
-  Widget labelContainer(String text){
+
+  Widget labelContainer(String text) {
     Size size = MediaQuery.of(context).size;
-    return Row (
+    return Row(
       children: [
-        SizedBox(width: size.width*0.05,),
-        Text(text,style: TextStyle(color: const Color(0xff696969).withOpacity(0.7),)),
+        SizedBox(
+          width: size.width * 0.05,
+        ),
+        Text(text,
+            style: TextStyle(
+              color: const Color(0xff696969).withOpacity(0.7),
+            )),
       ],
     );
   }
 
-
-
   @override
   Widget build(BuildContext context) {
-    TextEditingController nomController=TextEditingController(text: widget.nom);
-    TextEditingController prenomController=TextEditingController(text: widget.prenom);
-    TextEditingController numController=TextEditingController(text: widget.numTlph);
+    TextEditingController nomController =
+        TextEditingController(text: widget.nom);
+    TextEditingController prenomController =
+        TextEditingController(text: widget.prenom);
+    TextEditingController numController =
+        TextEditingController(text: widget.numTlph);
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       body: SingleChildScrollView(
@@ -175,93 +172,84 @@ class _EditProfileState extends State<EditProfile> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
-                  children: const [
-                    WidgetArrowBack()
-                  ],
+                  children: const [WidgetArrowBack()],
                 ),
-                SizedBox(height: size.height*0.02,),
-                /* RaisedButton(onPressed: (){
-                  //print(" token : ${userCredentials.token}");
-                  //print(" id : ${userCredentials.uid}");
-                 print("${userProfile[0]}");
-                },
-                child: Text("click me"),)*/
-                //SizedBox(height: size.height*0.0001,),
+                SizedBox(
+                  height: size.height * 0.02,
+                ),
                 CircleAvatar(
                     radius: 85,
                     backgroundColor: const Color(0xff2E9FB0),
                     child: CircleAvatar(
-                      backgroundColor:Colors.transparent ,
+                      backgroundColor: Colors.transparent,
                       radius: 80,
-                      backgroundImage:
-                     imageChanged==null? NetworkImage(widget.image) :Image.file(File(imageFile!.path)).image,
-
+                      backgroundImage: imageChanged == null
+                          ? NetworkImage(widget.image)
+                          : Image.file(File(imageFile!.path)).image,
                       child: IconButton(
-                        icon:const Icon(Icons.edit),
+                        icon: const Icon(Icons.edit),
                         iconSize: 40,
-                        onPressed: () { _showChoiceDialog(context); },),
-                    )
+                        onPressed: () {
+                          _showChoiceDialog(context);
+                        },
+                      ),
+                    )),
+                SizedBox(
+                  height: size.height * 0.02,
                 ),
-
-                SizedBox(height: size.height*0.02,),
                 labelContainer("Nom :"),
-                CustomTextField(controler: nomController,),
-                SizedBox(height: size.height*0.015,),
+                CustomTextField(
+                  controler: nomController,
+                ),
+                SizedBox(
+                  height: size.height * 0.015,
+                ),
                 labelContainer("Prénom :"),
-                CustomTextField(controler: prenomController,),
-                SizedBox(height: size.height*0.015,),
+                CustomTextField(
+                  controler: prenomController,
+                ),
+                SizedBox(
+                  height: size.height * 0.015,
+                ),
                 labelContainer("Numero de téléphone :"),
                 CustomTextField(
-                  onChanged: (value){
-                    numController.text=value;
+                  onChanged: (value) {
+                    numController.text = value;
                   },
                   hintText: " Numero de telephone ",
                   controler: numController,
-                  validationMode:
-                  AutovalidateMode.onUserInteraction,
+                  validationMode: AutovalidateMode.onUserInteraction,
                   validator: (value) {
-                    return value != null
-                        ? 'Enter a  valid number'
-                        : null;
+                    return value != null ? 'Enter a  valid number' : null;
                   },
                 ),
-                SizedBox(height: size.height*0.03,),
-                WidgetRaisedButton(press: () async {
-                  //print(widget.image);
-                 // print(widget.mdp);
-                 // print(numController.text);
-                  if(loading){
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const EnCours();
-                        });
-                  }
-                  FirebaseStorage.instance.refFromURL(widget.image).delete();
-                  // print ("token : ${userCredentials.token}");
-                  // print("id : ${userCredentials.uid}");
-                  var imgUrl = await Storage.uploadFile(imageFile!.path, "Selfies/"+widget.nom+" "+widget.prenom);
-                  imageChanged = imgUrl ;
-                  print(imgUrl);
-                 UpdateUser(nomController.text,prenomController.text,numController.text,imgUrl);
-
-                }, text: 'Modifier',color: const Color(0xff2E9FB0),textColor: Colors.white,),
-
-
-               /* RaisedButton(
-                  child: Text('click me'),
-                  onPressed: () async {
+                SizedBox(
+                  height: size.height * 0.03,
+                ),
+                WidgetRaisedButton(
+                  press: () async {
+                    if (loading) {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const EnCours();
+                          });
+                    }
                     FirebaseStorage.instance.refFromURL(widget.image).delete();
-                   // print ("token : ${userCredentials.token}");
-                   // print("id : ${userCredentials.uid}");
-                    var img_url = await Storage.uploadFile(imageFile!.path, "Selfies/"+widget.nom!+" "+widget.prenom!);
-                    imageChanged = img_url ;
-                    print(img_url);
+
+                    var imgUrl = await Storage.uploadFile(imageFile!.path,
+                        "Selfies/" + widget.nom + " " + widget.prenom);
+                    imageChanged = imgUrl;
+
+                    UpdateUser(nomController.text, prenomController.text,
+                        numController.text, imgUrl);
                   },
-                )*/
+                  text: 'Modifier',
+                  color: const Color(0xff2E9FB0),
+                  textColor: Colors.white,
+                ),
               ],
-            )
-        ),
+            )),
       ),
     );
   }

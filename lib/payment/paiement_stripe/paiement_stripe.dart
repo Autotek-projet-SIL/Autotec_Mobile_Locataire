@@ -7,22 +7,19 @@ import '../../components/text_field.dart';
 import '../../models/location.dart';
 import '../../models/rest_api.dart';
 import 'package:month_year_picker/month_year_picker.dart';
-
 import '../../models/user_data.dart';
 import '../paiement_baridimob/code_validation_screen.dart';
 
 class StripePayment extends StatefulWidget {
   final CarLocation location;
 
-  const StripePayment({Key? key, required this.location})
-      : super(key: key);
+  const StripePayment({Key? key, required this.location}) : super(key: key);
 
   @override
   State<StatefulWidget> createState() => StripePaymentState();
 }
 
 class StripePaymentState extends State<StripePayment> {
-  final _controller = TextEditingController();
   final _numeroCardController = TextEditingController();
   final _cvcController = TextEditingController();
   final _paiementKey = GlobalKey<FormState>();
@@ -35,10 +32,9 @@ class StripePaymentState extends State<StripePayment> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    int id_payer;
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
+        body: SingleChildScrollView(
+      child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -80,7 +76,6 @@ class StripePaymentState extends State<StripePayment> {
                   Container(
                     height: size.height * 0.07,
                     width: size.width * 0.8 + 5,
-                    //  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: ),
                     decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(15),
@@ -96,7 +91,6 @@ class StripePaymentState extends State<StripePayment> {
                                     value: value,
                                     child: ListTile(
                                       title: Text(value),
-                                      //trailing: Icon(Icons ),
                                     ),
                                   ))
                           .toList(),
@@ -135,7 +129,7 @@ class StripePaymentState extends State<StripePayment> {
                                   : const Color.fromRGBO(27, 146, 164, 0.7),
                             )),
                         child: Padding(
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
                           child: (_selected == null)
                               ? const Text("Date d'expiration")
                               : Text(DateFormat().add_yM().format(_selected!)),
@@ -162,57 +156,55 @@ class StripePaymentState extends State<StripePayment> {
                     )
                   ]),
                   const SizedBox(height: 32),
-
                   SizedBox(
                     width: size.width * 0.8,
                     height: size.height * 0.05,
                     child: CustomRaisedButton(
                       text: "Confirmer",
                       press: () async {
-                         final response = await Api.verifierPaiementStripe(
+                        final response = await Api.verifierPaiementStripe(
                             "stripe",
                             widget.location.montant.toString(),
                             dropdownValue,
                             _numeroCardController.text,
                             DateFormat().add_M().format(_selected!),
                             DateFormat().add_y().format(_selected!),
-                            _cvcController.text) ;
-                        widget.location.id_paiement  = response;
-                        print(response);
-                         UserCredentials.refresh();
-                         Api.endLocation(widget.location);
-                         await updates2();
-                         showDialog(
-                           context: context,
-                           builder: (BuildContext context) {
-                             return popUP2(
-                                 "Merci!",
-                                 "Nous avons bien reçu votre paiement ",
-                                 "Ok",
-                                 context);
-                           },
-                         );
+                            _cvcController.text);
+                        widget.location.id_paiement = response;                        
+                        UserCredentials.refresh();
+                        Api.endLocation(widget.location);
+                        await updates2();
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return popUP2(
+                                "Merci!",
+                                "Nous avons bien reçu votre paiement ",
+                                "Ok",
+                                context);
+                          },
+                        );
                       },
                       color: const Color.fromRGBO(27, 146, 164, 0.7),
                       textColor: Colors.white,
-
-
                     ),
                   ),
                 ],
               ),
             ),
-          ]),)
-    );
+          ]),
+    ));
   }
+
   Future<void> updates2() async {
-    var db = await FirebaseFirestore.instance;
+    var db =  FirebaseFirestore.instance;
     final docRef =
-    db.collection('CarLocation').doc(widget.location.car!.numeroChasis);
+        db.collection('CarLocation').doc(widget.location.car!.numeroChasis);
     final data = {'arrive': false};
     docRef.set(data, SetOptions(merge: true));
     Api.updateLocationState("fin", widget.location.id_location!);
   }
+
   Future<void> _onPressed({
     required BuildContext context,
     String? locale,

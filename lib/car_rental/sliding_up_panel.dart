@@ -1,17 +1,12 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:ui';
 import 'package:autotec/car_rental/real_time_tracking.dart';
-import 'package:autotec/components/raised_button.dart';
 import 'package:autotec/models/location.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import '../models/rest_api.dart';
 
-import '../models/user_data.dart';
-import '../payment/payment_method.dart';
 import 'deverrouillage.dart';
 
 class Distance {
@@ -90,25 +85,7 @@ class _TrackingScreenState extends State<TrackingScreen> {
             borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(18.0),
                 topRight: Radius.circular(18.0)),
-          ),
-          /*Positioned(
-            right: 10.0,
-            top: 40.0,
-            child: FloatingActionButton.extended(
-              onPressed: () {
-                //  go to the support page²
-              },
-              label: const Text('Demande de support',
-                  style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Poppins',
-                      color: Color.fromRGBO(27, 146, 164, 0.7))),
-              icon: const Icon(Icons.support_agent,
-                  color: Color.fromRGBO(27, 146, 164, 0.7)),
-              backgroundColor: Colors.white,
-            ),
-          ),*/
+          ),        
           Positioned(
               top: 0,
               child: ClipRRect(

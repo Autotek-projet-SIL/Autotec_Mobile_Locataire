@@ -8,13 +8,13 @@ import '../../components/raised_button.dart';
 import '../../models/baridimob_account.dart';
 import '../../models/location.dart';
 import '../../models/rest_api.dart';
-import 'email.dart';
 import '../../car_rental/home_page.dart';
 
 class CodeValidationScreen extends StatefulWidget {
   final CarLocation location;
 
-  const CodeValidationScreen({Key? key, required this.location}) : super(key: key);
+  const CodeValidationScreen({Key? key, required this.location})
+      : super(key: key);
 
   @override
   CodeValidationScreenState createState() => CodeValidationScreenState();
@@ -53,7 +53,6 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    //Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Center(
@@ -158,30 +157,8 @@ class CodeValidationScreenState extends State<CodeValidationScreen> {
                   text: "Confirmer",
                   press: () async {
                     final response = await Api.verifierPaiementBaridiMob(
-                        "baridimob", "10000.0", _codeController.text) ;
-                    widget.location.id_paiement  = response;
-                    //(_codeController.text == await accessMail())
-                    /*(verified)
-                        ? showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return popUP2(
-                                  "Merci !! ",
-                                  "Nous avons bien reçu votre paiement ",
-                                  "Ok",
-                                  context);
-                            },
-                          )
-                        : showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return popUP(
-                                  "Erreur !! ",
-                                  " Le code que vous avez saisi ne correspond à aucune transaction",
-                                  "Retour",
-                                  context);
-                            },
-                          );*/
+                        "baridimob", "10000.0", _codeController.text);
+                    widget.location.id_paiement = response;
                   },
                   color: const Color.fromRGBO(27, 146, 164, 0.7),
                   textColor: Colors.white,
@@ -232,7 +209,6 @@ Widget textFiedToCopy(bool pressed, TextEditingController _textController,
   );
 }
 
-
 Widget popUP2(
     String title, String content, String buttonText, BuildContext context) {
   return AlertDialog(
@@ -246,7 +222,7 @@ Widget popUP2(
           press: () async {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const  Map()),
+              MaterialPageRoute(builder: (context) => const Map()),
             );
           },
           color: const Color.fromRGBO(27, 146, 164, 0.7),

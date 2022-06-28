@@ -1,4 +1,3 @@
-import 'package:autotec/payment/paiement_stripe/paiement_stripe.dart';
 import 'package:autotec/payment/payment_method.dart';
 import 'package:flutter/material.dart';
 import '../components/WBack.dart';
@@ -94,7 +93,7 @@ class _FactureDetailsState extends State<Facture> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 19, fontWeight: FontWeight.bold)),
-                        Text("${widget.dateDebut}",
+                        Text(widget.dateDebut,
                             textAlign: TextAlign.center,
                             style: const TextStyle(fontSize: 19)),
                       ],
@@ -109,7 +108,7 @@ class _FactureDetailsState extends State<Facture> {
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 fontSize: 19, fontWeight: FontWeight.bold)),
-                        Text("${widget.heureDebut}",
+                        Text(widget.heureDebut,
                             textAlign: TextAlign.center,
                             style: const TextStyle(fontSize: 19)),
                       ],
@@ -181,7 +180,7 @@ class _FactureDetailsState extends State<Facture> {
                           height: 10,
                         ),
                         Text(
-                          "${widget.dateDebut}",
+                          widget.dateDebut,
                           textAlign: TextAlign.start,
                           style: const TextStyle(
                             color: Colors.black,
@@ -193,14 +192,14 @@ class _FactureDetailsState extends State<Facture> {
                           height: 5,
                         ),
                         Text(
-                          "${widget.pointDepart}",
+                          widget.pointDepart,
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(
                           height: 30,
                         ),
                         Text(
-                          "${widget.dateDebut}",
+                          widget.dateDebut,
                           textAlign: TextAlign.start,
                           style: const TextStyle(
                             color: Colors.black,
@@ -212,7 +211,7 @@ class _FactureDetailsState extends State<Facture> {
                           height: 5,
                         ),
                         Text(
-                          "${widget.pointArrive}",
+                          widget.pointArrive,
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -252,7 +251,7 @@ class _FactureDetailsState extends State<Facture> {
                         SizedBox(
                           height: size.height * 0.008,
                         ),
-                        Text("${widget.numeroChassis}",
+                        Text(widget.numeroChassis,
                             textAlign: TextAlign.center,
                             style: const TextStyle(fontSize: 19)),
                       ],

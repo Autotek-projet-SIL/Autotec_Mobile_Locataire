@@ -1,8 +1,6 @@
-// ignore_for_file: deprecated_member_use
-// ignore_for_file: file_names
+// ignore_for_file: deprecated_member_use, file_names
 
 import 'package:flutter/material.dart';
-
 
 class WidgetRaisedButton extends StatelessWidget {
   final String text;
@@ -18,24 +16,19 @@ class WidgetRaisedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //Size size = MediaQuery.of(context).size;
     return FractionallySizedBox(
       widthFactor: 1,
-
       child: RaisedButton(
         color: color,
         hoverColor: Colors.black,
-        shape:RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10)),      
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 14),
-
         child: Text(
           text,
           style: TextStyle(color: textColor, fontSize: 16),
         ),
         onPressed: press,
       ),
-
     );
   }
 }

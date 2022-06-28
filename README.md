@@ -1,8 +1,7 @@
 # autotec
 
-A new Flutter project.
 
-Il s'agit d'une application de Flutter pour la location en ligne de voitures autopilotées.
+Il s'agit d'une application mobile Flutter pour la location en ligne de voitures autonomes.
 
 L'application assure les fonctionnalités suivantes : 
 
